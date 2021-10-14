@@ -1,0 +1,28 @@
+.container {
+  height: 60vh;
+}
+
+.header {
+  align-items: center;
+  color: rgb(50, 117, 161);
+}
+
+.header h2 {
+  margin-bottom: 0.2em;
+}
+
+.header h3 {
+  margin-top: 0;
+}
+
+.login {
+  gap: 1em;
+}
+
+.login input {
+  border-color: brown;
+}
+
+.Mui-focused {
+  color: blueviolet;
+}

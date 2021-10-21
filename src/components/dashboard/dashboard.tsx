@@ -1,7 +1,9 @@
 import * as React from "react";
 import { Button, Grid } from "@mui/material";
 import { StoreContext } from "../../store/StoreProvider";
-import { Redirect, Link } from "react-router-dom";
+import { Redirect, Link, useHistory } from "react-router-dom";
+import request from "../../helpers/request";
+import logout from "../../actions/logout";
 
 // const MuiInputBase = createStyles({
 //   styleOverrides: {
@@ -14,10 +16,6 @@ import { Redirect, Link } from "react-router-dom";
 type Props = {};
 
 function Dashboard({}: Props): React.ReactElement {
-  const { setUser } = React.useContext(StoreContext);
-
-  const handleLogout = () => {};
-
   return (
     <Grid
       container
@@ -30,8 +28,8 @@ function Dashboard({}: Props): React.ReactElement {
       <Button variant="contained" to="/supplier-form" component={Link}>
         Supplier Form
       </Button>
-      <Button variant="contained" onClick={handleLogout}>
-        Logout
+      <Button variant="contained" to="/customers" component={Link}>
+        Customers
       </Button>
     </Grid>
   );

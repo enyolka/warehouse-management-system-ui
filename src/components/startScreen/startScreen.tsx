@@ -1,11 +1,12 @@
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import { Button, Grid } from "@mui/material";
 import styles from "./startScreen.module.css";
 import request from "../../helpers/request";
 import { StoreContext } from "../../store/StoreProvider";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
+import { login as loginAction } from "../../actions/login";
 
 // const MuiInputBase = createStyles({
 //   styleOverrides: {
@@ -18,41 +19,35 @@ import { Redirect } from "react-router-dom";
 type Props = {};
 
 function StartScreen({}: Props): React.ReactElement {
-  const [login, setLogin] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { user, setUser, token, setToken } = React.useContext(StoreContext);
+  const {
+    user,
+    setUser,
+    token,
+    setToken,
+    loginDispatch,
+    loginState: {
+      login: { loading, error, data },
+    },
+  } = React.useContext(StoreContext);
+  const history = useHistory();
+
+  useEffect(() => {
+    if (data) {
+      if (data.user) {
+        history.push("/");
+      }
+    }
+  }, [data]);
 
   const handleOnSubmit = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
+    loginAction(username, password)(loginDispatch);
     // const payload = new FormData();
     // payload.append("username", login);
     // payload.append("password", password);
     // payload.append("token", "")
-    request
-      .post(
-        "/users/v1/token/",
-        // payload,
-        {
-          username: login,
-          password: password,
-          token: "",
-        },
-        { headers: { "Content-Type": "application/json" } }
-      )
-      .then((resp) => {
-        setToken(resp.data.token);
-        request
-          .get("/users/v1/me", {
-            headers: { Authorization: `Token ${resp.data.token}` },
-          })
-          .then((resp) => {
-            console.log("ok");
-            setUser(resp.data);
-            resp.status === 200 ?? <Redirect to="/dashboard" />;
-          })
-          .catch((err) => Promise.reject(err));
-      })
-      .catch((err) => Promise.reject(err));
   };
 
   return (
@@ -82,10 +77,10 @@ function StartScreen({}: Props): React.ReactElement {
         alignItems="center"
       >
         <TextField
-          id="login-input"
-          label="Login"
-          value={login}
-          onChange={(e) => setLogin(e.target.value)}
+          id="username-input"
+          label="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
         <TextField
           id="password-input"

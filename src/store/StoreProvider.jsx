@@ -1,7 +1,8 @@
 import { Axios } from "axios";
-import React, { createContext, useState, useEffect } from "react";
-
+import React, { createContext, useState, useEffect, useReducer } from "react";
 import request from "../helpers/request";
+import login from "../reducers/login";
+import state from "../states/state";
 
 export const StoreContext = createContext();
 
@@ -12,6 +13,7 @@ export const StoreContext = createContext();
 const StoreProvider = ({ children }) => {
   const [token, setToken] = useState("");
   const [user, setUser] = useState(null);
+  const [loginState, loginDispatch] = useReducer(login, state)
 
   // const fetchData = async () => {
   //   const { data } = await request.get("/v1/users/token/", {
@@ -41,7 +43,7 @@ const StoreProvider = ({ children }) => {
   //   .catch(console.log);
 
   return (
-    <StoreContext.Provider value={{ token, setToken, user, setUser }}>
+    <StoreContext.Provider value={{ token, setToken, user, setUser, loginState, loginDispatch }}>
       {children}
     </StoreContext.Provider>
   );

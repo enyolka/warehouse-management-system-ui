@@ -1,0 +1,26 @@
+.root {
+  height: 100vh;
+}
+
+.header {
+  display: flex;
+  /* justify-content: flex-end; */
+  align-content: space-between;
+  height: 3em;
+  padding: 0.5em;
+  /* background-color: rgb(125, 178, 209); */
+}
+
+.btn__logout {
+  margin-left: auto !important;
+  color: rgb(14, 122, 216);
+  font-weight: 700;
+}
+
+.btn__logout:hover {
+  color: rgb(12, 58, 99);
+}
+
+.btn__icon {
+  padding-left: 0.5em;
+}

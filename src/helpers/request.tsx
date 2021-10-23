@@ -23,7 +23,6 @@ export default (history = null) => {
     (response) =>
       new Promise((resolve) => {
         resolve(response);
-        console.log(response);
       }),
     (error) => {
       if (!error.response) {

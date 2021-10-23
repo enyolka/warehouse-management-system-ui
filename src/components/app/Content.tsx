@@ -1,23 +1,15 @@
 import React, { useContext } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-import { StoreContext } from "../../store/StoreProvider";
+import { StoreContext } from "../../redux/store/StoreProvider";
 import CustomersForm from "../customers/customersForm";
 import CustomersPage from "../customers/customersPage";
 import Dashboard from "../dashboard/dashboard";
 import StartScreen from "../startScreen/startScreen";
 import SupplierForm from "../supplierForm/supplierForm";
 
-const ADMIN_TYPE = 1;
-
 const Content = () => {
-  const {
-    loginState: {
-      login: { loading, error, data },
-    },
-  } = useContext(StoreContext);
-  const isUserLogged = Boolean(data);
-  // const isAdmin = user?.accessLevel === ADMIN_TYPE;
-  console.log(isUserLogged);
+  const { loginState } = useContext(StoreContext);
+  const isUserLogged = Boolean(localStorage.token);
 
   return (
     <main>

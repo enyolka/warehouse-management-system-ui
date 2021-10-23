@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Button, Grid } from "@mui/material";
-import { StoreContext } from "../../store/StoreProvider";
+import { StoreContext } from "../../redux/store/StoreProvider";
 import { Link } from "react-router-dom";
 
 // const MuiInputBase = createStyles({

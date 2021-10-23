@@ -3,10 +3,9 @@ import { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import { Button, Grid } from "@mui/material";
 import styles from "./startScreen.module.css";
-import request from "../../helpers/request";
-import { StoreContext } from "../../store/StoreProvider";
-import { Redirect, useHistory } from "react-router-dom";
-import { login as loginAction } from "../../actions/login";
+import { StoreContext } from "../../redux/store/StoreProvider";
+import { useHistory } from "react-router-dom";
+import { login as loginAction } from "../../redux/login/action";
 
 // const MuiInputBase = createStyles({
 //   styleOverrides: {
@@ -21,25 +20,14 @@ type Props = {};
 function StartScreen({}: Props): React.ReactElement {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const {
-    user,
-    setUser,
-    token,
-    setToken,
-    loginDispatch,
-    loginState: {
-      login: { loading, error, data },
-    },
-  } = React.useContext(StoreContext);
+  const { loginDispatch } = React.useContext(StoreContext);
   const history = useHistory();
 
   useEffect(() => {
-    if (data) {
-      if (data.user) {
-        history.push("/");
-      }
+    if (localStorage.username) {
+      history.push("/");
     }
-  }, [data]);
+  }, [localStorage.username]);
 
   const handleOnSubmit = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();

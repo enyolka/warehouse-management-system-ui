@@ -1,22 +1,17 @@
 import * as React from "react";
-import { Box, Button, Grid } from "@mui/material";
-import { Link, useHistory } from "react-router-dom";
-import { StoreContext } from "../../store/StoreProvider";
-import logout from "../../actions/logout";
+import { Box, Button } from "@mui/material";
+import { useHistory } from "react-router-dom";
+import { StoreContext } from "../../redux/store/StoreProvider";
+import { logout } from "../../redux/login/action";
 import styles from "./App.module.css";
 import { FiLogOut } from "@react-icons/all-files/fi/FiLogOut";
 
 type Props = {};
 
 function Header({}: Props): React.ReactElement {
-  const {
-    loginDispatch,
-    loginState: {
-      login: { loading, error, data },
-    },
-  } = React.useContext(StoreContext);
+  const { loginDispatch } = React.useContext(StoreContext);
   const history = useHistory();
-  const isUserLogged = Boolean(data);
+  const isUserLogged = Boolean(localStorage.token);
 
   const handleLogout = () => {
     logout(history)(loginDispatch);
@@ -25,6 +20,7 @@ function Header({}: Props): React.ReactElement {
   return (
     <Box className={styles.header}>
       <img src={"/storage/logo.png"} />
+      {/* {localStorage.username ? <p>User: {localStorage.username}</p> : null} */}
       {isUserLogged && (
         <Button
           className={styles.btn__logout}

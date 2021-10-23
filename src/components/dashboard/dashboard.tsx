@@ -1,9 +1,7 @@
 import * as React from "react";
 import { Button, Grid } from "@mui/material";
-import { StoreContext } from "../../store/StoreProvider";
-import { Redirect, Link, useHistory } from "react-router-dom";
-import request from "../../helpers/request";
-import logout from "../../actions/logout";
+import { StoreContext } from "../../redux/store/StoreProvider";
+import { Link } from "react-router-dom";
 
 // const MuiInputBase = createStyles({
 //   styleOverrides: {

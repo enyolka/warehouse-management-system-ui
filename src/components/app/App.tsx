@@ -1,9 +1,8 @@
 import React from "react";
 import { HashRouter as Router } from "react-router-dom";
 import { Box } from "@mui/system";
-import StoreProvider from "../../store/StoreProvider";
+import StoreProvider from "../../redux/store/StoreProvider";
 import Content from "./Content";
-import StartScreen from "../startScreen/startScreen";
 import Header from "./Header";
 import styles from "./App.module.css";
 

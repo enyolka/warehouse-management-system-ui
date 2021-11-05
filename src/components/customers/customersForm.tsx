@@ -1,31 +1,145 @@
 import * as React from "react";
-import { Button, Grid } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Box, Button, Grid, Modal, TextField } from "@mui/material";
+import { CustomerFormModel } from "./types";
+import {
+  Field,
+  FieldInputProps,
+  Form,
+  Formik,
+  FormikProps,
+  FieldMetaProps,
+} from "formik";
+import * as Yup from "yup";
+import styles from "./customersForm.module.css";
+import classNames from "classnames";
 
-// const MuiInputBase = createStyles({
-//   styleOverrides: {
-//     root: {
-//       borderColor: "yellow",
-//     },
-//   },
-// });
+export interface FieldProps<V = any> {
+  field: FieldInputProps<V>;
+  form: FormikProps<V>; // if ppl want to restrict this for a given form, let them.
+  meta: FieldMetaProps<V>;
+}
 
-type Props = {};
+const MyInput = ({ field, form, ...props }: FieldProps) => {
+  return <TextField style={{ marginRight: 10 }} {...field} {...props} />;
+};
 
-function CustomersForm({}: Props): React.ReactElement {
+type Props = {
+  open: boolean;
+  handleClose: (value: React.SetStateAction<boolean>) => void;
+  createRequest: (model: CustomerFormModel) => void;
+};
+
+export function CustomersForm({
+  open,
+  handleClose,
+  createRequest,
+}: Props): React.ReactElement {
+  const initialModel: CustomerFormModel = {
+    id: 0,
+    lastName: "",
+    firstName: "",
+    city: "",
+    streetName: "",
+    streetNumber: "",
+    zipCode: "",
+    phone: "",
+  };
+
   return (
-    <Grid
-      container
-      direction="column"
-      justifyContent="center"
-      alignItems="center"
-      spacing="2"
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
     >
-      <p>CustomerForm</p>
-      <Button variant="contained" to="/dashboard" component={Link}>
-        Dashboard
-      </Button>
-    </Grid>
+      <Box className={classNames(styles.modal, styles.formBox)}>
+        <Formik<CustomerFormModel>
+          initialValues={initialModel}
+          enableReinitialize={true}
+          validateOnChange={true}
+          validateOnBlur={true}
+          onSubmit={(values, { resetForm }) => {
+            createRequest(values);
+            resetForm({});
+          }}
+          validationSchema={Yup.object({
+            firstName: Yup.string()
+              .max(15, "Must be 15 characters or less")
+              .required("Required"),
+            lastName: Yup.string()
+              .max(20, "Must be 20 characters or less")
+              .required("Required"),
+          })}
+        >
+          <Form>
+            <Grid container spacing={1}>
+              <Grid item>
+                <Field
+                  label="First name"
+                  name="firstName"
+                  type="text"
+                  component={MyInput}
+                />
+                <Field
+                  name="lastName"
+                  label="Last name"
+                  type="text"
+                  component={MyInput}
+                />
+              </Grid>
+              <Grid item>
+                <Field
+                  label="Phone"
+                  name="phone"
+                  type="text"
+                  component={MyInput}
+                />
+                <Field
+                  label="Email"
+                  name="email"
+                  type="text"
+                  component={MyInput}
+                />
+              </Grid>
+              <Grid item>
+                <Field
+                  label="Street name"
+                  name="streetName"
+                  type="text"
+                  component={MyInput}
+                />
+                <Field
+                  label="Street number"
+                  name="streetNumber"
+                  type="text"
+                  component={MyInput}
+                />
+              </Grid>
+              <Grid item>
+                <Field
+                  label="Zip code"
+                  name="zipCode"
+                  type="text"
+                  component={MyInput}
+                />
+                <Field
+                  label="City"
+                  name="city"
+                  type="text"
+                  component={MyInput}
+                />
+              </Grid>
+
+              <Grid item>
+                <Button type="submit" variant="contained">
+                  Submit
+                </Button>
+              </Grid>
+            </Grid>
+          </Form>
+        </Formik>
+      </Box>
+    </Modal>
   );
 }
 

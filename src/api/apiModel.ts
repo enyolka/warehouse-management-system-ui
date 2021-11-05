@@ -1,0 +1,11 @@
+export type CustomerModel = {
+  id: number;
+  last_name: string;
+  first_name: string;
+  phone?: string;
+  email?: string;
+  city: string;
+  street_name: string;
+  street_number: string;
+  zip_code: string;
+}

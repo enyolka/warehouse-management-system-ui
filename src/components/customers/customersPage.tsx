@@ -1,50 +1,46 @@
 import * as React from "react";
-import {
-  Button,
-  Grid,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@mui/material";
-import { Link, useHistory } from "react-router-dom";
+import { Button, Grid } from "@mui/material";
+import { Link } from "react-router-dom";
 import { StoreContext } from "../../redux/store/StoreProvider";
-import { getCustomers } from "../../redux/customers/action";
-import { useEffect, useMemo, useState } from "react";
-import { Paper } from "@material-ui/core";
+import {
+  deleteCustomer,
+  getCustomers,
+  postCustomer,
+} from "../../redux/customers/action";
+import { useContext, useEffect, useMemo, useReducer, useState } from "react";
 import { CustomerStore } from "../../redux/customers/store";
-
-// const MuiInputBase = createStyles({
-//   styleOverrides: {
-//     root: {
-//       borderColor: "yellow",
-//     },
-//   },
-// });
+import { CustomerFormModel } from "./types";
+import CustomersForm from "./customersForm";
+import CustomersTable from "./customersTable";
 
 type Props = {};
 
 function CustomersPage({}: Props): React.ReactElement {
-  const { customersState, customersDispatch } = React.useContext(StoreContext);
-  const [customersSet, setCustomersSet] = useState([]);
-  const history = useHistory();
-
-  const columnNames = [
-    { field: "lastName", headerName: "Last name", width: 120 },
-    { field: "firstName", headerName: "First name", width: 100 },
-    { field: "phone", headerName: "Phone", width: 120 },
-    { field: "city", headerName: "City", width: 100 },
-    { field: "streetName", headerName: "Street Name", width: 120 },
-    { field: "streetNumber", headerName: "Street Number", width: 80 },
-    { field: "zipCode", headerName: "Zip code", width: 100 },
-  ];
+  const { customersState, customersDispatch } = useContext(StoreContext);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     getCustomers()(customersDispatch);
-    setCustomersSet(customersState.data);
-  }, [customersState]);
+  }, []);
+
+  const data: CustomerStore[] = useMemo(
+    () => customersState.data,
+    [customersState]
+  );
+
+  const createCustomer = (model: CustomerFormModel) => {
+    postCustomer(model)(customersDispatch);
+    getCustomers()(customersDispatch);
+    console.log(customersState.data);
+  };
+
+  const deleteRequest = (idx: number) => {
+    deleteCustomer(idx)(customersDispatch).then(() =>
+      getCustomers()(customersDispatch)
+    );
+  };
 
   return (
     <Grid
@@ -52,45 +48,32 @@ function CustomersPage({}: Props): React.ReactElement {
       direction="column"
       justifyContent="center"
       alignItems="center"
-      spacing="2"
+      spacing={3}
     >
-      <p>Customers</p>
-      <Button variant="contained" to="/dashboard" component={Link}>
-        Dashboard
-      </Button>
-      <TableContainer component={Paper} sx={{ minWidth: 720, maxWidth: 1200 }}>
-        <Table
-          sx={{ minWidth: 720, maxWidth: 1200 }}
-          size="medium"
-          aria-label="a dense table"
+      <Grid item>
+        <h3>Customers</h3>
+      </Grid>
+      <Grid item>
+        <CustomersTable deleteRq={deleteRequest} data={data} />
+      </Grid>
+
+      <Grid item>
+        <Button
+          variant="contained"
+          onClick={handleOpen}
+          style={{ marginRight: 10 }}
         >
-          <TableHead>
-            <TableRow>
-              {columnNames.map(({ field, headerName }) => (
-                <TableCell key={field}>{headerName}</TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {customersSet.map((customer: CustomerStore, idx) => (
-              <TableRow
-                key={idx}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {customer.lastName}
-                </TableCell>
-                <TableCell>{customer.firstName}</TableCell>
-                <TableCell>{customer.city}</TableCell>
-                <TableCell>{customer.streetName}</TableCell>
-                <TableCell>{customer.streetNumber}</TableCell>
-                <TableCell>{customer.zipCode}</TableCell>
-                <TableCell>{customer.phone ?? "-"}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+          Add customer
+        </Button>
+        <Button variant="contained" to="/dashboard" component={Link}>
+          Dashboard
+        </Button>
+        <CustomersForm
+          open={open}
+          handleClose={handleClose}
+          createRequest={createCustomer}
+        />
+      </Grid>
     </Grid>
   );
 }

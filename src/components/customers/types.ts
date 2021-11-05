@@ -1,4 +1,4 @@
-export type CustomerStore = {
+export type CustomerFormModel = {
   id: number;
   lastName: string;
   firstName: string;
@@ -8,10 +8,4 @@ export type CustomerStore = {
   streetName: string;
   streetNumber: string;
   zipCode: string;
-}
-
-export type CustomersSetStore = {
-  loading: boolean;
-  data: CustomerStore[];
-  error: string;
 }

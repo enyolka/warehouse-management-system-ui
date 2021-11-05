@@ -1,5 +1,4 @@
 import { CustomersSetStore } from "./store";
-import { translateCustomersData } from "./translatorCustomers";
 
 export const customersInitialState: CustomersSetStore = {
   loading: false,
@@ -21,9 +20,32 @@ const customersReducer = (state = customersInitialState, action: any) => {
       return {
           ...state,
           loading: false,
-          data: translateCustomersData(action.payload),
+          data: action.payload,
       };
-
+    case "CUSTOMER_LOADING":
+        return {
+            ...state,
+            error: false,
+            loading: true,
+    };
+    case "CUSTOMER_CREATE":
+    return {
+        ...state,
+        error: false,
+        loading: true,
+    };
+    case "CUSTOMER_DELETE":
+      return {
+          ...state,
+          error: false,
+          loading: true,
+      };
+      case "CUSTOMER_UPDATE":
+        return {
+            ...state,
+            error: false,
+            loading: true,
+        };
     case "CUSTOMERS_ERROR":
       return {
           ...state,

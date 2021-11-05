@@ -26,13 +26,6 @@ const Content = () => {
         {isUserLogged && (
           <Route exact path="/customers" render={() => <CustomersPage />} />
         )}
-        {isUserLogged && (
-          <Route
-            exact
-            path="/customers/form"
-            render={() => <CustomersForm />}
-          />
-        )}
         {/*{isAdmin && (
           <Route exact path="/start-admin" render={() => <StartScreen />} />
         )} */}

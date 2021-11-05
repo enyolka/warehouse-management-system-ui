@@ -20,15 +20,18 @@ function Dashboard({}: Props): React.ReactElement {
       direction="column"
       justifyContent="center"
       alignItems="center"
-      spacing="2"
+      spacing={2}
     >
-      <p>ok</p>
-      <Button variant="contained" to="/supplier-form" component={Link}>
-        Supplier Form
-      </Button>
-      <Button variant="contained" to="/customers" component={Link}>
-        Customers
-      </Button>
+      <Grid item>
+        <Button variant="contained" to="/supplier-form" component={Link}>
+          Suppliers
+        </Button>
+      </Grid>
+      <Grid item>
+        <Button variant="contained" to="/customers" component={Link}>
+          Customers
+        </Button>
+      </Grid>
     </Grid>
   );
 }

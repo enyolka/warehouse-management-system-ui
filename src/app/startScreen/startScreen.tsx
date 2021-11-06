@@ -7,14 +7,6 @@ import { StoreContext } from "../../redux/store/StoreProvider";
 import { useHistory } from "react-router-dom";
 import { login as loginAction } from "../../redux/login/action";
 
-// const MuiInputBase = createStyles({
-//   styleOverrides: {
-//     root: {
-//       borderColor: "yellow",
-//     },
-//   },
-// });
-
 type Props = {};
 
 function StartScreen({}: Props): React.ReactElement {
@@ -32,10 +24,6 @@ function StartScreen({}: Props): React.ReactElement {
   const handleOnSubmit = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     loginAction(username, password)(loginDispatch);
-    // const payload = new FormData();
-    // payload.append("username", login);
-    // payload.append("password", password);
-    // payload.append("token", "")
   };
 
   return (

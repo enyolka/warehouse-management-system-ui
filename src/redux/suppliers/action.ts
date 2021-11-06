@@ -1,12 +1,12 @@
 import { ClientFormModel } from "../../components/clientTable/types";
 import request from "../../helpers/request";
-import { translateToModel, translatetoApiModel } from "./translatorCustomers";
+import { translateToModel, translatetoApiModel } from "../customers/translatorCustomers";
 
-export const getCustomers = () => (dispatch: any) => {
+export const getSuppliers = () => (dispatch: any) => {
   dispatch({type: "CUSTOMERS_LOADING"});
 
   request().get(
-    "/customers/v1/customers/",
+    "/customers/v1/suppliers/",
     {
       headers: { Authorization: `Token ${localStorage.token}`}}
   )
@@ -24,11 +24,11 @@ export const getCustomers = () => (dispatch: any) => {
   });
 }
 
-export const postCustomer = (model: ClientFormModel) => (dispatch: any) => {
+export const postSupplier = (model: ClientFormModel) => (dispatch: any) => {
   dispatch({type: "CUSTOMER_CREATE"});
 
   return request().post(
-    "/customers/v1/customers/",
+    "/customers/v1/suppliers/",
     translatetoApiModel(model),
      { headers: { Authorization: `Token ${localStorage.token}`}}
   )
@@ -40,11 +40,11 @@ export const postCustomer = (model: ClientFormModel) => (dispatch: any) => {
   });
 }
 
-export const putCustomer = (model: ClientFormModel) => (dispatch: any) => {
+export const putSupplier = (model: ClientFormModel) => (dispatch: any) => {
   dispatch({type: "CUSTOMER_UPDATE"});
 
   return request().put(
-    `/customers/v1/customers/${model.id}/`,
+    `/customers/v1/suppliers/${model.id}/`,
     translatetoApiModel(model),
      { headers: { Authorization: `Token ${localStorage.token}`}}
   ).catch((err) => {Promise.reject(err);       
@@ -55,11 +55,11 @@ export const putCustomer = (model: ClientFormModel) => (dispatch: any) => {
   });
 }
 
-export const deleteCustomer = (idx: number) => (dispatch: any) => {
+export const deleteSupplier = (idx: number) => (dispatch: any) => {
   dispatch({type: "CUSTOMER_DELETE"});
 
   return request().delete(
-    `/customers/v1/customers/${idx}`,
+    `/customers/v1/suppliers/${idx}`,
      { headers: { Authorization: `Token ${localStorage.token}`}}
   ).catch((err) => {Promise.reject(err);       
     dispatch({

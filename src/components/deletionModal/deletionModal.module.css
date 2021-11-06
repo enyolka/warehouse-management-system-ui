@@ -4,7 +4,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 500px;
+  width: 600px;
   /* max-width: 60%; */
   background-color: white;
   border: 1px solid rgb(77, 91, 100);
@@ -15,8 +15,4 @@
 
 .modal:focus {
   outline: none;
-}
-
-.formBox {
-  overflow-y: scroll;
 }

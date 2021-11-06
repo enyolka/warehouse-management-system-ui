@@ -1,7 +1,6 @@
-export type CustomerFormModel = {
+export type ClientFormModel = {
   id: number;
-  lastName: string;
-  firstName: string;
+  name: string;
   phone?: string;
   email?: string;
   city: string;

@@ -11,29 +11,28 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useState } from "react";
-import { CustomerStore } from "../../../redux/customers/store";
-import DeletionModal from "./deletionModal";
-import CustomersForm from "./customersForm";
-import { CustomerFormModel } from "../types";
+import DeletionModal from "../deletionModal/deletionModal";
+import ClientForm from "./clientForm";
+import { ClientFormModel } from "./types";
 
 type Props = {
-  data: CustomerStore[];
+  data: ClientFormModel[];
   deleteRequest: (idx: number) => void;
-  updateRequest: (model: CustomerFormModel) => void;
+  updateRequest: (model: ClientFormModel) => void;
 };
 
-const CustomersTable = ({ data, deleteRequest, updateRequest }: Props) => {
+const ClientTable = ({ data, deleteRequest, updateRequest }: Props) => {
   const [openDelete, setOpenDelete] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
   const [idx, setIdx] = useState<number>(0);
-  const [updatedCustomer, setUpdatedCustomer] = useState<CustomerFormModel>();
+  const [updatedCustomer, setUpdatedCustomer] = useState<ClientFormModel>();
 
   const openDeleteModal = (idx: number) => {
     setOpenDelete(true);
     setIdx(idx);
   };
 
-  const openUpdateModal = (model: CustomerFormModel) => {
+  const openUpdateModal = (model: ClientFormModel) => {
     setOpenUpdate(true);
     setUpdatedCustomer(model);
   };
@@ -53,15 +52,14 @@ const CustomersTable = ({ data, deleteRequest, updateRequest }: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((customer: CustomerStore, id) => (
+          {data.map((customer: ClientFormModel, id) => (
             <TableRow
               key={id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {customer.lastName}
+                {customer.name}
               </TableCell>
-              <TableCell>{customer.firstName}</TableCell>
               <TableCell>{customer.phone ?? "-"}</TableCell>
               <TableCell>{customer.email ?? "-"}</TableCell>
               <TableCell>{customer.city}</TableCell>
@@ -82,7 +80,7 @@ const CustomersTable = ({ data, deleteRequest, updateRequest }: Props) => {
                   createRequest={deleteRequest}
                   idx={idx}
                 />
-                <CustomersForm
+                <ClientForm
                   open={openUpdate}
                   handleClose={() => setOpenUpdate(false)}
                   createRequest={updateRequest}
@@ -98,8 +96,7 @@ const CustomersTable = ({ data, deleteRequest, updateRequest }: Props) => {
 };
 
 const columnNames = [
-  { field: "lastName", headerName: "Last name", width: 120 },
-  { field: "firstName", headerName: "First name", width: 100 },
+  { field: "name", headerName: "Name", width: 120 },
   { field: "phone", headerName: "Phone", width: 120 },
   { field: "email", headerName: "E-mail", width: 150 },
   { field: "city", headerName: "City", width: 100 },
@@ -108,4 +105,4 @@ const columnNames = [
   { field: "streetNumber", headerName: "Street Number", width: 80 },
 ];
 
-export default CustomersTable;
+export default ClientTable;

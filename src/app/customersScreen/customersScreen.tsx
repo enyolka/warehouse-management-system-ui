@@ -9,14 +9,13 @@ import {
   putCustomer,
 } from "../../redux/customers/action";
 import { useContext, useEffect, useMemo, useState } from "react";
-import { CustomerStore } from "../../redux/customers/store";
-import { CustomerFormModel } from "./types";
-import CustomersForm from "./components/customersForm";
-import CustomersTable from "./components/customersTable";
+import { ClientFormModel } from "../../components/clientTable/types";
+import CustomersForm from "../../components/clientTable/clientForm";
+import CustomersTable from "../../components/clientTable/clientTable";
 
 type Props = {};
 
-function CustomersPage({}: Props): React.ReactElement {
+function CustomersScreen({}: Props): React.ReactElement {
   const { customersState, customersDispatch } = useContext(StoreContext);
   const [open, setOpen] = useState(false);
 
@@ -24,18 +23,18 @@ function CustomersPage({}: Props): React.ReactElement {
     getCustomers()(customersDispatch);
   }, []);
 
-  const data: CustomerStore[] = useMemo(
+  const data: ClientFormModel[] = useMemo(
     () => customersState.data,
     [customersState]
   );
 
-  const createRequest = (model: CustomerFormModel) => {
+  const createRequest = (model: ClientFormModel) => {
     postCustomer(model)(customersDispatch).then(() =>
       getCustomers()(customersDispatch)
     );
   };
 
-  const updateRequest = (model: CustomerFormModel) => {
+  const updateRequest = (model: ClientFormModel) => {
     putCustomer(model)(customersDispatch).then(() =>
       getCustomers()(customersDispatch)
     );
@@ -87,4 +86,4 @@ function CustomersPage({}: Props): React.ReactElement {
   );
 }
 
-export default CustomersPage;
+export default CustomersScreen;

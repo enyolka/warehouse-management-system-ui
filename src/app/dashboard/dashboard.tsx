@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Button, Grid } from "@mui/material";
-import { StoreContext } from "../../redux/store/StoreProvider";
 import { Link } from "react-router-dom";
 
 // const MuiInputBase = createStyles({
@@ -13,21 +12,27 @@ import { Link } from "react-router-dom";
 
 type Props = {};
 
-function SupplierForm({}: Props): React.ReactElement {
+function Dashboard({}: Props): React.ReactElement {
   return (
     <Grid
       container
       direction="column"
       justifyContent="center"
       alignItems="center"
-      spacing="2"
+      spacing={2}
     >
-      <p>SupplierForm</p>
-      <Button variant="contained" to="/dashboard" component={Link}>
-        Dashboard
-      </Button>
+      <Grid item>
+        <Button variant="contained" to="/suppliers" component={Link}>
+          Suppliers
+        </Button>
+      </Grid>
+      <Grid item>
+        <Button variant="contained" to="/customers" component={Link}>
+          Customers
+        </Button>
+      </Grid>
     </Grid>
   );
 }
 
-export default SupplierForm;
+export default Dashboard;

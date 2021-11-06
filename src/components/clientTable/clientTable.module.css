@@ -1,0 +1,41 @@
+.modal {
+  position: absolute;
+  max-height: 80vh;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  /* max-width: 60%; */
+  background-color: white;
+  border: 1px solid rgb(77, 91, 100);
+  border-radius: 0.4em;
+  box-shadow: 1em 1em 1em rgb(77, 91, 100);
+  padding: 1.5em;
+}
+
+.modal:focus {
+  outline: none;
+}
+
+.formBox {
+  overflow-y: scroll;
+}
+
+.fieldsRow {
+  display: flex;
+  flex-direction: row;
+}
+
+.field {
+  flex-direction: column !important;
+}
+
+.error {
+  color: red;
+}
+
+.errorMessage {
+  color: red;
+  margin-top: 0.5em;
+  font-size: 0.8em;
+}

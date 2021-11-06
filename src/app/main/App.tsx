@@ -1,4 +1,3 @@
-import React from "react";
 import { HashRouter as Router } from "react-router-dom";
 import { Box } from "@mui/system";
 import StoreProvider from "../../redux/store/StoreProvider";

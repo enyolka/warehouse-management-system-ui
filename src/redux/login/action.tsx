@@ -19,7 +19,7 @@ export const login =
       .then((resp) => {
         localStorage.token = resp.data.token;
         request()
-          .get("/users/v1/me", {
+          .get("/users/v1/me/", {
             headers: { Authorization: `Token ${localStorage.token}` },
           })
           .then((resp) => {

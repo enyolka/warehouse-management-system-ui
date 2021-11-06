@@ -1,7 +1,6 @@
 export type CustomerModel = {
   id: number;
-  last_name: string;
-  first_name: string;
+  name: string;
   phone?: string;
   email?: string;
   city: string;

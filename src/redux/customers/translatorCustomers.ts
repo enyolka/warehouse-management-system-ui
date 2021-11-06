@@ -1,13 +1,11 @@
 import { CustomerModel } from "../../api/apiModel"
-import { CustomerFormModel } from "../../components/customers/types"
-import { CustomerStore } from "./store"
+import { ClientFormModel } from "../../components/clientTable/types"
 
-export const translateToStore = (data: any): CustomerStore[] => {
+export const translateToModel = (data: any): ClientFormModel[] => {
   try {
-    return data.map(({ id, last_name, first_name, phone, email, city, street_name, street_number, zip_code} : any) => ({
+    return data.map(({ id, name, phone, email, city, street_name, street_number, zip_code} : any) => ({
       id: id,
-      lastName: last_name,
-      firstName: first_name,
+      name: name,
       phone: phone || "",
       email: email || "",
       city: city,
@@ -20,11 +18,10 @@ export const translateToStore = (data: any): CustomerStore[] => {
   }
 }
 
-export const translatetoApiModel = (model: CustomerFormModel): CustomerModel => {
+export const translatetoApiModel = (model: ClientFormModel): CustomerModel => {
     return {
       id: model.id,
-      last_name: model.lastName,
-      first_name: model.firstName,
+      name: model.name,
       phone: model.phone || "",
       email: model.email || "",
       city: model.city,

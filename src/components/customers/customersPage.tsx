@@ -6,20 +6,19 @@ import {
   deleteCustomer,
   getCustomers,
   postCustomer,
+  putCustomer,
 } from "../../redux/customers/action";
-import { useContext, useEffect, useMemo, useReducer, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { CustomerStore } from "../../redux/customers/store";
 import { CustomerFormModel } from "./types";
-import CustomersForm from "./customersForm";
-import CustomersTable from "./customersTable";
+import CustomersForm from "./components/customersForm";
+import CustomersTable from "./components/customersTable";
 
 type Props = {};
 
 function CustomersPage({}: Props): React.ReactElement {
   const { customersState, customersDispatch } = useContext(StoreContext);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     getCustomers()(customersDispatch);
@@ -30,10 +29,16 @@ function CustomersPage({}: Props): React.ReactElement {
     [customersState]
   );
 
-  const createCustomer = (model: CustomerFormModel) => {
-    postCustomer(model)(customersDispatch);
-    getCustomers()(customersDispatch);
-    console.log(customersState.data);
+  const createRequest = (model: CustomerFormModel) => {
+    postCustomer(model)(customersDispatch).then(() =>
+      getCustomers()(customersDispatch)
+    );
+  };
+
+  const updateRequest = (model: CustomerFormModel) => {
+    putCustomer(model)(customersDispatch).then(() =>
+      getCustomers()(customersDispatch)
+    );
   };
 
   const deleteRequest = (idx: number) => {
@@ -54,13 +59,17 @@ function CustomersPage({}: Props): React.ReactElement {
         <h3>Customers</h3>
       </Grid>
       <Grid item>
-        <CustomersTable deleteRq={deleteRequest} data={data} />
+        <CustomersTable
+          deleteRequest={deleteRequest}
+          updateRequest={updateRequest}
+          data={data}
+        />
       </Grid>
 
       <Grid item>
         <Button
           variant="contained"
-          onClick={handleOpen}
+          onClick={() => setOpen(true)}
           style={{ marginRight: 10 }}
         >
           Add customer
@@ -70,8 +79,8 @@ function CustomersPage({}: Props): React.ReactElement {
         </Button>
         <CustomersForm
           open={open}
-          handleClose={handleClose}
-          createRequest={createCustomer}
+          handleClose={() => setOpen(false)}
+          createRequest={createRequest}
         />
       </Grid>
     </Grid>

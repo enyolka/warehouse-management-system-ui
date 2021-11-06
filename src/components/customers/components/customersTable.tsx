@@ -11,20 +11,31 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useState } from "react";
-import { CustomerStore } from "../../redux/customers/store";
+import { CustomerStore } from "../../../redux/customers/store";
 import DeletionModal from "./deletionModal";
+import CustomersForm from "./customersForm";
+import { CustomerFormModel } from "../types";
 
 type Props = {
   data: CustomerStore[];
-  deleteRq: (idx: number) => void;
+  deleteRequest: (idx: number) => void;
+  updateRequest: (model: CustomerFormModel) => void;
 };
 
-const CustomersTable = ({ deleteRq, data }: Props) => {
+const CustomersTable = ({ data, deleteRequest, updateRequest }: Props) => {
   const [openDelete, setOpenDelete] = useState(false);
-  const [deletedIdx, setDeletedIdx] = useState<number>(0);
-  const openDeletionModal = (idx: number) => {
+  const [openUpdate, setOpenUpdate] = useState(false);
+  const [idx, setIdx] = useState<number>(0);
+  const [updatedCustomer, setUpdatedCustomer] = useState<CustomerFormModel>();
+
+  const openDeleteModal = (idx: number) => {
     setOpenDelete(true);
-    setDeletedIdx(idx);
+    setIdx(idx);
+  };
+
+  const openUpdateModal = (model: CustomerFormModel) => {
+    setOpenUpdate(true);
+    setUpdatedCustomer(model);
   };
 
   return (
@@ -42,9 +53,9 @@ const CustomersTable = ({ deleteRq, data }: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((customer: CustomerStore, idx) => (
+          {data.map((customer: CustomerStore, id) => (
             <TableRow
-              key={idx}
+              key={id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">
@@ -58,18 +69,24 @@ const CustomersTable = ({ deleteRq, data }: Props) => {
               <TableCell>{customer.streetName}</TableCell>
               <TableCell>{customer.streetNumber}</TableCell>
               <TableCell>
-                <Button onClick={() => console.log("edit")}>
+                <Button onClick={() => openUpdateModal(customer)}>
                   <EditIcon color="action" />
                 </Button>
-                <Button onClick={() => openDeletionModal(customer.id)}>
+                <Button onClick={() => openDeleteModal(customer.id)}>
                   <DeleteIcon color="action" />
                 </Button>
 
                 <DeletionModal
                   open={openDelete}
                   handleClose={() => setOpenDelete(false)}
-                  createRequest={deleteRq}
-                  idx={deletedIdx}
+                  createRequest={deleteRequest}
+                  idx={idx}
+                />
+                <CustomersForm
+                  open={openUpdate}
+                  handleClose={() => setOpenUpdate(false)}
+                  createRequest={updateRequest}
+                  initialValues={updatedCustomer}
                 />
               </TableCell>
             </TableRow>

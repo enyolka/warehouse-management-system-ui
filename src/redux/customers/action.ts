@@ -40,6 +40,21 @@ export const postCustomer = (model: CustomerFormModel) => (dispatch: any) => {
   });
 }
 
+export const putCustomer = (model: CustomerFormModel) => (dispatch: any) => {
+  dispatch({type: "CUSTOMER_UPDATE"});
+
+  return request().put(
+    `/customers/v1/customers/${model.id}/`,
+    translatetoApiModel(model),
+     { headers: { Authorization: `Token ${localStorage.token}`}}
+  ).catch((err) => {Promise.reject(err);       
+    dispatch({
+    type: "CUSTOMERS_ERROR",
+    payload: err.response ? err.response.data : "COULD NOT CONNECT",
+    });
+  });
+}
+
 export const deleteCustomer = (idx: number) => (dispatch: any) => {
   dispatch({type: "CUSTOMER_DELETE"});
 

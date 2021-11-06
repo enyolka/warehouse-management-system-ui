@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Box, Button, Grid, Modal, TextField } from "@mui/material";
-import { CustomerFormModel } from "./types";
+import { CustomerFormModel } from "../types";
 import {
   Field,
   FieldInputProps,
@@ -10,7 +10,7 @@ import {
   FieldMetaProps,
 } from "formik";
 import * as Yup from "yup";
-import styles from "./customersForm.module.css";
+import styles from "../customersPage.module.css";
 import classNames from "classnames";
 
 export interface FieldProps<V = any> {
@@ -27,12 +27,14 @@ type Props = {
   open: boolean;
   handleClose: (value: React.SetStateAction<boolean>) => void;
   createRequest: (model: CustomerFormModel) => void;
+  initialValues?: CustomerFormModel;
 };
 
 export function CustomersForm({
   open,
   handleClose,
   createRequest,
+  ...props
 }: Props): React.ReactElement {
   const initialModel: CustomerFormModel = {
     id: 0,
@@ -43,6 +45,7 @@ export function CustomersForm({
     streetNumber: "",
     zipCode: "",
     phone: "",
+    email: "",
   };
 
   return (
@@ -54,12 +57,13 @@ export function CustomersForm({
     >
       <Box className={classNames(styles.modal, styles.formBox)}>
         <Formik<CustomerFormModel>
-          initialValues={initialModel}
+          initialValues={props.initialValues ?? initialModel}
           enableReinitialize={true}
           validateOnChange={true}
           validateOnBlur={true}
           onSubmit={(values, { resetForm }) => {
             createRequest(values);
+            if (props.initialValues) handleClose(true);
             resetForm({});
           }}
           validationSchema={Yup.object({

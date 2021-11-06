@@ -34,18 +34,18 @@ const customersReducer = (state = customersInitialState, action: any) => {
         error: false,
         loading: true,
     };
+    case "CUSTOMER_UPDATE":
+      return {
+          ...state,
+          error: false,
+          loading: true,
+      };
     case "CUSTOMER_DELETE":
       return {
           ...state,
           error: false,
           loading: true,
       };
-      case "CUSTOMER_UPDATE":
-        return {
-            ...state,
-            error: false,
-            loading: true,
-        };
     case "CUSTOMERS_ERROR":
       return {
           ...state,

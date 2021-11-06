@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { StoreContext } from "../../redux/store/StoreProvider";
-import CustomersForm from "../customers/customersForm";
 import CustomersPage from "../customers/customersPage";
 import Dashboard from "../dashboard/dashboard";
 import StartScreen from "../startScreen/startScreen";

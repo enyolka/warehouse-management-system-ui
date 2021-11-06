@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Box, Button, Modal } from "@mui/material";
-import styles from "./customersForm.module.css";
+import styles from "../customersPage.module.css";
 
 type Props = {
   open: boolean;

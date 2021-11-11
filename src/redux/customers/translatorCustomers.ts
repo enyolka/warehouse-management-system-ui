@@ -1,4 +1,4 @@
-import { CustomerModel } from "../../api/apiModel"
+import { ClientModel } from "../../api/apiModel"
 import { ClientFormModel } from "../../components/clientTable/types"
 
 export const translateToModel = (data: any): ClientFormModel[] => {
@@ -18,7 +18,7 @@ export const translateToModel = (data: any): ClientFormModel[] => {
   }
 }
 
-export const translatetoApiModel = (model: ClientFormModel): CustomerModel => {
+export const translatetoApiModel = (model: ClientFormModel): ClientModel => {
     return {
       id: model.id,
       name: model.name,

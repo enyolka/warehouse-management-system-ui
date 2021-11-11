@@ -52,7 +52,7 @@ const ClientTable = ({ data, deleteRequest, updateRequest }: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((customer: ClientFormModel, id) => (
+          {data.map((customer: ClientFormModel, id: number) => (
             <TableRow
               key={id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

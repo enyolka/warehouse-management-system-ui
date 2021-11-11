@@ -8,7 +8,7 @@ import {
   postSupplier,
   putSupplier,
 } from "../../redux/suppliers/action";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import { ClientFormModel } from "../../components/clientTable/types";
 import ClientForm from "../../components/clientTable/clientForm";
 import ClientTable from "../../components/clientTable/clientTable";
@@ -19,31 +19,21 @@ function SuppliersScreen({}: Props): React.ReactElement {
   const { suppliersState, suppliersDispatch } = useContext(StoreContext);
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    getSuppliers()(suppliersDispatch);
-  }, []);
-
   const data: ClientFormModel[] = useMemo(
     () => suppliersState.data,
     [suppliersState]
   );
 
   const createRequest = (model: ClientFormModel) => {
-    postSupplier(model)(suppliersDispatch).then(() =>
-      getSuppliers()(suppliersDispatch)
-    );
+    postSupplier(model)(suppliersDispatch);
   };
 
   const updateRequest = (model: ClientFormModel) => {
-    putSupplier(model)(suppliersDispatch).then(() =>
-      getSuppliers()(suppliersDispatch)
-    );
+    putSupplier(model)(suppliersDispatch);
   };
 
   const deleteRequest = (idx: number) => {
-    deleteSupplier(idx)(suppliersDispatch).then(() =>
-      getSuppliers()(suppliersDispatch)
-    );
+    deleteSupplier(idx)(suppliersDispatch);
   };
 
   return (

@@ -19,10 +19,6 @@ function CustomersScreen({}: Props): React.ReactElement {
   const { customersState, customersDispatch } = useContext(StoreContext);
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    getCustomers()(customersDispatch);
-  }, []);
-
   const data: ClientFormModel[] = useMemo(
     () => customersState.data,
     [customersState]

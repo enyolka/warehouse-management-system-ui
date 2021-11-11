@@ -1,13 +1,13 @@
 import { ClientSetStore } from "./store";
 
-export const customersInitialState: ClientSetStore = {
+export const supplierInitialState: ClientSetStore = {
   loading: false,
   data: [],
   error: "",
 }
 
 
-const customersReducer = (state = customersInitialState, action: any) => {
+const supplierReducer = (state = supplierInitialState, action: any) => {
   switch (action.type)
  { 
   case "CUSTOMERS_LOADING":
@@ -20,31 +20,35 @@ const customersReducer = (state = customersInitialState, action: any) => {
       return {
           ...state,
           loading: false,
-          data: action.payload,
+          data: action.payload || state.data,
       };
-    case "CUSTOMER_LOADING":
-        return {
-            ...state,
-            error: false,
-            loading: true,
-    };
     case "CUSTOMER_CREATE":
     return {
         ...state,
         error: false,
         loading: true,
+        data: [...state.data].concat(action.payload),
     };
     case "CUSTOMER_UPDATE":
+      const updatedData = state.data.map(customer => {
+        if (customer.id === action.payload[0].id) {
+          return action.payload[0];
+        }
+        return customer ;
+      })
       return {
           ...state,
           error: false,
           loading: true,
+          data: updatedData
       };
     case "CUSTOMER_DELETE":
+      const reducedData = state.data.filter(element => element.id !== action.payload)
       return {
           ...state,
           error: false,
           loading: true,
+          data: reducedData,
       };
     case "CUSTOMERS_ERROR":
       return {
@@ -58,4 +62,4 @@ const customersReducer = (state = customersInitialState, action: any) => {
  }
 }
 
-export default customersReducer;
+export default supplierReducer

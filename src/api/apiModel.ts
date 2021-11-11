@@ -1,4 +1,4 @@
-export type CustomerModel = {
+export type ClientModel = {
   id: number;
   name: string;
   phone?: string;

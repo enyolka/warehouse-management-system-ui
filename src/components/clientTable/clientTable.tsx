@@ -38,12 +38,8 @@ const ClientTable = ({ data, deleteRequest, updateRequest }: Props) => {
   };
 
   return (
-    <TableContainer component={Paper} sx={{ minWidth: 1020, maxWidth: 1200 }}>
-      <Table
-        sx={{ minWidth: 1020, maxWidth: 1200 }}
-        size="medium"
-        aria-label="a dense table"
-      >
+    <TableContainer component={Paper}>
+      <Table size="medium" aria-label="Client table">
         <TableHead>
           <TableRow>
             {columnNames.map(({ field, headerName }) => (

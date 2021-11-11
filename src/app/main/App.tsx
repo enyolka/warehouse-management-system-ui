@@ -5,7 +5,7 @@ import Content from "./Content";
 import Header from "./Header";
 import styles from "./App.module.css";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
-import { theme } from "../styles/theme";
+import { theme } from "../../styles/theme";
 
 function App() {
   return (

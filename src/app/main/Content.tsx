@@ -4,6 +4,7 @@ import { StoreContext } from "../../redux/store/StoreProvider";
 import CustomersScreen from "../customersScreen/customersScreen";
 import Dashboard from "../dashboard/dashboard";
 import ProductLibraryScreen from "../productLibraryScreen/productLibrary";
+import ProductsScreen from "../productsScreen/productsScreen";
 import StartScreen from "../startScreen/startScreen";
 import SuppliersScreen from "../suppliersScreen/suppliersScreen";
 
@@ -32,6 +33,9 @@ const Content = () => {
             path="/product-library"
             render={() => <ProductLibraryScreen />}
           />
+        )}
+        {isUserLogged && (
+          <Route exact path="/products" render={() => <ProductsScreen />} />
         )}
         {/*{isAdmin && (
           <Route exact path="/start-admin" render={() => <StartScreen />} />

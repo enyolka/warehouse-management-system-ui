@@ -36,6 +36,11 @@ function Dashboard({}: Props): React.ReactElement {
           Product Library
         </Button>
       </Grid>
+      <Grid item>
+        <Button variant="contained" to="/products" component={Link}>
+          Products
+        </Button>
+      </Grid>
     </Grid>
   );
 }

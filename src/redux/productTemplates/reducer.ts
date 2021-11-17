@@ -1,40 +1,40 @@
-import { ClientSetStore } from "./store";
+import { ProductTemplateSetStore } from "./store";
 
-export const supplierInitialState: ClientSetStore = {
+export const productTemplatesInitialState: ProductTemplateSetStore = {
   loading: false,
   data: [],
-  error: false,
+  error: "",
 }
 
 
-const supplierReducer = (state = supplierInitialState, action: any): ClientSetStore => {
+const productTemplatesReducer = (state = productTemplatesInitialState, action: any) => {
   switch (action.type)
  { 
-  case "CUSTOMERS_LOADING":
+  case "PRODUCT_TEMPLATE_LOADING":
     return {
         ...state,
         error: false,
         loading: true,
     };
-    case "CUSTOMERS_SUCCESS":
+    case "PRODUCT_TEMPLATE_SUCCESS":
       return {
           ...state,
           loading: false,
           data: action.payload || state.data,
       };
-    case "CUSTOMER_CREATE":
+    case "PRODUCT_TEMPLATE_CREATE":
     return {
         ...state,
         error: false,
         loading: true,
         data: [...state.data].concat(action.payload),
     };
-    case "CUSTOMER_UPDATE":
-      const updatedData = state.data.map(customer => {
-        if (customer.id === action.payload[0].id) {
+    case "PRODUCT_TEMPLATE_UPDATE":
+      const updatedData = state.data.map(prod => {
+        if (prod.id === action.payload[0].id) {
           return action.payload[0];
         }
-        return customer ;
+        return prod ;
       })
       return {
           ...state,
@@ -42,7 +42,7 @@ const supplierReducer = (state = supplierInitialState, action: any): ClientSetSt
           loading: true,
           data: updatedData
       };
-    case "CUSTOMER_DELETE":
+    case "PRODUCT_TEMPLATE_DELETE":
       const reducedData = state.data.filter(element => element.id !== action.payload)
       return {
           ...state,
@@ -50,7 +50,7 @@ const supplierReducer = (state = supplierInitialState, action: any): ClientSetSt
           loading: true,
           data: reducedData,
       };
-    case "CUSTOMERS_ERROR":
+    case "PRODUCT_TEMPLATE_ERROR":
       return {
           ...state,
           loading: false,
@@ -62,4 +62,4 @@ const supplierReducer = (state = supplierInitialState, action: any): ClientSetSt
  }
 }
 
-export default supplierReducer
+export { productTemplatesReducer }

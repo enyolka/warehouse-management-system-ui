@@ -18,14 +18,14 @@ export interface FieldProps<V = any> {
   field: FieldInputProps<V>;
   form: FormikProps<V>; // if ppl want to restrict this for a given form, let them.
   meta: FieldMetaProps<V>;
-  error: boolean;
+  isError: boolean;
 }
 
 const MyInput = ({ field, form, ...props }: FieldProps) => {
   return (
     <TextField
-      className={classNames({ error: props.error })}
       style={{ marginRight: 10 }}
+      error={props.isError}
       {...field}
       {...props}
     />
@@ -56,6 +56,31 @@ export function ClientForm({
     email: "",
   };
 
+  const phoneRegExp =
+    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+  const zipCodeRegExp = /^(([0-9]{5})|([0-9]{2}-[0-9]{3}))$/;
+  const streetRegExp = /^([0-9]+|([0-9]+[/][0-9]+))$/;
+
+  const validationSchema = Yup.object({
+    name: Yup.string()
+      .max(30, "Must be 30 characters or less")
+      .required("Required"),
+    phone: Yup.string().matches(phoneRegExp, "Phone number is not valid"),
+    email: Yup.string().email(),
+    streetName: Yup.string()
+      .max(20, "Must be 20 characters or less")
+      .required("Required"),
+    streetNumber: Yup.string()
+      .matches(streetRegExp, "Street number is not valid")
+      .required("Required"),
+    zipCode: Yup.string()
+      .matches(zipCodeRegExp, "Zip code is not valid. Must be 5 numbers")
+      .required("Required"),
+    city: Yup.string()
+      .max(20, "Must be 20 characters or less")
+      .required("Required"),
+  });
+
   return (
     <Modal
       open={open}
@@ -74,30 +99,22 @@ export function ClientForm({
             if (props.initialValues) handleClose(true);
             resetForm({});
           }}
-          validationSchema={Yup.object({
-            name: Yup.string()
-              .max(30, "Must be 30 characters or less")
-              .required("Required"),
-          })}
+          validationSchema={validationSchema}
         >
           {({ errors, touched }) => (
             <Form>
-              <Grid container spacing={2}>
-                <Grid item className={styles.fieldsRow}>
-                  <Grid item className={styles.field}>
-                    <Field
-                      label="Name"
-                      name="name"
-                      type="text"
-                      component={MyInput}
-                      error={errors.name && touched.name}
-                    />
-                    <ErrorMessage name="name">
-                      {(msg) => (
-                        <div className={styles.errorMessage}>{msg}</div>
-                      )}
-                    </ErrorMessage>
-                  </Grid>
+              <Grid container spacing={2} columns={1}>
+                <Grid item className={styles.field}>
+                  <Field
+                    label="Name"
+                    name="name"
+                    type="text"
+                    component={MyInput}
+                    isError={errors.name && touched.name}
+                  />
+                  <ErrorMessage name="name">
+                    {(msg) => <div className={styles.errorMessage}>{msg}</div>}
+                  </ErrorMessage>
                   {/* <Grid item className={styles.field}>
                     <Field
                       name="lastName"
@@ -113,57 +130,99 @@ export function ClientForm({
                     </ErrorMessage>
                   </Grid> */}
                 </Grid>
-                <Grid item>
-                  <Field
-                    label="Phone"
-                    name="phone"
-                    type="text"
-                    component={MyInput}
-                  />
+                <Grid item className={styles.fieldsRow}>
+                  <Grid item className={styles.field}>
+                    <Field
+                      label="Phone"
+                      name="phone"
+                      type="text"
+                      component={MyInput}
+                      isError={errors.phone && touched.phone}
+                    />
+                    <ErrorMessage name="phone">
+                      {(msg) => (
+                        <div className={styles.errorMessage}>{msg}</div>
+                      )}
+                    </ErrorMessage>
+                  </Grid>
 
-                  <ErrorMessage name="phone" />
-                  <Field
-                    label="Email"
-                    name="email"
-                    type="text"
-                    component={MyInput}
-                  />
-                  <ErrorMessage name="email" />
+                  <Grid item className={styles.field}>
+                    <Field
+                      label="Email"
+                      name="email"
+                      type="text"
+                      component={MyInput}
+                      isError={errors.email && touched.email}
+                    />
+                    <ErrorMessage name="email">
+                      {(msg) => (
+                        <div className={styles.errorMessage}>{msg}</div>
+                      )}
+                    </ErrorMessage>
+                  </Grid>
                 </Grid>
-                <Grid item>
-                  <Field
-                    label="Street name"
-                    name="streetName"
-                    type="text"
-                    component={MyInput}
-                  />
-                  <ErrorMessage name="streetName" />
-                  <Field
-                    label="Street number"
-                    name="streetNumber"
-                    type="text"
-                    component={MyInput}
-                  />
-                  <ErrorMessage name="streetNumber" />
+                <Grid item className={styles.fieldsRow}>
+                  <Grid item className={styles.field}>
+                    <Field
+                      label="Street name"
+                      name="streetName"
+                      type="text"
+                      component={MyInput}
+                      isError={errors.streetName && touched.streetName}
+                    />
+                    <ErrorMessage name="streetName">
+                      {(msg) => (
+                        <div className={styles.errorMessage}>{msg}</div>
+                      )}
+                    </ErrorMessage>
+                  </Grid>
+                  <Grid item className={styles.field}>
+                    <Field
+                      label="Street number"
+                      name="streetNumber"
+                      type="text"
+                      component={MyInput}
+                      isError={errors.streetNumber && touched.streetNumber}
+                    />
+                    <ErrorMessage name="streetNumber">
+                      {(msg) => (
+                        <div className={styles.errorMessage}>{msg}</div>
+                      )}
+                    </ErrorMessage>
+                  </Grid>
                 </Grid>
-                <Grid item>
-                  <Field
-                    label="Zip code"
-                    name="zipCode"
-                    type="text"
-                    component={MyInput}
-                  />
-                  <ErrorMessage name="zipCode" />
-                  <Field
-                    label="City"
-                    name="city"
-                    type="text"
-                    component={MyInput}
-                  />
-                  <ErrorMessage name="city" />
+                <Grid item className={styles.fieldsRow}>
+                  <Grid item className={styles.field}>
+                    <Field
+                      label="Zip code"
+                      name="zipCode"
+                      type="text"
+                      component={MyInput}
+                      isError={errors.zipCode && touched.zipCode}
+                    />
+                    <ErrorMessage name="zipCode">
+                      {(msg) => (
+                        <div className={styles.errorMessage}>{msg}</div>
+                      )}
+                    </ErrorMessage>
+                  </Grid>
+                  <Grid item className={styles.field}>
+                    <Field
+                      label="City"
+                      name="city"
+                      type="text"
+                      component={MyInput}
+                      isError={errors.city && touched.city}
+                    />
+                    <ErrorMessage name="city">
+                      {(msg) => (
+                        <div className={styles.errorMessage}>{msg}</div>
+                      )}
+                    </ErrorMessage>
+                  </Grid>
                 </Grid>
 
-                <Grid item>
+                <Grid item className={styles.submitButton}>
                   <Button type="submit" variant="contained">
                     Submit
                   </Button>

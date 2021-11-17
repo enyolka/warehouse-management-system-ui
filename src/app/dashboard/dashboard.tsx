@@ -32,8 +32,8 @@ function Dashboard({}: Props): React.ReactElement {
         </Button>
       </Grid>
       <Grid item>
-        <Button variant="contained" to="/products" component={Link}>
-          Products
+        <Button variant="contained" to="/product-library" component={Link}>
+          Product Library
         </Button>
       </Grid>
     </Grid>

@@ -1,11 +1,15 @@
+import { useContext, useMemo } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
+import { StoreContext } from "../../redux/store/StoreProvider";
 import CustomersScreen from "../customersScreen/customersScreen";
 import Dashboard from "../dashboard/dashboard";
+import ProductLibraryScreen from "../productLibraryScreen/productLibrary";
 import StartScreen from "../startScreen/startScreen";
 import SuppliersScreen from "../suppliersScreen/suppliersScreen";
 
 const Content = () => {
-  const isUserLogged = Boolean(localStorage.token);
+  const { loginState } = useContext(StoreContext);
+  const isUserLogged = useMemo(() => Boolean(localStorage.token), [loginState]);
 
   return (
     <main>
@@ -21,6 +25,13 @@ const Content = () => {
         )}
         {isUserLogged && (
           <Route exact path="/customers" render={() => <CustomersScreen />} />
+        )}
+        {isUserLogged && (
+          <Route
+            exact
+            path="/product-library"
+            render={() => <ProductLibraryScreen />}
+          />
         )}
         {/*{isAdmin && (
           <Route exact path="/start-admin" render={() => <StartScreen />} />

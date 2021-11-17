@@ -1,7 +1,7 @@
 import { ClientModel } from "../../api/apiModel"
 import { ClientFormModel } from "../../components/clientTable/types"
 
-export const translateToModel = (data: any): ClientFormModel[] => {
+export const translateToModel = (data: ClientModel[]): ClientFormModel[] => {
   try {
     return data.map(({ id, name, phone, email, city, street_name, street_number, zip_code} : any) => ({
       id: id,

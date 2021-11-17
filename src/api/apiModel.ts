@@ -8,3 +8,12 @@ export type ClientModel = {
   street_number: string;
   zip_code: string;
 }
+
+export type ProductTemplateModel = {
+  id: number;
+  name: string;
+  supplier: ClientModel;
+  length?: number;
+  width?: number;
+  height?: number;
+};

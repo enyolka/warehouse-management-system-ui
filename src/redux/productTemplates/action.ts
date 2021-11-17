@@ -1,7 +1,7 @@
 import { ClientFormModel } from "../../components/clientTable/types";
 import { ProductTemplateFormModel } from "../../components/productTable/types";
 import request from "../../helpers/request";
-import { translatetoApiModel, translateToFormModel, translateToPostApiModel, translateToPostFormModel } from "./translatorProductTemplate";
+import { translateToFormModel, translateToPostApiModel, translateToPostFormModel } from "./translatorProductTemplate";
 
 
 export const getProductTemplate = (suppliers: ClientFormModel[]) => (dispatch: any) => {
@@ -37,7 +37,7 @@ export const postProductTemplate = (model: ProductTemplateFormModel, suppliers: 
       console.log(resp.data)
       dispatch({
         type: "PRODUCT_TEMPLATE_CREATE",        
-        payload: translateToPostFormModel([resp.data], suppliers),
+        payload: translateToPostFormModel(resp.data, suppliers),
       });
     dispatch({type: "PRODUCT_TEMPLATE_SUCCESS"})
     })
@@ -50,15 +50,17 @@ export const postProductTemplate = (model: ProductTemplateFormModel, suppliers: 
 }
 
 export const putProductTemplate = (model: ProductTemplateFormModel, suppliers: ClientFormModel[]) => (dispatch: any) => {
+  console.log(model)
   return request().put(
     `/storages/v1/product-templates/${model.id}/`,
     translateToPostApiModel(model),
      { headers: { Authorization: `Token ${localStorage.token}`}}
   ).then(
     resp => { 
+      console.log(resp)
       dispatch({
         type: "PRODUCT_TEMPLATE_UPDATE", 
-        payload: translateToPostFormModel([resp.data], suppliers),
+        payload: translateToPostFormModel(resp.data, suppliers),
       });
       dispatch({type: "PRODUCT_TEMPLATE_SUCCESS"})
     }) 

@@ -9,6 +9,7 @@ import {
   FormikProps,
   FieldMetaProps,
   ErrorMessage,
+  FormikErrors,
 } from "formik";
 import * as Yup from "yup";
 import styles from "./clientTable.module.css";
@@ -16,20 +17,12 @@ import classNames from "classnames";
 
 export interface FieldProps<V = any> {
   field: FieldInputProps<V>;
-  form: FormikProps<V>; // if ppl want to restrict this for a given form, let them.
+  form: FormikProps<V>;
   meta: FieldMetaProps<V>;
-  isError: boolean;
 }
 
 const MyInput = ({ field, form, ...props }: FieldProps) => {
-  return (
-    <TextField
-      style={{ marginRight: 10 }}
-      error={props.isError}
-      {...field}
-      {...props}
-    />
-  );
+  return <TextField style={{ marginRight: 10 }} {...field} {...props} />;
 };
 
 type Props = {
@@ -66,7 +59,7 @@ export function ClientForm({
       .max(30, "Must be 30 characters or less")
       .required("Required"),
     phone: Yup.string().matches(phoneRegExp, "Phone number is not valid"),
-    email: Yup.string().email(),
+    email: Yup.string().email("Email is not valid"),
     streetName: Yup.string()
       .max(20, "Must be 20 characters or less")
       .required("Required"),
@@ -110,7 +103,7 @@ export function ClientForm({
                     name="name"
                     type="text"
                     component={MyInput}
-                    isError={errors.name && touched.name}
+                    error={errors.name && touched.name}
                   />
                   <ErrorMessage name="name">
                     {(msg) => <div className={styles.errorMessage}>{msg}</div>}
@@ -137,7 +130,7 @@ export function ClientForm({
                       name="phone"
                       type="text"
                       component={MyInput}
-                      isError={errors.phone && touched.phone}
+                      error={errors.phone && touched.phone}
                     />
                     <ErrorMessage name="phone">
                       {(msg) => (
@@ -152,7 +145,7 @@ export function ClientForm({
                       name="email"
                       type="text"
                       component={MyInput}
-                      isError={errors.email && touched.email}
+                      error={errors.email && touched.email}
                     />
                     <ErrorMessage name="email">
                       {(msg) => (
@@ -168,7 +161,7 @@ export function ClientForm({
                       name="streetName"
                       type="text"
                       component={MyInput}
-                      isError={errors.streetName && touched.streetName}
+                      error={errors.streetName && touched.streetName}
                     />
                     <ErrorMessage name="streetName">
                       {(msg) => (
@@ -182,7 +175,7 @@ export function ClientForm({
                       name="streetNumber"
                       type="text"
                       component={MyInput}
-                      isError={errors.streetNumber && touched.streetNumber}
+                      error={errors.streetNumber && touched.streetNumber}
                     />
                     <ErrorMessage name="streetNumber">
                       {(msg) => (
@@ -198,7 +191,7 @@ export function ClientForm({
                       name="zipCode"
                       type="text"
                       component={MyInput}
-                      isError={errors.zipCode && touched.zipCode}
+                      error={errors.zipCode && touched.zipCode}
                     />
                     <ErrorMessage name="zipCode">
                       {(msg) => (
@@ -212,7 +205,7 @@ export function ClientForm({
                       name="city"
                       type="text"
                       component={MyInput}
-                      isError={errors.city && touched.city}
+                      error={errors.city && touched.city}
                     />
                     <ErrorMessage name="city">
                       {(msg) => (

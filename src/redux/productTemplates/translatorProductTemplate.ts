@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { ProductTemplateModel } from "../../api/apiModel"
+import { ProductTemplateModel, ProductTemplatePostModel } from "../../api/apiModel"
 import { ClientFormModel } from "../../components/clientTable/types";
 import { ProductTemplateFormModel } from "../../components/productTable/types"
 import { translateToModel as translateToClientModel, translatetoApiModel as translateToClientApiModel } from "../customers/translatorCustomers";
@@ -44,7 +44,10 @@ export const translateToPostApiModel = (model: ProductTemplateFormModel) => {
 }
 
 
-export const translateToPostFormModel = (model: any, suppliers: ClientFormModel[]): ProductTemplateFormModel => {
+export const translateToPostFormModel = (model: ProductTemplatePostModel, suppliers: ClientFormModel[]): ProductTemplateFormModel => {
+  console.log("Model")
+  console.log(model)
+  console.log(suppliers.find(sup => sup.id === model.supplier)!)
   return {
     id: model.id,
     name: model.name,

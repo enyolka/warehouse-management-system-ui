@@ -35,16 +35,13 @@ function ProductLibraryScreen({}: Props): React.ReactElement {
     [suppliersState]
   );
 
-  // useEffect(() => {
-  //   getProductTemplate(suppliersData)(productTemplatesDispatch);
-  // }, []);
-
   const data: ProductTemplateFormModel[] = useMemo(() => {
     return productTemplatesState.data;
   }, [productTemplatesState]);
 
   const createRequest = (model: ProductTemplateFormModel) => {
     postProductTemplate(model, suppliersData)(productTemplatesDispatch);
+    console.log(productTemplatesState.data);
     getProductTemplate(suppliersData)(productTemplatesDispatch);
   };
 

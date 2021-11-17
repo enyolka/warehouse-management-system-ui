@@ -17,3 +17,12 @@ export type ProductTemplateModel = {
   width?: number;
   height?: number;
 };
+
+export type ProductTemplatePostModel = {
+  id: number;
+  name: string;
+  supplier: number;
+  length?: number;
+  width?: number;
+  height?: number;
+};

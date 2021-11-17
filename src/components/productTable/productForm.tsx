@@ -156,7 +156,7 @@ export function ProductForm({
                     name="name"
                     type="text"
                     component={MyInput}
-                    // isError={errors.name && touched.name}
+                    error={errors.name && touched.name}
                   />
                   <ErrorMessage name="name">
                     {(msg) => <div className={styles.errorMessage}>{msg}</div>}
@@ -169,7 +169,7 @@ export function ProductForm({
                     name="supplier"
                     type="select"
                     component={MyAutoComplete}
-                    // isError={errors.supplier && touched.supplier}
+                    error={errors.supplier && touched.supplier}
                     options={suppliersState.data}
                     getOptionLabel={(option: ClientFormModel) => option.name}
                   />
@@ -185,7 +185,7 @@ export function ProductForm({
                       name="length"
                       type="text"
                       component={MyInput}
-                      // isError={errors.length && touched.length}
+                      error={errors.length && touched.length}
                     />
                     <ErrorMessage name="length">
                       {(msg) => (
@@ -199,7 +199,7 @@ export function ProductForm({
                       name="width"
                       type="text"
                       component={MyInput}
-                      // isError={errors.width && touched.width}
+                      error={errors.width && touched.width}
                     />
                     <ErrorMessage name="width">
                       {(msg) => (
@@ -213,7 +213,7 @@ export function ProductForm({
                       name="height"
                       type="text"
                       component={MyInput}
-                      // isError={errors.height && touched.height}
+                      error={errors.height && touched.height}
                     />
                     <ErrorMessage name="height">
                       {(msg) => (

@@ -12,7 +12,7 @@ export type ClientModel = {
 export type ProductTemplateModel = {
   id: number;
   name: string;
-  supplier: ClientModel;
+  supplier: ClientModel
   length?: number;
   width?: number;
   height?: number;
@@ -22,6 +22,26 @@ export type ProductTemplatePostModel = {
   id: number;
   name: string;
   supplier: number;
+  length?: number;
+  width?: number;
+  height?: number;
+};
+
+export type ProductModel = {
+  id: number;
+  name: string;
+  supplier: ClientModel;
+  template: ProductTemplateModel;
+  length?: number;
+  width?: number;
+  height?: number;
+};
+
+export type ProductPostModel = {
+  id: number;
+  name: string;
+  supplier: number;
+  template: number;
   length?: number;
   width?: number;
   height?: number;

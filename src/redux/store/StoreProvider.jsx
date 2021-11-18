@@ -9,7 +9,9 @@ import {
 import supplierReducer, { supplierInitialState } from "../suppliers/reducer";
 import loginReducer, { loginInitialState } from "../login/reducer";
 import {productTemplatesReducer, productTemplatesInitialState} from "../productTemplates/reducer"
-import { getProductTemplate } from "../productTemplates/action";
+import { getProductTemplates } from "../productTemplates/action";
+import {productsReducer, productsInitialState} from "../products/reducer"
+import { getProducts } from "../products/action";
 
 export const StoreContext = createContext();
 
@@ -18,12 +20,14 @@ const StoreProvider = ({ children }) => {
   const [customersState, customersDispatch] = useReducer(customersReducer, customersInitialState)
   const [suppliersState, suppliersDispatch] = useReducer(supplierReducer, supplierInitialState)
   const [productTemplatesState, productTemplatesDispatch] = useReducer(productTemplatesReducer, productTemplatesInitialState)
+  const [productsState, productsDispatch] = useReducer(productsReducer, productsInitialState)
 
   useEffect(() => {
     if(localStorage.token) {
     getCustomers()(customersDispatch);
     getSuppliers()(suppliersDispatch);
-    getProductTemplate(suppliersState.data)(productTemplatesDispatch)
+    getProductTemplates()(productTemplatesDispatch)
+    getProducts()(productTemplatesDispatch)
   }}, [loginState.data]);
 
   return (
@@ -35,7 +39,9 @@ const StoreProvider = ({ children }) => {
       suppliersState, 
       suppliersDispatch, 
       productTemplatesState, 
-      productTemplatesDispatch 
+      productTemplatesDispatch,
+      productsState, 
+      productsDispatch  
       }}>
       {children}
     </StoreContext.Provider>

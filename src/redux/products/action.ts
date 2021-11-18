@@ -1,91 +1,91 @@
 import { ClientFormModel } from "../../components/clientTable/types";
-import { ProductTemplateFormModel } from "../../components/productTable/types";
+import { ProductFormModel, ProductTemplateFormModel } from "../../components/productTable/types";
 import request from "../../helpers/request";
-import { translateToFormModel, translateToPostApiModel, translateToPostFormModel } from "./translatorProductTemplate";
+import { translateToFormModel, translateToPostApiModel, translateToPostFormModel } from "./translatorProduct";
 
 
-export const getProductTemplates = () => (dispatch: any) => {
-  dispatch({type: "PRODUCT_TEMPLATE_LOADING"});
+export const getProducts = () => (dispatch: any) => {
+  dispatch({type: "PRODUCT_LOADING"});
 
   return request().get(
-    "/storages/v1/product-templates/",
+    "/storages/v1/products/",
     {
       headers: { Authorization: `Token ${localStorage.token}`}}
   )
   .then((resp) => {
     console.log(resp.data)
     dispatch({
-      type: "PRODUCT_TEMPLATE_SUCCESS",
+      type: "PRODUCT_SUCCESS",
       payload: translateToFormModel(resp.data),
     });
   })
   .catch((err) => {Promise.reject(err);       
     dispatch({
-    type: "PRODUCT_TEMPLATE_ERROR",
+    type: "PRODUCT_ERROR",
     payload: err.response ? err.response.data : "COULD NOT CONNECT",
     });
   });
 }
 
-export const postProductTemplate = (model: ProductTemplateFormModel, suppliers: ClientFormModel[]) => (dispatch: any) => {
+export const postProduct = (model: ProductFormModel, suppliers: ClientFormModel[], templates: ProductTemplateFormModel[]) => (dispatch: any) => {
   return request().post(
-    "/storages/v1/product-templates/",
+    "/storages/v1/products/",
     translateToPostApiModel(model),
      { headers: { Authorization: `Token ${localStorage.token}`}}
   ).then(
     resp => { 
       console.log(resp.data)
       dispatch({
-        type: "PRODUCT_TEMPLATE_CREATE",        
-        payload: translateToPostFormModel(resp.data, suppliers),
+        type: "PRODUCT_CREATE",        
+        payload: translateToPostFormModel(resp.data, suppliers, templates), 
       });
-    dispatch({type: "PRODUCT_TEMPLATE_SUCCESS"})
+    dispatch({type: "PRODUCT_SUCCESS"})
     })
   .catch((err) => {Promise.reject(err);       
     dispatch({
-    type: "PRODUCT_TEMPLATE_ERROR",
+    type: "PRODUCT_ERROR",
     payload: err.response ? err.response.data : "COULD NOT CONNECT",
     });
   });
 }
 
-export const putProductTemplate = (model: ProductTemplateFormModel, suppliers: ClientFormModel[]) => (dispatch: any) => {
+export const putProduct = (model: ProductFormModel, suppliers: ClientFormModel[], templates: ProductTemplateFormModel[]) => (dispatch: any) => {
   console.log(model)
   return request().put(
-    `/storages/v1/product-templates/${model.id}/`,
+    `/storages/v1/products/${model.id}/`,
     translateToPostApiModel(model),
      { headers: { Authorization: `Token ${localStorage.token}`}}
   ).then(
     resp => { 
       console.log(resp)
       dispatch({
-        type: "PRODUCT_TEMPLATE_UPDATE", 
-        payload: translateToPostFormModel(resp.data, suppliers),
+        type: "PRODUCT_UPDATE", 
+        payload: translateToPostFormModel(resp.data, suppliers, templates),
       });
-      dispatch({type: "PRODUCT_TEMPLATE_SUCCESS"})
+      dispatch({type: "PRODUCT_SUCCESS"})
     }) 
   .catch((err) => {Promise.reject(err);       
     dispatch({
-    type: "PRODUCT_TEMPLATE_ERROR",
+    type: "PRODUCT_ERROR",
     payload: err.response ? err.response.data : "COULD NOT CONNECT",
     });
   });
 }
 
-export const deleteProductTemplate = (idx: number) => (dispatch: any) => {
+export const deleteProduct = (idx: number) => (dispatch: any) => {
 
   return request().delete(
-    `/storages/v1/product-templates/${idx}`,
+    `/storages/v1/products/${idx}`,
      { headers: { Authorization: `Token ${localStorage.token}`}}
   ).then(resp => {
      dispatch({
-       type: "PRODUCT_TEMPLATE_DELETE",
+       type: "PRODUCT_DELETE",
        payload: idx
       })
-      dispatch({type: "PRODUCT_TEMPLATE_SUCCESS"})}
+      dispatch({type: "PRODUCT_SUCCESS"})}
     ).catch((err) => {Promise.reject(err);       
     dispatch({
-    type: "PRODUCT_TEMPLATE_ERROR",
+    type: "PRODUCT_ERROR",
     payload: err.response ? err.response.data : "COULD NOT CONNECT",
     });
   });

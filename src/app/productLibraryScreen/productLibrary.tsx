@@ -15,7 +15,7 @@ import ClientTable from "../../components/clientTable/clientTable";
 import { ProductTemplateFormModel } from "../../components/productTable/types";
 import {
   deleteProductTemplate,
-  getProductTemplate,
+  getProductTemplates,
   postProductTemplate,
   putProductTemplate,
 } from "../../redux/productTemplates/action";
@@ -42,17 +42,17 @@ function ProductLibraryScreen({}: Props): React.ReactElement {
   const createRequest = (model: ProductTemplateFormModel) => {
     postProductTemplate(model, suppliersData)(productTemplatesDispatch);
     console.log(productTemplatesState.data);
-    getProductTemplate(suppliersData)(productTemplatesDispatch);
+    getProductTemplates()(productTemplatesDispatch);
   };
 
   const updateRequest = (model: ProductTemplateFormModel) => {
     putProductTemplate(model, suppliersData)(productTemplatesDispatch);
-    getProductTemplate(suppliersData)(productTemplatesDispatch);
+    getProductTemplates()(productTemplatesDispatch);
   };
 
   const deleteRequest = (idx: number) => {
     deleteProductTemplate(idx)(productTemplatesDispatch);
-    getProductTemplate(suppliersData)(productTemplatesDispatch);
+    getProductTemplates()(productTemplatesDispatch);
   };
 
   return (

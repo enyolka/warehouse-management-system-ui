@@ -4,7 +4,7 @@ import request from "../../helpers/request";
 import { translateToFormModel, translateToPostApiModel, translateToPostFormModel } from "./translatorProduct";
 
 
-export const getProducts = (suppliers: ClientFormModel[]) => (dispatch: any) => {
+export const getProducts = (suppliers: ClientFormModel[], templates: ProductTemplateFormModel[]) => (dispatch: any) => {
   dispatch({type: "PRODUCT_LOADING"});
 
   return request().get(
@@ -14,9 +14,10 @@ export const getProducts = (suppliers: ClientFormModel[]) => (dispatch: any) => 
   )
   .then((resp) => {
     console.log(resp.data)
+    console.log(translateToFormModel(resp.data, suppliers, templates))
     dispatch({
       type: "PRODUCT_SUCCESS",
-      payload: translateToFormModel(resp.data),
+      payload: translateToFormModel(resp.data, suppliers, templates),
     });
   })
   .catch((err) => {Promise.reject(err);       
@@ -28,16 +29,17 @@ export const getProducts = (suppliers: ClientFormModel[]) => (dispatch: any) => 
 }
 
 export const postProduct = (model: ProductFormModel, suppliers: ClientFormModel[], templates: ProductTemplateFormModel[]) => (dispatch: any) => {
+  console.log(model)
   return request().post(
     "/storages/v1/products/",
-    translateToPostApiModel(model),
+    translateToPostApiModel(model, suppliers),
      { headers: { Authorization: `Token ${localStorage.token}`}}
   ).then(
     resp => { 
       console.log(resp.data)
       dispatch({
         type: "PRODUCT_CREATE",        
-        payload: translateToPostFormModel(resp.data, templates), 
+        payload: translateToPostFormModel(resp.data, suppliers, templates), 
       });
     dispatch({type: "PRODUCT_SUCCESS"})
     })
@@ -53,14 +55,14 @@ export const putProduct = (model: ProductFormModel, suppliers: ClientFormModel[]
   console.log(model)
   return request().put(
     `/storages/v1/products/${model.id}/`,
-    translateToPostApiModel(model),
+    translateToPostApiModel(model, suppliers),
      { headers: { Authorization: `Token ${localStorage.token}`}}
   ).then(
     resp => { 
       console.log(resp)
       dispatch({
         type: "PRODUCT_UPDATE", 
-        payload: translateToPostFormModel(resp.data, templates),
+        payload: translateToPostFormModel(resp.data, suppliers, templates),
       });
       dispatch({type: "PRODUCT_SUCCESS"})
     }) 

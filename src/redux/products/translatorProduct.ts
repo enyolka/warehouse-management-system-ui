@@ -2,29 +2,30 @@ import { useContext } from "react";
 import { ClientModel, ProductModel, ProductTemplateModel  } from "../../api/apiModel"
 import { ClientFormModel } from "../../components/clientTable/types";
 import { ProductFormModel, ProductTemplateFormModel } from "../../components/productTable/types"
+import { UserFormModel } from "../../components/userTable/types";
 import { translateToModel as translateToClientModel, translatetoApiModel as translateToClientApiModel } from "../customers/translatorCustomers";
 import { translateToFormModel as translateToFormTemplateModel, translateToApiModel as translateToTemplateApiModel } from "../productTemplates/translatorProductTemplate";
 import { StoreContext } from "../store/StoreProvider";
 
 
-const findSupplier = (template: number, suppliers: ClientFormModel[]) => {
+const findSupplier = (template: number, suppliers: ClientFormModel[]): ClientFormModel => {
   return suppliers.find(
-    (it: ClientFormModel) => it.id === template
-  );
+    (it: ClientFormModel) => it.id == template
+  )!;
 }
 
-export const translateToFormModel = (data: ProductModel[]): ProductFormModel[] => {
+export const translateToFormModel = (data: ProductModel[], suppliers: ClientFormModel[], templates: ProductTemplateFormModel[]): ProductFormModel[] => {
   try {
     return data.map((model : ProductModel) => ({
       id: model.id,
       name: model.name,
-      supplier: translateToClientModel([model.supplier as ClientModel])[0],//findSupplier(model.template as number, suppliers)!,
-      template: translateToFormTemplateModel([model.template as ProductTemplateModel])[0],
+      supplier: translateToClientModel([model.supplier as ClientModel])[0],
+      template: templates.find(temp => temp.id === model.template)!,
       length: model.length ?? 0,
       width: model.width ?? 0,
       height: model.height ?? 0,
       weight: model.weight ?? 0,
-      created_by: localStorage.user_id,
+      created_by: model.created_by as UserFormModel,
       status: "ACCEPTED" ,
     }));
   } catch(e) {
@@ -32,11 +33,11 @@ export const translateToFormModel = (data: ProductModel[]): ProductFormModel[] =
   }
 }
 
-export const translatetoApiModel = (model: ProductFormModel): ProductModel => {
+export const translatetoApiModel = (model: ProductFormModel, suppliers: ClientFormModel[]): ProductModel => {
     return {
       id: model.id,
       name: model.name,
-      supplier: translateToClientApiModel(model.supplier),
+      supplier: translateToClientApiModel(findSupplier(model.supplier.id, suppliers)!).id,
       template: translateToTemplateApiModel(model.template),
       length: model.length ?? 0,
       width: model.width ?? 0,
@@ -47,11 +48,11 @@ export const translatetoApiModel = (model: ProductFormModel): ProductModel => {
     }
 }
 
-export const translateToPostApiModel = (model: ProductFormModel): ProductModel => {
+export const translateToPostApiModel = (model: ProductFormModel, suppliers: ClientFormModel[]): ProductModel => {
   return {
     id: model.id,
     name: model.name,
-    supplier: translateToClientApiModel(model.supplier).id,
+    supplier: model.supplier.id,//findSupplier(model.template.id, suppliers).id ?? suppliers[0].id,
     template: model.template.id,
     length: model.length ?? 0,
     width: model.width ?? 0,
@@ -63,11 +64,11 @@ export const translateToPostApiModel = (model: ProductFormModel): ProductModel =
 }
 
 
-export const translateToPostFormModel = (model: ProductModel, templates: ProductTemplateFormModel[]): ProductFormModel => {
+export const translateToPostFormModel = (model: ProductModel, suppliers: ClientFormModel[], templates: ProductTemplateFormModel[]): ProductFormModel => {
   return {
     id: model.id,
     name: model.name,
-    supplier:  translateToClientModel([model.supplier as ClientModel])[0],
+    supplier:  findSupplier(model.supplier as number, suppliers)!,
     template: templates.find(temp => temp.id === model.template)!,
     length: model.length ?? 0,
     width: model.width ?? 0,

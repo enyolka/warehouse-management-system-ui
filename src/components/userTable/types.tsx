@@ -1,5 +1,6 @@
 export type UserFormModel = {
   id: number;
-  login: string;
+  username: string;
   email: string;
+  is_staff: string;
 };

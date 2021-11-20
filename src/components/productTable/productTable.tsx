@@ -54,10 +54,10 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {product.name}
+                {product.template?.name ?? ""}
               </TableCell>
               <TableCell component="th" scope="row">
-                {product.template.name}
+                {product.name}
               </TableCell>
               <TableCell>{product.supplier?.name ?? ""}</TableCell>
               <TableCell>{product.length ?? "-"}</TableCell>

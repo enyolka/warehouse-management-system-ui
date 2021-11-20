@@ -10,20 +10,19 @@ export const productsInitialState: ProductSetStore = {
 const productsReducer = (state = productsInitialState, action: any) => {
   switch (action.type)
  { 
-  case "PRODUCT__LOADING":
+  case "PRODUCT_LOADING":
     return {
         ...state,
         error: false,
         loading: true,
     };
-    case "PRODUCT__SUCCESS":
-      console.log(action.payload)
+    case "PRODUCT_SUCCESS":
       return {
           ...state,
           loading: false,
           data: action.payload || state.data,
       };
-    case "PRODUCT__CREATE":
+    case "PRODUCT_CREATE":
       console.log(action.payload)
     return {
         ...state,
@@ -31,11 +30,11 @@ const productsReducer = (state = productsInitialState, action: any) => {
         loading: true,
         data: [...state.data].concat(action.payload),
     };
-    case "PRODUCT__UPDATE":
+    case "PRODUCT_UPDATE":
       console.log(action.payload)
       const updatedData = state.data.map(prod => {
-        if (prod.id === action.payload[0].id) {
-          return action.payload[0];
+        if (prod.id === action.payload.id) {
+          return action.payload;
         }
         return prod ;
       })
@@ -45,7 +44,7 @@ const productsReducer = (state = productsInitialState, action: any) => {
           loading: true,
           data: updatedData
       };
-    case "PRODUCT__DELETE":
+    case "PRODUCT_DELETE":
       const reducedData = state.data.filter(element => element.id !== action.payload)
       return {
           ...state,
@@ -53,7 +52,7 @@ const productsReducer = (state = productsInitialState, action: any) => {
           loading: true,
           data: reducedData,
       };
-    case "PRODUCT__ERROR":
+    case "PRODUCT_ERROR":
       return {
           ...state,
           loading: false,

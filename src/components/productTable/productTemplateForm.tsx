@@ -1,13 +1,5 @@
 import * as React from "react";
-import {
-  Autocomplete,
-  Box,
-  Button,
-  Grid,
-  Modal,
-  PropTypes,
-  TextField,
-} from "@mui/material";
+import { Box, Button, Grid, Modal, PropTypes, TextField } from "@mui/material";
 import {
   Field,
   FieldInputProps,
@@ -24,7 +16,7 @@ import { ProductTemplateFormModel } from "./types";
 import { useContext } from "react";
 import { StoreContext } from "../../redux/store/StoreProvider";
 import { ClientFormModel } from "../clientTable/types";
-import { fieldToTextField } from "formik-material-ui";
+import { Autocomplete, fieldToTextField } from "formik-material-ui";
 import { MyAutoComplete, MyInput } from "./inputComponents";
 
 type Props = {
@@ -99,10 +91,17 @@ export function ProductTemplateForm({
                     label="Supplier"
                     name="supplier"
                     type="select"
-                    component={MyAutoComplete}
+                    component={Autocomplete}
                     error={errors.supplier && touched.supplier}
                     options={suppliersState.data}
                     getOptionLabel={(option: ClientFormModel) => option.name}
+                    renderInput={(params: any) => (
+                      <TextField
+                        {...params}
+                        label="Supplier"
+                        variant="outlined"
+                      />
+                    )}
                   />
                   <ErrorMessage name="supplier">
                     {(msg) => <div className={styles.errorMessage}>{msg}</div>}

@@ -39,6 +39,10 @@ function ProductsScreen({}: Props): React.ReactElement {
     [suppliersState, productTemplatesState]
   );
 
+  useEffect(() => {
+    getProducts(extraData.suppliers, extraData.templates)(productsDispatch);
+  }, []);
+
   const data: ProductFormModel[] = useMemo(() => {
     return productsState.data;
   }, [productsState]);
@@ -49,7 +53,7 @@ function ProductsScreen({}: Props): React.ReactElement {
       extraData.suppliers,
       extraData.templates
     )(productsDispatch);
-    getProducts(extraData.suppliers)(productsDispatch);
+    getProducts(extraData.suppliers, extraData.templates)(productsDispatch);
   };
 
   const updateRequest = (model: ProductFormModel) => {
@@ -58,14 +62,15 @@ function ProductsScreen({}: Props): React.ReactElement {
       extraData.suppliers,
       extraData.templates
     )(productsDispatch);
-    getProducts(extraData.suppliers)(productsDispatch);
+    getProducts(extraData.suppliers, extraData.templates)(productsDispatch);
   };
 
   const deleteRequest = (idx: number) => {
     deleteProduct(idx)(productsDispatch);
-    getProducts(extraData.suppliers)(productsDispatch);
+    getProducts(extraData.suppliers, extraData.templates)(productsDispatch);
   };
 
+  console.log(productsState);
   return (
     <Grid
       container

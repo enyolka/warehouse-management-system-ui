@@ -1,11 +1,11 @@
-import React, { createContext, useReducer, useEffect } from "react";
+import React, { createContext, useReducer, useEffect, useMemo } from "react";
 import customersReducer, { customersInitialState } from "../customers/reducer";
 import {
   getCustomers,
-} from "../../redux/customers/action";
+} from "../customers/action";
 import {
   getSuppliers,
-} from "../../redux/suppliers/action";
+} from "../suppliers/action";
 import supplierReducer, { supplierInitialState } from "../suppliers/reducer";
 import loginReducer, { loginInitialState } from "../login/reducer";
 import userReducer, { userInitialState } from "../users/reducer";
@@ -14,6 +14,7 @@ import { getProductTemplates } from "../productTemplates/action";
 import {productsReducer, productsInitialState} from "../products/reducer"
 import { getProducts } from "../products/action";
 import { getUsers } from "../users/action";
+import { ProductFormModel } from "../../components/productTable/types";
 
 export const StoreContext = createContext();
 
@@ -25,13 +26,21 @@ const StoreProvider = ({ children }) => {
   const [productTemplatesState, productTemplatesDispatch] = useReducer(productTemplatesReducer, productTemplatesInitialState)
   const [productsState, productsDispatch] = useReducer(productsReducer, productsInitialState)
 
+  const extraData = useMemo(
+    () => ({
+      suppliers: suppliersState.data,
+      templates: productTemplatesState.data,
+    }),
+    [suppliersState, productTemplatesState]
+  );
+
   useEffect(() => {
     if(localStorage.token) {
       getUsers()(userDispatch);
       getCustomers()(customersDispatch);
       getSuppliers()(suppliersDispatch);
       getProductTemplates()(productTemplatesDispatch)
-      getProducts(suppliersState.data)(productTemplatesDispatch)
+      getProducts(extraData.suppliers, extraData.templates)(productsDispatch);
   }}, [loginState.data]);
 
   return (

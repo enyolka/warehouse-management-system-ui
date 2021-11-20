@@ -2,14 +2,17 @@ import { Autocomplete, TextField } from "@mui/material";
 import { FieldInputProps, FieldMetaProps, FormikProps } from "formik";
 import { fieldToTextField } from "formik-material-ui";
 import { ClientFormModel } from "../clientTable/types";
-import { ProductFormModel } from "./types";
+import { ProductFormModel, ProductTemplateFormModel } from "./types";
 
 export interface FieldProps<V = any> {
   field: FieldInputProps<V>;
   form: FormikProps<V>; // if ppl want to restrict this for a given form, let them.
   meta: FieldMetaProps<V>;
   isError?: boolean;
-  options?: Array<ClientFormModel>;
+  options?: Array<ClientFormModel | ProductTemplateFormModel>;
+  getOptionLabel?: (
+    option: ClientFormModel | ProductTemplateFormModel
+  ) => string;
 }
 
 const MyInput = ({ field, form, ...props }: FieldProps) => {
@@ -38,6 +41,7 @@ const MyAutoComplete = ({
     <Autocomplete
       {...props}
       options={options}
+      getOptionLabel={props.getOptionLabel}
       onChange={(_, newValue: ClientFormModel | ProductFormModel | any) => {
         setFieldValue(name!, newValue);
       }}

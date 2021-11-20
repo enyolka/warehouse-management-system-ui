@@ -1,9 +1,10 @@
 export type Status = "ACCEPTED" | "IN STOCK" | "SHIPPED";
 
-export type User = {
+export type UserModel = {
   id: number;
-  login: string;
+  username: string;
   email: string;
+  is_staff: string;
 }
 
 export type ClientModel = {
@@ -32,7 +33,7 @@ export type ProductModel = {
   name: string;
   supplier: ClientModel | number;
   template: ProductTemplateModel | number;
-  created_by: number;
+  created_by: UserModel | number;
   length?: number;
   width?: number;
   height?: number;

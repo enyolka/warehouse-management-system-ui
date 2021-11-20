@@ -20,7 +20,7 @@ import {
 import * as Yup from "yup";
 import styles from "../clientTable/clientTable.module.css";
 import classNames from "classnames";
-import { ProductFormModel, ProductTemplateFormModel } from "./types";
+import { ProductTemplateFormModel } from "./types";
 import { useContext } from "react";
 import { StoreContext } from "../../redux/store/StoreProvider";
 import { ClientFormModel } from "../clientTable/types";
@@ -30,30 +30,26 @@ import { MyAutoComplete, MyInput } from "./inputComponents";
 type Props = {
   open: boolean;
   handleClose: (value: React.SetStateAction<boolean>) => void;
-  createRequest: (model: ProductFormModel) => void;
-  initialValues?: ProductFormModel;
+  createRequest: (model: ProductTemplateFormModel) => void;
+  initialValues?: ProductTemplateFormModel;
 };
 
-export function ProductForm({
+export function ProductTemplateForm({
   open,
   handleClose,
   createRequest,
   ...props
 }: Props): React.ReactElement {
-  const { suppliersState, productTemplatesState } =
-    React.useContext(StoreContext);
+  const { suppliersState } = React.useContext(StoreContext);
 
-  const initialModel: ProductFormModel = {
+  const initialModel: ProductTemplateFormModel = {
     id: 0,
     name: "",
-    template: productTemplatesState.data[0],
-    supplier: suppliersState.data[0], //.name,
-    created_by: localStorage.user_id,
+    supplier: suppliersState.data[0],
     length: 0,
     width: 0,
     height: 0,
     weight: 0,
-    status: "ACCEPTED",
   };
 
   const validationSchema = Yup.object({
@@ -70,7 +66,7 @@ export function ProductForm({
       aria-describedby="modal-modal-description"
     >
       <Box className={classNames(styles.modal, styles.formBox)}>
-        <Formik<ProductFormModel>
+        <Formik<ProductTemplateFormModel>
           initialValues={props.initialValues ?? initialModel}
           enableReinitialize={true}
           validateOnChange={true}
@@ -87,42 +83,6 @@ export function ProductForm({
               <Grid container spacing={2} columns={1}>
                 <Grid item className={styles.field}>
                   <Field
-                    label="Template"
-                    name="template"
-                    type="select"
-                    component={MyAutoComplete}
-                    error={errors.template && touched.template}
-                    options={productTemplatesState.data}
-                    getOptionLabel={(option: ProductTemplateFormModel) =>
-                      option.name
-                    }
-                  />
-                  <ErrorMessage name="template">
-                    {(msg) => <div className={styles.errorMessage}>{msg}</div>}
-                  </ErrorMessage>
-                  {console.log(
-                    suppliersState.data.find(
-                      (it: ClientFormModel) => it.id === values.template.id
-                    )
-                  )}
-                </Grid>
-                {/* 
-                <Grid item className={styles.field}>
-                  <Field
-                    label="Supplier"
-                    name="supplier"
-                    type="text"
-                    value={suppliersState.data.find(
-                      (it: ClientFormModel) => it.id === values.template.id
-                    )}
-                    // disabled={true}
-                    component={MyInput}
-                    error={errors.supplier && touched.supplier}
-                  />
-                </Grid> */}
-
-                <Grid item className={styles.field}>
-                  <Field
                     label="Name"
                     name="name"
                     type="text"
@@ -130,6 +90,21 @@ export function ProductForm({
                     error={errors.name && touched.name}
                   />
                   <ErrorMessage name="name">
+                    {(msg) => <div className={styles.errorMessage}>{msg}</div>}
+                  </ErrorMessage>
+                </Grid>
+
+                <Grid item className={styles.field}>
+                  <Field
+                    label="Supplier"
+                    name="supplier"
+                    type="select"
+                    component={MyAutoComplete}
+                    error={errors.supplier && touched.supplier}
+                    options={suppliersState.data}
+                    getOptionLabel={(option: ClientFormModel) => option.name}
+                  />
+                  <ErrorMessage name="supplier">
                     {(msg) => <div className={styles.errorMessage}>{msg}</div>}
                   </ErrorMessage>
                 </Grid>
@@ -177,6 +152,20 @@ export function ProductForm({
                       )}
                     </ErrorMessage>
                   </Grid>
+                  <Grid item className={styles.field}>
+                    <Field
+                      label="Weight"
+                      name="weight"
+                      type="text"
+                      component={MyInput}
+                      error={errors.weight && touched.weight}
+                    />
+                    <ErrorMessage name="weight">
+                      {(msg) => (
+                        <div className={styles.errorMessage}>{msg}</div>
+                      )}
+                    </ErrorMessage>
+                  </Grid>
                 </Grid>
 
                 <Grid item className={styles.submitButton}>
@@ -193,4 +182,4 @@ export function ProductForm({
   );
 }
 
-export default ProductForm;
+export default ProductTemplateForm;

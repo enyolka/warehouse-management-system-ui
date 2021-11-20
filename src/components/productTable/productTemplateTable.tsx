@@ -12,29 +12,35 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useState } from "react";
 import DeletionModal from "../deletionModal/deletionModal";
-import ProductForm from "./productForm";
-import { ProductFormModel } from "./types";
+import { ProductTemplateModel } from "../../api/apiModel";
+import { ProductTemplateFormModel } from "./types";
+import ProductForm from "./productTemplateForm";
 
 type Props = {
-  data: ProductFormModel[];
+  data: ProductTemplateFormModel[];
   deleteRequest: (idx: number) => void;
-  updateRequest: (model: ProductFormModel) => void;
+  updateRequest: (model: ProductTemplateFormModel) => void;
 };
 
-const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
+const ProductTemplateTable = ({
+  data,
+  deleteRequest,
+  updateRequest,
+}: Props) => {
   const [openDelete, setOpenDelete] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
   const [idx, setIdx] = useState<number>(0);
-  const [updatedProduct, setUpdatedProduct] = useState<ProductFormModel>();
+  const [updatedTemplate, setUpdatedTemplate] =
+    useState<ProductTemplateFormModel>();
 
   const openDeleteModal = (idx: number) => {
     setOpenDelete(true);
     setIdx(idx);
   };
 
-  const openUpdateModal = (model: ProductFormModel) => {
+  const openUpdateModal = (model: ProductTemplateFormModel) => {
     setOpenUpdate(true);
-    setUpdatedProduct(model);
+    setUpdatedTemplate(model);
   };
 
   return (
@@ -48,27 +54,24 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((product: ProductFormModel, id: number) => (
+          {data.map((template: ProductTemplateFormModel, id: number) => (
             <TableRow
               key={id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {product.name}
+                {template.name}
               </TableCell>
-              <TableCell component="th" scope="row">
-                {product.template.name}
-              </TableCell>
-              <TableCell>{product.supplier?.name ?? ""}</TableCell>
-              <TableCell>{product.length ?? "-"}</TableCell>
-              <TableCell>{product.width ?? "-"}</TableCell>
-              <TableCell>{product.height ?? "-"}</TableCell>
-              <TableCell>{product.weight ?? "-"}</TableCell>
+              <TableCell>{template.supplier?.name ?? ""}</TableCell>
+              <TableCell>{template.length ?? "-"}</TableCell>
+              <TableCell>{template.width ?? "-"}</TableCell>
+              <TableCell>{template.height ?? "-"}</TableCell>
+              <TableCell>{template.weight ?? "-"}</TableCell>
               <TableCell>
-                <Button onClick={() => openUpdateModal(product)}>
+                <Button onClick={() => openUpdateModal(template)}>
                   <EditIcon color="action" />
                 </Button>
-                <Button onClick={() => openDeleteModal(product.id)}>
+                <Button onClick={() => openDeleteModal(template.id)}>
                   <DeleteIcon color="action" />
                 </Button>
 
@@ -82,7 +85,7 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
                   open={openUpdate}
                   handleClose={() => setOpenUpdate(false)}
                   createRequest={updateRequest}
-                  initialValues={updatedProduct}
+                  initialValues={updatedTemplate}
                 />
               </TableCell>
             </TableRow>
@@ -94,7 +97,6 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
 };
 
 const columnNames = [
-  { field: "template", headerName: "Template", width: 120 },
   { field: "name", headerName: "Name", width: 150 },
   { field: "supplier", headerName: "Supplier", width: 120 },
   { field: "length", headerName: "Length", width: 80 },
@@ -103,4 +105,4 @@ const columnNames = [
   { field: "weight", headerName: "Weight", width: 80 },
 ];
 
-export default ProductTable;
+export default ProductTemplateTable;

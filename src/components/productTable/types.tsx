@@ -1,4 +1,6 @@
+import { Status } from "../../api/apiModel";
 import { ClientFormModel } from "../clientTable/types";
+import { UserFormModel } from "../userTable/types";
 
 export type ProductTemplateFormModel = {
   id: number;
@@ -7,6 +9,7 @@ export type ProductTemplateFormModel = {
   length?: number;
   width?: number;
   height?: number;
+  weight?: number;
 };
 
 export type ProductFormModel = {
@@ -14,7 +17,10 @@ export type ProductFormModel = {
   name: string;
   supplier: ClientFormModel;
   template: ProductTemplateFormModel;
+  created_by: UserFormModel;
   length?: number;
   width?: number;
   height?: number;
+  weight?: number;
+  status?: Status;
 };

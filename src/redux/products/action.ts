@@ -4,7 +4,7 @@ import request from "../../helpers/request";
 import { translateToFormModel, translateToPostApiModel, translateToPostFormModel } from "./translatorProduct";
 
 
-export const getProducts = () => (dispatch: any) => {
+export const getProducts = (suppliers: ClientFormModel[]) => (dispatch: any) => {
   dispatch({type: "PRODUCT_LOADING"});
 
   return request().get(
@@ -37,7 +37,7 @@ export const postProduct = (model: ProductFormModel, suppliers: ClientFormModel[
       console.log(resp.data)
       dispatch({
         type: "PRODUCT_CREATE",        
-        payload: translateToPostFormModel(resp.data, suppliers, templates), 
+        payload: translateToPostFormModel(resp.data, templates), 
       });
     dispatch({type: "PRODUCT_SUCCESS"})
     })
@@ -60,7 +60,7 @@ export const putProduct = (model: ProductFormModel, suppliers: ClientFormModel[]
       console.log(resp)
       dispatch({
         type: "PRODUCT_UPDATE", 
-        payload: translateToPostFormModel(resp.data, suppliers, templates),
+        payload: translateToPostFormModel(resp.data, templates),
       });
       dispatch({type: "PRODUCT_SUCCESS"})
     }) 

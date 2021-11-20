@@ -49,7 +49,7 @@ function ProductsScreen({}: Props): React.ReactElement {
       extraData.suppliers,
       extraData.templates
     )(productsDispatch);
-    getProducts()(productsDispatch);
+    getProducts(extraData.suppliers)(productsDispatch);
   };
 
   const updateRequest = (model: ProductFormModel) => {
@@ -58,12 +58,12 @@ function ProductsScreen({}: Props): React.ReactElement {
       extraData.suppliers,
       extraData.templates
     )(productsDispatch);
-    getProducts()(productsDispatch);
+    getProducts(extraData.suppliers)(productsDispatch);
   };
 
   const deleteRequest = (idx: number) => {
     deleteProduct(idx)(productsDispatch);
-    getProducts()(productsDispatch);
+    getProducts(extraData.suppliers)(productsDispatch);
   };
 
   return (
@@ -78,17 +78,17 @@ function ProductsScreen({}: Props): React.ReactElement {
         <h3>Products</h3>
       </Grid>
       <Grid item>
-        {/* <ProductTable
+        <ProductTable
           deleteRequest={deleteRequest}
           updateRequest={updateRequest}
           data={data}
-        /> */}
+        />
       </Grid>
 
       <Grid item>
         <Button
           variant="contained"
-          // onClick={() => setOpen(true)}
+          onClick={() => setOpen(true)}
           style={{ marginRight: 10 }}
         >
           Add product
@@ -96,11 +96,11 @@ function ProductsScreen({}: Props): React.ReactElement {
         <Button variant="contained" to="/dashboard" component={Link}>
           Dashboard
         </Button>
-        {/* <ProductForm
+        <ProductForm
           open={open}
           handleClose={() => setOpen(false)}
           createRequest={createRequest}
-        /> */}
+        />
       </Grid>
     </Grid>
   );

@@ -22,6 +22,8 @@ import {
 import ProductTable from "../../components/productTable/productTable";
 import ProductForm from "../../components/productTable/productForm";
 import { useEffect } from "react";
+import ProductTemplateForm from "../../components/productTable/productTemplateForm";
+import ProductTemplateTable from "../../components/productTable/productTemplateTable";
 
 type Props = {};
 
@@ -67,7 +69,7 @@ function ProductLibraryScreen({}: Props): React.ReactElement {
         <h3>Product Library</h3>
       </Grid>
       <Grid item>
-        <ProductTable
+        <ProductTemplateTable
           deleteRequest={deleteRequest}
           updateRequest={updateRequest}
           data={data}
@@ -85,7 +87,7 @@ function ProductLibraryScreen({}: Props): React.ReactElement {
         <Button variant="contained" to="/dashboard" component={Link}>
           Dashboard
         </Button>
-        <ProductForm
+        <ProductTemplateForm
           open={open}
           handleClose={() => setOpen(false)}
           createRequest={createRequest}

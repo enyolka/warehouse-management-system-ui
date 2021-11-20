@@ -2,14 +2,6 @@ import * as React from "react";
 import { Button, Grid } from "@mui/material";
 import { Link } from "react-router-dom";
 
-// const MuiInputBase = createStyles({
-//   styleOverrides: {
-//     root: {
-//       borderColor: "yellow",
-//     },
-//   },
-// });
-
 type Props = {};
 
 function Dashboard({}: Props): React.ReactElement {

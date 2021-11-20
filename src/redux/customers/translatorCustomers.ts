@@ -1,8 +1,9 @@
 import { ClientModel } from "../../api/apiModel"
 import { ClientFormModel } from "../../components/clientTable/types"
 
-export const translateToModel = (data: ClientModel[]): ClientFormModel[] => {
+export const translateToModel = (data: ClientModel[] | number): ClientFormModel[] => {
   try {
+    if(!(typeof data == "number"))
     return data.map(({ id, name, phone, email, city, street_name, street_number, zip_code} : any) => ({
       id: id,
       name: name,
@@ -12,7 +13,8 @@ export const translateToModel = (data: ClientModel[]): ClientFormModel[] => {
       streetName: street_name,
       streetNumber: street_number,
       zipCode: zip_code,
-    }))
+    })) 
+    else return []
   } catch(e) {
   return []
   }

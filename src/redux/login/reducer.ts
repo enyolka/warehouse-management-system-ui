@@ -4,6 +4,7 @@ import { LoginStore } from "./store";
 export const loginInitialState: LoginStore = {
   loading: false,
   data: {
+          id: 0,
           username: localStorage.getItem("username") || "",
           email: localStorage.getItem("email") || ""
         },
@@ -12,6 +13,7 @@ export const loginInitialState: LoginStore = {
 
 const saveToLocalStorage = (data: any) => {
   try {
+    localStorage.setItem("user_id", data.id)
     localStorage.setItem("username", data.username)
     localStorage.setItem("email", data.email)
   } catch(e) {
@@ -20,7 +22,6 @@ const saveToLocalStorage = (data: any) => {
 }
 
 const loginReducer = (state = loginInitialState, action: any) => {
-  // saveToLocalStorage(action.payload)
   switch (action.type)
  { 
   case "LOGIN_LOADING":

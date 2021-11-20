@@ -1,4 +1,5 @@
 export type LoginDataStore = {
+    id: number; 
     username: string;
     email: string;
   }

@@ -17,14 +17,12 @@ const productTemplatesReducer = (state = productTemplatesInitialState, action: a
         loading: true,
     };
     case "PRODUCT_TEMPLATE_SUCCESS":
-      console.log(action.payload)
       return {
           ...state,
           loading: false,
           data: action.payload || state.data,
       };
     case "PRODUCT_TEMPLATE_CREATE":
-      console.log(action.payload)
     return {
         ...state,
         error: false,
@@ -32,7 +30,6 @@ const productTemplatesReducer = (state = productTemplatesInitialState, action: a
         data: [...state.data].concat(action.payload),
     };
     case "PRODUCT_TEMPLATE_UPDATE":
-      console.log(action.payload)
       const updatedData = state.data.map(prod => {
         if (prod.id === action.payload[0].id) {
           return action.payload[0];

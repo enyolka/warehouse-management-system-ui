@@ -13,7 +13,6 @@ export const getProductTemplates = () => (dispatch: any) => {
       headers: { Authorization: `Token ${localStorage.token}`}}
   )
   .then((resp) => {
-    console.log(resp.data)
     dispatch({
       type: "PRODUCT_TEMPLATE_SUCCESS",
       payload: translateToFormModel(resp.data),

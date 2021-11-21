@@ -163,7 +163,7 @@ export function ProductForm({
                   </ErrorMessage>
                 </Grid>
 
-                <Grid item className={styles.fieldsRow}>
+                {/* <Grid item className={styles.fieldsRow}>
                   <Grid item className={styles.field}>
                     <Field
                       label="Length"
@@ -220,7 +220,7 @@ export function ProductForm({
                       )}
                     </ErrorMessage>
                   </Grid>
-                </Grid>
+                </Grid> */}
 
                 <Grid item className={styles.field}>
                   <Field

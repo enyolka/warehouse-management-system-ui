@@ -59,14 +59,12 @@ const ProductTemplateTable = ({
               key={id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
-                {template.name}
-              </TableCell>
+              <TableCell>{template.name}</TableCell>
               <TableCell>{template.supplier?.name ?? ""}</TableCell>
-              <TableCell>{template.length ?? "-"}</TableCell>
-              <TableCell>{template.width ?? "-"}</TableCell>
-              <TableCell>{template.height ?? "-"}</TableCell>
-              <TableCell>{template.weight ?? "-"}</TableCell>
+              <TableCell>{template.length ? template.length : "-"}</TableCell>
+              <TableCell>{template.width ? template.width : "-"}</TableCell>
+              <TableCell>{template.height ? template.height : "-"}</TableCell>
+              <TableCell>{template.weight ? template.weight : "-"}</TableCell>
               <TableCell>
                 <Button onClick={() => openUpdateModal(template)}>
                   <EditIcon color="action" />

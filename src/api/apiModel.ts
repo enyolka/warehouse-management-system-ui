@@ -1,4 +1,4 @@
-export type Status = "ACCEPTED" | "IN STOCK" | "SHIPPED";
+export type Status = "ACCEPTED" | "IN_STOCK" | "SHIPPED";
 
 export type UserModel = {
   id: number;

@@ -6,8 +6,6 @@ import { StoreContext } from "../../redux/store/StoreProvider";
 type Props = {};
 
 function Dashboard({}: Props): React.ReactElement {
-  const { productsState } = React.useContext(StoreContext);
-  console.log(productsState.data);
   return (
     <Grid
       container

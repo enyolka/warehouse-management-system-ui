@@ -7,6 +7,8 @@ import {
   PropTypes,
   TextField,
   TextFieldProps,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
 import {
   Field,
@@ -20,12 +22,22 @@ import {
 import * as Yup from "yup";
 import styles from "../clientTable/clientTable.module.css";
 import classNames from "classnames";
-import { ProductFormModel, ProductTemplateFormModel } from "./types";
+import {
+  ProductFormModel,
+  ProductTemplateFormModel,
+  StatusModel,
+} from "./types";
 import { useContext } from "react";
 import { StoreContext } from "../../redux/store/StoreProvider";
 import { ClientFormModel } from "../clientTable/types";
-import { Autocomplete, fieldToTextField } from "formik-material-ui";
-import { MyAutoComplete, MyInput } from "./inputComponents";
+import {
+  Autocomplete,
+  fieldToTextField,
+  RadioGroup,
+  // ToggleButtonGroup,
+} from "formik-material-ui";
+import { MyAutoComplete, MyInput, MyRadioGroup } from "./inputComponents";
+import { Status } from "../../api/apiModel";
 
 type Props = {
   open: boolean;
@@ -42,6 +54,21 @@ export function ProductForm({
 }: Props): React.ReactElement {
   const { suppliersState, productTemplatesState } =
     React.useContext(StoreContext);
+
+  const statuses: Array<StatusModel> = [
+    {
+      label: "Accepted",
+      value: "ACCEPTED",
+    },
+    {
+      label: "In stock",
+      value: "IN_STOCK",
+    },
+    {
+      label: "Shipped",
+      value: "SHIPPED",
+    },
+  ];
 
   const initialModel: ProductFormModel = {
     id: 0,
@@ -179,6 +206,34 @@ export function ProductForm({
                       )}
                     </ErrorMessage>
                   </Grid>
+                  <Grid item className={styles.field}>
+                    <Field
+                      label="Weight"
+                      name="weight"
+                      type="text"
+                      component={MyInput}
+                      error={errors.weight && touched.weight}
+                    />
+                    <ErrorMessage name="weight">
+                      {(msg) => (
+                        <div className={styles.errorMessage}>{msg}</div>
+                      )}
+                    </ErrorMessage>
+                  </Grid>
+                </Grid>
+
+                <Grid item className={styles.field}>
+                  <Field
+                    label="Status"
+                    name="status"
+                    type="select"
+                    component={MyRadioGroup}
+                    error={errors.status && touched.status}
+                    options={statuses}
+                  />
+                  <ErrorMessage name="status">
+                    {(msg) => <div className={styles.errorMessage}>{msg}</div>}
+                  </ErrorMessage>
                 </Grid>
 
                 <Grid item className={styles.submitButton}>

@@ -41,7 +41,7 @@ function ProductsScreen({}: Props): React.ReactElement {
 
   useEffect(() => {
     getProducts(extraData.suppliers, extraData.templates)(productsDispatch);
-  }, []);
+  }, [productTemplatesState.data]);
 
   const data: ProductFormModel[] = useMemo(() => {
     return productsState.data;

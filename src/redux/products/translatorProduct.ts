@@ -26,7 +26,7 @@ export const translateToFormModel = (data: ProductModel[], suppliers: ClientForm
       height: model.height ?? 0,
       weight: model.weight ?? 0,
       created_by: model.created_by as UserFormModel,
-      status: "ACCEPTED" ,
+      status: model.status ?? "ACCEPTED" ,
     }));
   } catch(e) {
   return []
@@ -44,7 +44,7 @@ export const translatetoApiModel = (model: ProductFormModel, suppliers: ClientFo
       height: model.height ?? 0,
       weight: model.weight ?? 0,
       created_by: localStorage.user_id,
-      status: "ACCEPTED" ,
+      status: model.status ?? "ACCEPTED" ,
     }
 }
 
@@ -59,7 +59,7 @@ export const translateToPostApiModel = (model: ProductFormModel, suppliers: Clie
     height: model.height ?? 0,
     weight: model.weight ?? 0,
     created_by: localStorage.user_id,
-    status: "ACCEPTED" ,
+    status: model.status ?? "ACCEPTED" ,
   }
 }
 
@@ -75,6 +75,6 @@ export const translateToPostFormModel = (model: ProductModel, suppliers: ClientF
     height: model.height ?? 0,
     weight: model.weight ?? 0,
     created_by: localStorage.user_id,
-    status: "ACCEPTED" ,
+    status: model.status ?? "ACCEPTED" ,
   }
 }

@@ -2,6 +2,11 @@ import { Status } from "../../api/apiModel";
 import { ClientFormModel } from "../clientTable/types";
 import { UserFormModel } from "../userTable/types";
 
+export type StatusModel = {
+  label: string;
+  value: Status;
+};
+
 export type ProductTemplateFormModel = {
   id: number;
   name: string;

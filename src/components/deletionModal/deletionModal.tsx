@@ -4,14 +4,14 @@ import styles from "./deletionModal.module.css";
 
 type Props = {
   open: boolean;
-  idx: number;
+  idxs: number[];
   handleClose: (value: React.SetStateAction<boolean>) => void;
   createRequest: (idx: number) => void;
 };
 
-const DeletionModal = ({ open, idx, handleClose, createRequest }: Props) => {
+const DeletionModal = ({ open, idxs, handleClose, createRequest }: Props) => {
   const handleDeletion = () => {
-    createRequest(idx);
+    idxs.forEach((idx) => createRequest(idx));
     handleClose(true);
   };
 

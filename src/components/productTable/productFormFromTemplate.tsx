@@ -42,11 +42,16 @@ import { Status } from "../../api/apiModel";
 type Props = {
   open: boolean;
   handleClose: (value: React.SetStateAction<boolean>) => void;
-  createRequest: (model: ProductFormModel) => void;
+  createRequest: (template_id: number, count: number) => void;
   initialValues?: ProductFormModel;
 };
 
-export function ProductForm({
+type ProductFromTemplateModel = {
+  template: ProductTemplateFormModel;
+  count: number;
+};
+
+export function ProductFormFromTemplate({
   open,
   handleClose,
   createRequest,
@@ -70,17 +75,9 @@ export function ProductForm({
     },
   ];
 
-  const initialModel: ProductFormModel = {
-    id: 0,
-    name: productTemplatesState.data[0]?.name ?? "",
+  const initialTemplateModel: ProductFromTemplateModel = {
     template: productTemplatesState.data[0],
-    supplier: suppliersState.data[0], //.name,
-    created_by: localStorage.user_id,
-    length: 0,
-    width: 0,
-    height: 0,
-    weight: 0,
-    status: "ACCEPTED",
+    count: 0,
   };
 
   const validationSchema = Yup.object({
@@ -93,21 +90,23 @@ export function ProductForm({
     <Modal
       open={open}
       onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
+      aria-labelledby="Create from template form"
+      aria-describedby="Create from template form"
     >
       <Box className={classNames(styles.modal, styles.formBox)}>
-        <Formik<ProductFormModel>
-          initialValues={props.initialValues ?? initialModel}
+        <Formik<ProductFromTemplateModel>
+          initialValues={initialTemplateModel}
           enableReinitialize={true}
           validateOnChange={true}
           validateOnBlur={true}
-          onSubmit={(values, { resetForm }) => {
-            createRequest(values);
+          onSubmit={({ template, count }, { resetForm }) => {
+            console.log("ok");
+            console.log({ template, count });
+            createRequest(template.id, count);
             if (props.initialValues) handleClose(true);
             resetForm({});
           }}
-          validationSchema={validationSchema}
+          //validationSchema={validationSchema}
         >
           {({ errors, touched, values }) => (
             <Form>
@@ -135,94 +134,20 @@ export function ProductForm({
                     {(msg) => <div className={styles.errorMessage}>{msg}</div>}
                   </ErrorMessage>
                 </Grid>
-                {/* 
-                <Grid item className={styles.field}>
-                  <Field
-                    label="Supplier"
-                    name="supplier"
-                    type="text"
-                    value={suppliersState.data.find(
-                      (it: ClientFormModel) => it.id === values.template.id
-                    )}
-                    // disabled={true}
-                    component={MyInput}
-                    error={errors.supplier && touched.supplier}
-                  />
-                </Grid> */}
 
                 <Grid item className={styles.field}>
                   <Field
-                    label="Name"
-                    name="name"
+                    label="Count"
+                    name="count"
                     type="text"
                     component={MyInput}
-                    error={errors.name && touched.name}
+                    error={errors.count && touched.count}
                   />
-                  <ErrorMessage name="name">
+                  <ErrorMessage name="count">
                     {(msg) => <div className={styles.errorMessage}>{msg}</div>}
                   </ErrorMessage>
                 </Grid>
-
-                {/* <Grid item className={styles.fieldsRow}>
-                  <Grid item className={styles.field}>
-                    <Field
-                      label="Length"
-                      name="length"
-                      type="text"
-                      component={MyInput}
-                      error={errors.length && touched.length}
-                    />
-                    <ErrorMessage name="length">
-                      {(msg) => (
-                        <div className={styles.errorMessage}>{msg}</div>
-                      )}
-                    </ErrorMessage>
-                  </Grid>
-                  <Grid item className={styles.field}>
-                    <Field
-                      label="Width"
-                      name="width"
-                      type="text"
-                      component={MyInput}
-                      error={errors.width && touched.width}
-                    />
-                    <ErrorMessage name="width">
-                      {(msg) => (
-                        <div className={styles.errorMessage}>{msg}</div>
-                      )}
-                    </ErrorMessage>
-                  </Grid>
-                  <Grid item className={styles.field}>
-                    <Field
-                      label="Height"
-                      name="height"
-                      type="text"
-                      component={MyInput}
-                      error={errors.height && touched.height}
-                    />
-                    <ErrorMessage name="height">
-                      {(msg) => (
-                        <div className={styles.errorMessage}>{msg}</div>
-                      )}
-                    </ErrorMessage>
-                  </Grid>
-                  <Grid item className={styles.field}>
-                    <Field
-                      label="Weight"
-                      name="weight"
-                      type="text"
-                      component={MyInput}
-                      error={errors.weight && touched.weight}
-                    />
-                    <ErrorMessage name="weight">
-                      {(msg) => (
-                        <div className={styles.errorMessage}>{msg}</div>
-                      )}
-                    </ErrorMessage>
-                  </Grid>
-                </Grid> */}
-
-                <Grid item className={styles.field}>
+                {/* <Grid item className={styles.field}>
                   <Field
                     label="Status"
                     name="status"
@@ -234,7 +159,7 @@ export function ProductForm({
                   <ErrorMessage name="status">
                     {(msg) => <div className={styles.errorMessage}>{msg}</div>}
                   </ErrorMessage>
-                </Grid>
+                </Grid> */}
 
                 <Grid item className={styles.submitButton}>
                   <Button type="submit" variant="contained">
@@ -250,4 +175,4 @@ export function ProductForm({
   );
 }
 
-export default ProductForm;
+export default ProductFormFromTemplate;

@@ -3,7 +3,7 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import { StoreContext } from "../../redux/store/StoreProvider";
 import CustomersScreen from "../customersScreen/customersScreen";
 import Dashboard from "../dashboard/dashboard";
-import ProductLibraryScreen from "../productLibraryScreen/productLibrary";
+import ProductLibraryScreen from "../productLibraryScreen/productLibraryScreen";
 import ProductsScreen from "../productsScreen/productsScreen";
 import StartScreen from "../startScreen/startScreen";
 import SuppliersScreen from "../suppliersScreen/suppliersScreen";

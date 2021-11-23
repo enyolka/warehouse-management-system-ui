@@ -74,7 +74,7 @@ const ClientTable = ({ data, deleteRequest, updateRequest }: Props) => {
                   open={openDelete}
                   handleClose={() => setOpenDelete(false)}
                   createRequest={deleteRequest}
-                  idx={idx}
+                  idxs={[idx]}
                 />
                 <ClientForm
                   open={openUpdate}

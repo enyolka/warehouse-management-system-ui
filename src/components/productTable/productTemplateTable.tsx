@@ -1,5 +1,7 @@
 import {
   Button,
+  Checkbox,
+  checkboxClasses,
   Paper,
   Table,
   TableBody,
@@ -22,6 +24,10 @@ type Props = {
   updateRequest: (model: ProductTemplateFormModel) => void;
 };
 
+type Checked = {
+  [id: number]: boolean;
+};
+
 const ProductTemplateTable = ({
   data,
   deleteRequest,
@@ -29,7 +35,9 @@ const ProductTemplateTable = ({
 }: Props) => {
   const [openDelete, setOpenDelete] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
+  const [openGeneralDelete, setOpenGeneralDelete] = useState(false);
   const [idx, setIdx] = useState<number>(0);
+  const [checked, setChecked] = useState<Checked[]>([]);
   const [updatedTemplate, setUpdatedTemplate] =
     useState<ProductTemplateFormModel>();
 
@@ -42,6 +50,7 @@ const ProductTemplateTable = ({
     setOpenUpdate(true);
     setUpdatedTemplate(model);
   };
+  console.log(data);
 
   return (
     <TableContainer component={Paper}>
@@ -59,6 +68,16 @@ const ProductTemplateTable = ({
               key={id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
+              <TableCell>
+                <Checkbox
+                  value={checked[template.id]}
+                  // onChange={() =>
+                  //   checked[template.id]
+                  //     ? setChecked(checked[template.id])
+                  //     : setChecked(checked[template.id])
+                  // }
+                />
+              </TableCell>
               <TableCell>{template.name}</TableCell>
               <TableCell>{template.supplier?.name ?? ""}</TableCell>
               <TableCell>{template.length ? template.length : "-"}</TableCell>
@@ -77,7 +96,7 @@ const ProductTemplateTable = ({
                   open={openDelete}
                   handleClose={() => setOpenDelete(false)}
                   createRequest={deleteRequest}
-                  idx={idx}
+                  idxs={[idx]}
                 />
                 <ProductForm
                   open={openUpdate}
@@ -88,6 +107,20 @@ const ProductTemplateTable = ({
               </TableCell>
             </TableRow>
           ))}
+          <TableRow>
+            <TableCell>
+              <Button onClick={() => setOpenGeneralDelete(true)}>
+                <DeleteIcon color="action" />
+              </Button>
+
+              {/* <DeletionModal
+                open={openGeneralDelete}
+                handleClose={() => setOpenGeneralDelete(false)}
+                createRequest={deleteRequest}
+                idxs={checked}
+              /> */}
+            </TableCell>
+          </TableRow>
         </TableBody>
       </Table>
     </TableContainer>
@@ -95,6 +128,7 @@ const ProductTemplateTable = ({
 };
 
 const columnNames = [
+  { field: "checkbox", headerName: "", width: "20" },
   { field: "name", headerName: "Name", width: 150 },
   { field: "supplier", headerName: "Supplier", width: 120 },
   { field: "length", headerName: "Length", width: 80 },

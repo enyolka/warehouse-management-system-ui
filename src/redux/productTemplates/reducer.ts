@@ -31,8 +31,8 @@ const productTemplatesReducer = (state = productTemplatesInitialState, action: a
     };
     case "PRODUCT_TEMPLATE_UPDATE":
       const updatedData = state.data.map(prod => {
-        if (prod.id === action.payload[0].id) {
-          return action.payload[0];
+        if (prod.id === action.payload.id) {
+          return action.payload;
         }
         return prod ;
       })

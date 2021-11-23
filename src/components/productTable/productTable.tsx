@@ -99,8 +99,38 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
     setOpenUpdate(true);
     setUpdatedProduct(model);
   };
+  const rows: GridRowsProp = data.map(
+    (
+      {
+        template,
+        name,
+        supplier,
+        length,
+        width,
+        height,
+        weight,
+        created_by,
+        status,
+      },
+      id
+    ) => ({
+      id: id,
+      template: template.name,
+      name: name,
+      supplier: supplier.name,
+      length: length,
+      width: width,
+      height: height,
+      weight: weight,
+      created_by: created_by,
+      status: status,
+    })
+  );
 
   return (
+    // <div style={{ height: 700, maxWidth: 700, minWidth: "80vw" }}>
+    //   <DataGrid rows={rows} columns={columnNames} />
+    // </div>
     <TableContainer component={Paper}>
       <Table size="medium" aria-label="Client table">
         <TableHead>
@@ -142,7 +172,7 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
                   open={openDelete}
                   handleClose={() => setOpenDelete(false)}
                   createRequest={deleteRequest}
-                  idx={idx}
+                  idxs={[idx]}
                 />
                 <ProductForm
                   open={openUpdate}

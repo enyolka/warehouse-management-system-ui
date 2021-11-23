@@ -10,12 +10,14 @@ import { ProductFormModel } from "../../components/productTable/types";
 import {
   deleteProduct,
   getProducts,
+  postFromTemplateProduct,
   postProduct,
   putProduct,
 } from "../../redux/products/action";
 import ProductTable from "../../components/productTable/productTable";
 import ProductForm from "../../components/productTable/productForm";
 import { useEffect } from "react";
+import ProductFormFromTemplate from "../../components/productTable/productFormFromTemplate";
 
 type Props = {};
 
@@ -27,6 +29,7 @@ function ProductsScreen({}: Props): React.ReactElement {
     productTemplatesState,
   } = useContext(StoreContext);
   const [open, setOpen] = useState(false);
+  const [openFromTemplate, setOpenFromTemplate] = useState(false);
 
   const extraData: {
     suppliers: ClientFormModel[];
@@ -50,6 +53,16 @@ function ProductsScreen({}: Props): React.ReactElement {
   const createRequest = (model: ProductFormModel) => {
     postProduct(
       model,
+      extraData.suppliers,
+      extraData.templates
+    )(productsDispatch);
+    getProducts(extraData.suppliers, extraData.templates)(productsDispatch);
+  };
+
+  const createFromTemplateRequest = (template_id: number, count: number) => {
+    postFromTemplateProduct(
+      template_id,
+      count,
       extraData.suppliers,
       extraData.templates
     )(productsDispatch);
@@ -96,7 +109,14 @@ function ProductsScreen({}: Props): React.ReactElement {
           onClick={() => setOpen(true)}
           style={{ marginRight: 10 }}
         >
-          Add product
+          Add single product
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => setOpenFromTemplate(true)}
+          style={{ marginRight: 10 }}
+        >
+          Add products
         </Button>
         <Button variant="contained" to="/dashboard" component={Link}>
           Dashboard
@@ -105,6 +125,11 @@ function ProductsScreen({}: Props): React.ReactElement {
           open={open}
           handleClose={() => setOpen(false)}
           createRequest={createRequest}
+        />
+        <ProductFormFromTemplate
+          open={openFromTemplate}
+          handleClose={() => setOpenFromTemplate(false)}
+          createRequest={createFromTemplateRequest}
         />
       </Grid>
     </Grid>

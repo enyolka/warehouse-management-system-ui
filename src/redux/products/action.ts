@@ -29,7 +29,9 @@ export const getProducts = (suppliers: ClientFormModel[], templates: ProductTemp
 }
 
 export const postProduct = (model: ProductFormModel, suppliers: ClientFormModel[], templates: ProductTemplateFormModel[]) => (dispatch: any) => {
+  console.log("---------- POST ---------------")
   console.log(model)
+  console.log(translateToPostApiModel(model, suppliers))
   return request().post(
     "/storages/v1/products/",
     translateToPostApiModel(model, suppliers),
@@ -37,6 +39,30 @@ export const postProduct = (model: ProductFormModel, suppliers: ClientFormModel[
   ).then(
     resp => { 
       console.log(resp.data)
+      console.log(translateToPostFormModel([resp.data], suppliers, templates))
+      console.log("-------------------------")
+      dispatch({
+        type: "PRODUCT_CREATE",        
+        payload: translateToPostFormModel([resp.data], suppliers, templates), 
+      });
+    dispatch({type: "PRODUCT_SUCCESS"})
+    })
+  .catch((err) => {Promise.reject(err);       
+    dispatch({
+    type: "PRODUCT_ERROR",
+    payload: err.response ? err.response.data : "COULD NOT CONNECT",
+    });
+  });
+}
+
+
+export const postFromTemplateProduct = (template: number, count: number, suppliers: ClientFormModel[], templates: ProductTemplateFormModel[]) => (dispatch: any) => {
+  return request().post(
+    "/storages/v1/products/from_template/",
+    {template_id: template, count: count},
+     { headers: { Authorization: `Token ${localStorage.token}`}}
+  ).then(
+    resp => { 
       dispatch({
         type: "PRODUCT_CREATE",        
         payload: translateToPostFormModel(resp.data, suppliers, templates), 
@@ -51,6 +77,7 @@ export const postProduct = (model: ProductFormModel, suppliers: ClientFormModel[
   });
 }
 
+
 export const putProduct = (model: ProductFormModel, suppliers: ClientFormModel[], templates: ProductTemplateFormModel[]) => (dispatch: any) => {
   console.log(model)
   return request().put(
@@ -62,7 +89,7 @@ export const putProduct = (model: ProductFormModel, suppliers: ClientFormModel[]
       console.log(resp)
       dispatch({
         type: "PRODUCT_UPDATE", 
-        payload: translateToPostFormModel(resp.data, suppliers, templates),
+        payload: translateToPostFormModel([resp.data], suppliers, templates),
       });
       dispatch({type: "PRODUCT_SUCCESS"})
     }) 

@@ -2,16 +2,8 @@ import * as React from "react";
 import { Button, Grid } from "@mui/material";
 import { Link } from "react-router-dom";
 import { StoreContext } from "../../redux/store/StoreProvider";
-import {
-  deleteSupplier,
-  getSuppliers,
-  postSupplier,
-  putSupplier,
-} from "../../redux/suppliers/action";
 import { useContext, useMemo, useState } from "react";
 import { ClientFormModel } from "../../components/clientTable/types";
-import ClientForm from "../../components/clientTable/clientForm";
-import ClientTable from "../../components/clientTable/clientTable";
 import { ProductTemplateFormModel } from "../../components/productTable/types";
 import {
   deleteProductTemplate,
@@ -19,9 +11,6 @@ import {
   postProductTemplate,
   putProductTemplate,
 } from "../../redux/productTemplates/action";
-import ProductTable from "../../components/productTable/productTable";
-import ProductForm from "../../components/productTable/productForm";
-import { useEffect } from "react";
 import ProductTemplateForm from "../../components/productTable/productTemplateForm";
 import ProductTemplateTable from "../../components/productTable/productTemplateTable";
 

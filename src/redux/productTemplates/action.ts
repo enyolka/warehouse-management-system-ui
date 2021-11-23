@@ -72,7 +72,6 @@ export const putProductTemplate = (model: ProductTemplateFormModel, suppliers: C
 }
 
 export const deleteProductTemplate = (idx: number) => (dispatch: any) => {
-
   return request().delete(
     `/storages/v1/product-templates/${idx}`,
      { headers: { Authorization: `Token ${localStorage.token}`}}

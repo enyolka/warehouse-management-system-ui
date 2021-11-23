@@ -18,6 +18,7 @@ export const translateToFormModel = (data: ProductModel[], suppliers: ClientForm
   try {
     return data.map((model : ProductModel) => {
     const template = templates.find(temp => temp.id === model.template)!;
+    // const supplier = suppliers.find(supp => supp.id === template.supplier.id)!;
     return({
       id: model.id,
       name: model.name,
@@ -36,10 +37,11 @@ export const translateToFormModel = (data: ProductModel[], suppliers: ClientForm
 }
 
 export const translatetoApiModel = (model: ProductFormModel, suppliers: ClientFormModel[]): ProductModel => {
+  // const supplier = suppliers.find(supp => supp.id === model.template.supplier.id)!;
     return {
       id: model.id,
       name: model.name,
-      supplier: translateToClientApiModel(findSupplier(model.supplier.id, suppliers)!).id,
+      supplier: model.template.supplier.id,
       template: translateToTemplateApiModel(model.template),
       length: model.length ,
       width: model.width,
@@ -54,7 +56,7 @@ export const translateToPostApiModel = (model: ProductFormModel, suppliers: Clie
   return {
     id: model.id,
     name: model.name,
-    supplier: model.supplier.id,//findSupplier(model.template.id, suppliers).id ?? suppliers[0].id,
+    supplier: model.template.supplier.id,//findSupplier(model.template.id, suppliers).id ?? suppliers[0].id,
     template: model.template.id,
     length: model.length,
     width: model.width ?? 0,
@@ -66,8 +68,10 @@ export const translateToPostApiModel = (model: ProductFormModel, suppliers: Clie
 }
 
 
-export const translateToPostFormModel = (model: ProductModel, suppliers: ClientFormModel[], templates: ProductTemplateFormModel[]): ProductFormModel => {
-  const template = templates.find(temp => temp.id === model.template)!
+export const translateToPostFormModel = (data: any, suppliers: ClientFormModel[], templates: ProductTemplateFormModel[]): ProductFormModel => {
+  
+  return data.map((model: any) => {
+    const template = templates.find(temp => temp.id === model.template)!
   return {
     id: model.id,
     name: model.name,
@@ -79,5 +83,5 @@ export const translateToPostFormModel = (model: ProductModel, suppliers: ClientF
     weight: template.weight,
     created_by: localStorage.user_id,
     status: model.status ?? "ACCEPTED" ,
-  }
+  }});
 }

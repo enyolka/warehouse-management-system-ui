@@ -32,7 +32,6 @@ function ProductLibraryScreen({}: Props): React.ReactElement {
 
   const createRequest = (model: ProductTemplateFormModel) => {
     postProductTemplate(model, suppliersData)(productTemplatesDispatch);
-    console.log(productTemplatesState.data);
     getProductTemplates()(productTemplatesDispatch);
   };
 

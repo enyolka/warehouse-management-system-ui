@@ -1,18 +1,24 @@
 import { useContext } from "react";
-import { ClientModel, ProductModel, ProductTemplateModel  } from "../../api/apiModel"
+import { ClientModel, ProductModel, ProductTemplateModel, Status  } from "../../api/apiModel"
 import { ClientFormModel } from "../../components/clientTable/types";
-import { ProductFormModel, ProductTemplateFormModel } from "../../components/productTable/types"
+import { statuses } from "../../components/productTable/productForm";
+import { ProductFormModel, ProductTemplateFormModel, StatusModel } from "../../components/productTable/types"
 import { UserFormModel } from "../../components/userTable/types";
 import { translateToModel as translateToClientModel, translatetoApiModel as translateToClientApiModel } from "../customers/translatorCustomers";
 import { translateToFormModel as translateToFormTemplateModel, translateToApiModel as translateToTemplateApiModel } from "../productTemplates/translatorProductTemplate";
 import { StoreContext } from "../store/StoreProvider";
-
 
 const findSupplier = (template: number, suppliers: ClientFormModel[]): ClientFormModel => {
   return suppliers.find(
     (it: ClientFormModel) => it.id == template
   )!;
 }
+
+
+const findStatus = (value: Status | undefined): StatusModel => {
+  return statuses.find((status) => value === status.value) ?? statuses[0]
+}
+
 
 export const translateToFormModel = (data: ProductModel[], suppliers: ClientFormModel[], templates: ProductTemplateFormModel[]): ProductFormModel[] => {
   try {
@@ -29,7 +35,7 @@ export const translateToFormModel = (data: ProductModel[], suppliers: ClientForm
       height: template.height,
       weight: template.weight,
       created_by: model.created_by as UserFormModel,
-      status: model.status ?? "ACCEPTED" ,
+      status: model.status,
     })});
   } catch(e) {
   return []
@@ -48,7 +54,7 @@ export const translatetoApiModel = (model: ProductFormModel, suppliers: ClientFo
       height: model.height,
       weight: model.weight,
       created_by: localStorage.user_id,
-      status: model.status ?? "ACCEPTED" ,
+      status: model.status,
     }
 }
 
@@ -63,7 +69,7 @@ export const translateToPostApiModel = (model: ProductFormModel, suppliers: Clie
     height: model.height ?? 0,
     weight: model.weight ?? 0,
     created_by: localStorage.user_id,
-    status: model.status ?? "ACCEPTED" ,
+    status: model.status,
   }
 }
 
@@ -82,6 +88,6 @@ export const translateToPostFormModel = (data: any, suppliers: ClientFormModel[]
     height: template.height,
     weight: template.weight,
     created_by: localStorage.user_id,
-    status: model.status ?? "ACCEPTED" ,
+    status: model.status,
   }});
 }

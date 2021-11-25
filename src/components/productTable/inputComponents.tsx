@@ -7,6 +7,7 @@ import {
 } from "@mui/material";
 import { FieldInputProps, FieldMetaProps, FormikProps } from "formik";
 import { fieldToTextField } from "formik-material-ui";
+import { useState } from "react";
 import { ClientFormModel } from "../clientTable/types";
 import {
   ProductFormModel,
@@ -70,6 +71,11 @@ const MyRadioGroup = ({
   options,
   ...props
 }: FieldProps) => {
+  const [value, setValue] = useState<StatusModel>(field.value);
+  const handleInputChange = (event: any) => {
+    event.persist();
+    setValue(event.target.value);
+  };
   return (
     <>
       <RadioGroup {...field} {...props} name={field.name}>

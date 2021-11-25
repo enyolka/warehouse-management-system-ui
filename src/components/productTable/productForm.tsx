@@ -46,6 +46,21 @@ type Props = {
   initialValues?: ProductFormModel;
 };
 
+export const statuses: Array<StatusModel> = [
+  {
+    label: "Accepted",
+    value: "ACCEPTED",
+  },
+  {
+    label: "In stock",
+    value: "IN_STOCK",
+  },
+  {
+    label: "Shipped",
+    value: "SHIPPED",
+  },
+];
+
 export function ProductForm({
   open,
   handleClose,
@@ -54,21 +69,6 @@ export function ProductForm({
 }: Props): React.ReactElement {
   const { suppliersState, productTemplatesState } =
     React.useContext(StoreContext);
-
-  const statuses: Array<StatusModel> = [
-    {
-      label: "Accepted",
-      value: "ACCEPTED",
-    },
-    {
-      label: "In stock",
-      value: "IN_STOCK",
-    },
-    {
-      label: "Shipped",
-      value: "SHIPPED",
-    },
-  ];
 
   const initialModel: ProductFormModel = {
     id: 0,
@@ -80,7 +80,7 @@ export function ProductForm({
     width: 0,
     height: 0,
     weight: 0,
-    status: "ACCEPTED",
+    status: statuses[0].value,
   };
 
   const validationSchema = Yup.object({

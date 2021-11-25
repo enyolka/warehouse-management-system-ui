@@ -50,7 +50,6 @@ const ProductTemplateTable = ({
     setOpenUpdate(true);
     setUpdatedTemplate(model);
   };
-  console.log(data);
 
   return (
     <TableContainer component={Paper}>
@@ -68,16 +67,6 @@ const ProductTemplateTable = ({
               key={id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell>
-                <Checkbox
-                  value={checked[template.id]}
-                  // onChange={() =>
-                  //   checked[template.id]
-                  //     ? setChecked(checked[template.id])
-                  //     : setChecked(checked[template.id])
-                  // }
-                />
-              </TableCell>
               <TableCell>{template.name}</TableCell>
               <TableCell>{template.supplier?.name ?? ""}</TableCell>
               <TableCell>{template.length ? template.length : "-"}</TableCell>
@@ -107,20 +96,20 @@ const ProductTemplateTable = ({
               </TableCell>
             </TableRow>
           ))}
-          <TableRow>
+          {/* <TableRow>
             <TableCell>
               <Button onClick={() => setOpenGeneralDelete(true)}>
                 <DeleteIcon color="action" />
               </Button>
 
-              {/* <DeletionModal
+              <DeletionModal
                 open={openGeneralDelete}
                 handleClose={() => setOpenGeneralDelete(false)}
                 createRequest={deleteRequest}
                 idxs={checked}
               /> */}
-            </TableCell>
-          </TableRow>
+          {/* </TableCell>
+          </TableRow> */}
         </TableBody>
       </Table>
     </TableContainer>
@@ -128,7 +117,6 @@ const ProductTemplateTable = ({
 };
 
 const columnNames = [
-  { field: "checkbox", headerName: "", width: "20" },
   { field: "name", headerName: "Name", width: 150 },
   { field: "supplier", headerName: "Supplier", width: 120 },
   { field: "length", headerName: "Length", width: 80 },

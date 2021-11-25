@@ -1,5 +1,6 @@
 import {
   Button,
+  Chip,
   Paper,
   Table,
   TableBody,
@@ -9,73 +10,15 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
-import { DataGrid, GridRowsProp, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridRowsProp } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useMemo, useState } from "react";
 import DeletionModal from "../deletionModal/deletionModal";
-import ProductForm from "./productForm";
+import ProductForm, { statuses } from "./productForm";
 import { ProductFormModel } from "./types";
 import styles from "./productTable.module.css";
-import classNames from "classnames";
-import {
-  useTable,
-  useFilters,
-  useGlobalFilter,
-  useAsyncDebounce,
-} from "react-table";
-
-type FilterProps = {
-  preGlobalFilteredRows: any;
-  globalFilter: any;
-  setGlobalFilter: any;
-};
-
-// function GlobalFilter({
-//   preGlobalFilteredRows,
-//   globalFilter,
-//   setGlobalFilter,
-// }: FilterProps) {
-//   const count = preGlobalFilteredRows.length
-//   const [value, setValue] = useState(globalFilter)
-//   const onChange = useAsyncDebounce(value => {
-//     setGlobalFilter(value || undefined)
-//   }, 200)
-
-//   return (
-//     <span>
-//       Search:{' '}
-//       <TextField
-//         value={value || ""}
-//         onChange={e => {
-//           setValue(e.target.value);
-//           onChange(e.target.value);
-//         }}
-//         placeholder={`${count} records...`}
-//         style={{
-//           fontSize: '1.1rem',
-//           border: '0',
-//         }}
-//       />
-//     </span>
-//   )
-// }
-
-// function DefaultColumnFilter({
-//   column: { filterValue, preFilteredRows, setFilter },
-// }) {
-//   const count = preFilteredRows.length
-
-//   return (
-//     <input
-//       value={filterValue || ''}
-//       onChange={e => {
-//         setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
-//       }}
-//       placeholder={`Search ${count} records...`}
-//     />
-//   )
-// }
+import { Status } from "../../api/apiModel";
 
 type Props = {
   data: ProductFormModel[];
@@ -93,6 +36,10 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
   const openDeleteModal = (idx: number) => {
     setOpenDelete(true);
     setIdx(idx);
+  };
+
+  const findStatus = (value: Status | undefined) => {
+    return statuses.find((status) => value === status.value) ?? statuses[0];
   };
 
   const openUpdateModal = (model: ProductFormModel) => {
@@ -122,127 +69,139 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
       width: width,
       height: height,
       weight: weight,
-      created_by: created_by,
-      status: status,
+      created_by: created_by.username,
     })
   );
 
-  return (
-    // <div style={{ height: 700, maxWidth: 700, minWidth: "80vw" }}>
-    //   <DataGrid rows={rows} columns={columnNames} />
-    // </div>
-    <TableContainer component={Paper}>
-      <Table size="medium" aria-label="Client table">
-        <TableHead>
-          <TableRow>
-            {columnNames.map(({ field, headerName, isSorted }) => (
-              <TableCell key={field} onClick={() => setSortedColum(headerName)}>
-                {headerName}
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((product: ProductFormModel, id: number) => (
-            <TableRow
-              key={id}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              className={classNames({
-                [styles.shipped]: product.status === "SHIPPED",
-              })}
-            >
-              <TableCell>{product.template?.name ?? ""}</TableCell>
-              <TableCell>{product.name}</TableCell>
-              <TableCell>{product.supplier?.name ?? ""}</TableCell>
-              <TableCell>{product.length ? product.length : "-"}</TableCell>
-              <TableCell>{product.width ? product.width : "-"}</TableCell>
-              <TableCell>{product.height ? product.height : "-"}</TableCell>
-              <TableCell>{product.weight ? product.weight : "-"}</TableCell>
-              <TableCell>{product.created_by.username ?? "-"}</TableCell>
-              <TableCell>{product.status ?? "-"}</TableCell>
-              <TableCell>
-                <Button onClick={() => openUpdateModal(product)}>
-                  <EditIcon color="action" />
-                </Button>
-                <Button onClick={() => openDeleteModal(product.id)}>
-                  <DeleteIcon color="action" />
-                </Button>
+  const columnNames = [
+    // { field: "template", headerName: "Template", width: 120},
+    { field: "name", headerName: "Name", width: 180 },
+    { field: "supplier", headerName: "Supplier", width: 160 },
+    { field: "length", headerName: "Length", width: 90 },
+    { field: "width", headerName: "Width", width: 90 },
+    { field: "height", headerName: "Height", width: 90 },
+    { field: "weight", headerName: "Weight", width: 90 },
+    {
+      field: "created_by",
+      headerName: "Accepting person",
+      width: 150,
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 150,
+      sortComparator: (v1: any, v2: any, param1: any, param2: any) =>
+        data[param1.id].status! < data[param2.id].status! ? -1 : 1,
+      renderCell: (params: any) => {
+        const val = findStatus(data[params.id].status);
+        return (
+          <Chip
+            label={val.label}
+            color={
+              val?.value === "IN_STOCK"
+                ? "success"
+                : val?.value === "SHIPPED"
+                ? "secondary"
+                : "primary"
+            }
+          />
+        );
+      },
+    },
+    {
+      field: "edit",
+      headerName: "",
+      width: 60,
+      renderCell: (params: any) => (
+        <Button onClick={() => openUpdateModal(data[params.id])}>
+          <EditIcon color="action" />
+        </Button>
+      ),
+    },
+    {
+      field: "delete",
+      headerName: "",
+      width: 60,
+      renderCell: (params: any) => (
+        <Button onClick={() => openDeleteModal(data[params.id].id)}>
+          <DeleteIcon color="action" />
+        </Button>
+      ),
+    },
+  ];
 
-                <DeletionModal
-                  open={openDelete}
-                  handleClose={() => setOpenDelete(false)}
-                  createRequest={deleteRequest}
-                  idxs={[idx]}
-                />
-                <ProductForm
-                  open={openUpdate}
-                  handleClose={() => setOpenUpdate(false)}
-                  createRequest={updateRequest}
-                  initialValues={updatedProduct}
-                />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+  return (
+    <div style={{ height: 700, maxWidth: 700, minWidth: "67vw" }}>
+      <DataGrid rows={rows} columns={columnNames} checkboxSelection />
+      <DeletionModal
+        open={openDelete}
+        handleClose={() => setOpenDelete(false)}
+        createRequest={deleteRequest}
+        idxs={[idx]}
+      />
+      <ProductForm
+        open={openUpdate}
+        handleClose={() => setOpenUpdate(false)}
+        createRequest={updateRequest}
+        initialValues={updatedProduct}
+      />
+    </div>
+    // <TableContainer component={Paper}>
+    //   <Table size="medium" aria-label="Client table">
+    //     <TableHead>
+    //       <TableRow>
+    //         {columnNames.map(({ field, headerName, isSorted }) => (
+    //           <TableCell key={field} onClick={() => setSortedColum(headerName)}>
+    //             {headerName}
+    //           </TableCell>
+    //         ))}
+    //       </TableRow>
+    //     </TableHead>
+    //     <TableBody>
+    //       {data.map((product: ProductFormModel, id: number) => (
+    //         <TableRow
+    //           key={id}
+    //           sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+    //           className={classNames({
+    //             [styles.shipped]: product.status === "SHIPPED",
+    //           })}
+    //         >
+    //           {/* <TableCell>{product.template?.name ?? ""}</TableCell> */}
+    //           <TableCell>{product.name}</TableCell>
+    //           <TableCell>{product.supplier?.name ?? ""}</TableCell>
+    //           <TableCell>{product.length ? product.length : "-"}</TableCell>
+    //           <TableCell>{product.width ? product.width : "-"}</TableCell>
+    //           <TableCell>{product.height ? product.height : "-"}</TableCell>
+    //           <TableCell>{product.weight ? product.weight : "-"}</TableCell>
+    //           <TableCell>{product.created_by.username ?? "-"}</TableCell>
+    //           <TableCell>{product.status ?? "-"}</TableCell>
+    //           <TableCell>
+    //             <Button onClick={() => openUpdateModal(product)}>
+    //               <EditIcon color="action" />
+    //             </Button>
+    //             <Button onClick={() => openDeleteModal(product.id)}>
+    //               <DeleteIcon color="action" />
+    //             </Button>
+
+    //             <DeletionModal
+    //               open={openDelete}
+    //               handleClose={() => setOpenDelete(false)}
+    //               createRequest={deleteRequest}
+    //               idxs={[idx]}
+    //             />
+    //             <ProductForm
+    //               open={openUpdate}
+    //               handleClose={() => setOpenUpdate(false)}
+    //               createRequest={updateRequest}
+    //               initialValues={updatedProduct}
+    //             />
+    //           </TableCell>
+    //         </TableRow>
+    //       ))}
+    //     </TableBody>
+    //   </Table>
+    // </TableContainer>
   );
 };
-
-const columnNames = [
-  { field: "template", headerName: "Template", width: 120, isSorted: false },
-  { field: "name", headerName: "Name", width: 150, isSorted: false },
-  { field: "supplier", headerName: "Supplier", width: 120, isSorted: false },
-  { field: "length", headerName: "Length", width: 70, isSorted: false },
-  { field: "width", headerName: "Width", width: 70, isSorted: false },
-  { field: "height", headerName: "Height", width: 70, isSorted: false },
-  { field: "weight", headerName: "Weight", width: 70, isSorted: false },
-  {
-    field: "created_by",
-    headerName: "Accepting person",
-    width: 100,
-    isSorted: false,
-  },
-  { field: "status", headerName: "Status", width: 100, isSorted: false },
-];
-
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-type Order = "asc" | "desc";
-
-function getComparator<Key extends keyof any>(
-  order: Order,
-  orderBy: Key
-): (
-  a: { [key in Key]: number | string },
-  b: { [key in Key]: number | string }
-) => number {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort<T>(
-  array: readonly T[],
-  comparator: (a: T, b: T) => number
-) {
-  const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
 
 export default ProductTable;

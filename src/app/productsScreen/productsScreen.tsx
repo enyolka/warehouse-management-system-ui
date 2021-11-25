@@ -83,7 +83,6 @@ function ProductsScreen({}: Props): React.ReactElement {
     getProducts(extraData.suppliers, extraData.templates)(productsDispatch);
   };
 
-  console.log(productsState);
   return (
     <Grid
       container

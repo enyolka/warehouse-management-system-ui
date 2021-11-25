@@ -100,8 +100,6 @@ export function ProductFormFromTemplate({
           validateOnChange={true}
           validateOnBlur={true}
           onSubmit={({ template, count }, { resetForm }) => {
-            console.log("ok");
-            console.log({ template, count });
             createRequest(template.id, count);
             if (props.initialValues) handleClose(true);
             resetForm({});

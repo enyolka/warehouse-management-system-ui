@@ -13,8 +13,6 @@ export const getProducts = (suppliers: ClientFormModel[], templates: ProductTemp
       headers: { Authorization: `Token ${localStorage.token}`}}
   )
   .then((resp) => {
-    console.log(resp.data)
-    console.log(translateToFormModel(resp.data, suppliers, templates))
     dispatch({
       type: "PRODUCT_SUCCESS",
       payload: translateToFormModel(resp.data, suppliers, templates),

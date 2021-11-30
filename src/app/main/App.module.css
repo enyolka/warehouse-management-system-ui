@@ -6,8 +6,8 @@
   display: flex;
   /* justify-content: flex-end; */
   align-content: space-between;
-  height: 3em;
-  padding: 0.5em;
+  height: 5em;
+  padding: 1em;
   /* background-color: rgb(125, 178, 209); */
 }
 
@@ -23,4 +23,8 @@
 
 .btn__icon {
   padding-left: 0.5em;
+}
+
+.main {
+  padding: 2em;
 }

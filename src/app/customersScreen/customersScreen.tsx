@@ -18,6 +18,7 @@ type Props = {};
 function CustomersScreen({}: Props): React.ReactElement {
   const { customersState, customersDispatch } = useContext(StoreContext);
   const [open, setOpen] = useState(false);
+  const disabled = !!(localStorage["admin"] === "false");
 
   const data: ClientFormModel[] = useMemo(
     () => customersState.data,
@@ -62,21 +63,24 @@ function CustomersScreen({}: Props): React.ReactElement {
       </Grid>
 
       <Grid item>
-        <Button
-          variant="contained"
-          onClick={() => setOpen(true)}
-          style={{ marginRight: 10 }}
-        >
-          Add customer
-        </Button>
+        {disabled && (
+            <Button
+              variant="contained"
+              onClick={() => setOpen(true)}
+              style={{ marginRight: 10 }}
+            >
+              Add customer
+            </Button>
+          ) && (
+            <CustomersForm
+              open={open}
+              handleClose={() => setOpen(false)}
+              createRequest={createRequest}
+            />
+          )}
         <Button variant="contained" to="/dashboard" component={Link}>
           Dashboard
         </Button>
-        <CustomersForm
-          open={open}
-          handleClose={() => setOpen(false)}
-          createRequest={createRequest}
-        />
       </Grid>
     </Grid>
   );

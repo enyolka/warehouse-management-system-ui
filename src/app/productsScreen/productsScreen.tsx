@@ -103,13 +103,13 @@ function ProductsScreen({}: Props): React.ReactElement {
       </Grid>
 
       <Grid item>
-        <Button
+        {/* <Button
           variant="contained"
           onClick={() => setOpen(true)}
           style={{ marginRight: 10 }}
         >
           Add single product
-        </Button>
+        </Button> */}
         <Button
           variant="contained"
           onClick={() => setOpenFromTemplate(true)}
@@ -117,14 +117,19 @@ function ProductsScreen({}: Props): React.ReactElement {
         >
           Add products
         </Button>
-        <Button variant="contained" to="/dashboard" component={Link}>
+        {/* <Button
+          variant="contained"
+          color="secondary"
+          to="/dashboard"
+          component={Link}
+        >
           Dashboard
-        </Button>
-        <ProductForm
+        </Button> */}
+        {/* <ProductForm
           open={open}
           handleClose={() => setOpen(false)}
           createRequest={createRequest}
-        />
+        /> */}
         <ProductFormFromTemplate
           open={openFromTemplate}
           handleClose={() => setOpenFromTemplate(false)}

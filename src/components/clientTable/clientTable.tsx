@@ -26,6 +26,7 @@ const ClientTable = ({ data, deleteRequest, updateRequest }: Props) => {
   const [openUpdate, setOpenUpdate] = useState(false);
   const [idx, setIdx] = useState<number>(0);
   const [updatedCustomer, setUpdatedCustomer] = useState<ClientFormModel>();
+  const disabled = !!(localStorage["admin"] === "false");
 
   const openDeleteModal = (idx: number) => {
     setOpenDelete(true);
@@ -63,11 +64,17 @@ const ClientTable = ({ data, deleteRequest, updateRequest }: Props) => {
               <TableCell>{customer.streetName}</TableCell>
               <TableCell>{customer.streetNumber}</TableCell>
               <TableCell>
-                <Button onClick={() => openUpdateModal(customer)}>
-                  <EditIcon color="action" />
+                <Button
+                  onClick={() => openUpdateModal(customer)}
+                  disabled={disabled}
+                >
+                  <EditIcon />
                 </Button>
-                <Button onClick={() => openDeleteModal(customer.id)}>
-                  <DeleteIcon color="action" />
+                <Button
+                  onClick={() => openDeleteModal(customer.id)}
+                  disabled={disabled}
+                >
+                  <DeleteIcon />
                 </Button>
 
                 <DeletionModal

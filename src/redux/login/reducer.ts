@@ -6,7 +6,8 @@ export const loginInitialState: LoginStore = {
   data: {
           id: 0,
           username: localStorage.getItem("username") || "",
-          email: localStorage.getItem("email") || ""
+          email: localStorage.getItem("email") || "",
+          admin: JSON.parse(localStorage.getItem("admin") || "false")
         },
   error: "",
 };
@@ -16,6 +17,7 @@ const saveToLocalStorage = (data: any) => {
     localStorage.setItem("user_id", data.id)
     localStorage.setItem("username", data.username)
     localStorage.setItem("email", data.email)
+    localStorage.setItem("admin", data.is_staff)
   } catch(e) {
     console.log(e)
   }

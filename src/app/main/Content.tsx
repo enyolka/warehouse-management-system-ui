@@ -7,19 +7,29 @@ import ProductLibraryScreen from "../productLibraryScreen/productLibraryScreen";
 import ProductsScreen from "../productsScreen/productsScreen";
 import StartScreen from "../startScreen/startScreen";
 import SuppliersScreen from "../suppliersScreen/suppliersScreen";
+import styles from "./App.module.css";
 
-const Content = () => {
+type Props = {
+  value: number;
+  setValue: (newValue: number) => void;
+};
+
+const Content = ({ value, setValue }: Props) => {
   const { loginState } = useContext(StoreContext);
   const isUserLogged = useMemo(() => Boolean(localStorage.token), [loginState]);
 
   return (
-    <main>
+    <main className={styles.main}>
       <Switch>
         <Route exact path="/">
           {isUserLogged ? <Redirect to="/dashboard" /> : <StartScreen />}
         </Route>
         {isUserLogged && (
-          <Route exact path="/dashboard" render={() => <Dashboard />} />
+          <Route
+            exact
+            path="/dashboard"
+            render={() => <Dashboard value={value} setValue={setValue} />}
+          />
         )}
         {isUserLogged && (
           <Route exact path="/suppliers" render={() => <SuppliersScreen />} />

@@ -20,6 +20,7 @@ function ProductLibraryScreen({}: Props): React.ReactElement {
   const { productTemplatesState, productTemplatesDispatch, suppliersState } =
     useContext(StoreContext);
   const [open, setOpen] = useState(false);
+  const disabled = !!(localStorage["admin"] === "false");
 
   const suppliersData: ClientFormModel[] = useMemo(
     () => suppliersState.data,
@@ -65,16 +66,23 @@ function ProductLibraryScreen({}: Props): React.ReactElement {
       </Grid>
 
       <Grid item>
-        <Button
+        {!disabled && (
+          <Button
+            variant="contained"
+            onClick={() => setOpen(true)}
+            style={{ marginRight: 10 }}
+          >
+            Add product template
+          </Button>
+        )}
+        {/* <Button
           variant="contained"
-          onClick={() => setOpen(true)}
-          style={{ marginRight: 10 }}
+          color="secondary"
+          to="/dashboard"
+          component={Link}
         >
-          Add product template
-        </Button>
-        <Button variant="contained" to="/dashboard" component={Link}>
           Dashboard
-        </Button>
+        </Button> */}
         <ProductTemplateForm
           open={open}
           handleClose={() => setOpen(false)}

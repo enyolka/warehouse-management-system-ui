@@ -6,15 +6,17 @@ import Header from "./Header";
 import styles from "./App.module.css";
 import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { theme } from "../../styles/theme";
+import { useState } from "react";
 
 function App() {
+  const [value, setValue] = useState(0);
   return (
     <StoreProvider>
       <ThemeProvider theme={theme}>
         <Router>
           <Box className={styles.root}>
-            <Header />
-            <Content />
+            <Header value={value} setValue={setValue} />
+            <Content value={value} setValue={setValue} />
           </Box>
         </Router>
       </ThemeProvider>

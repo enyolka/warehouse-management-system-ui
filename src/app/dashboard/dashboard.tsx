@@ -2,10 +2,14 @@ import * as React from "react";
 import { Button, Grid } from "@mui/material";
 import { Link } from "react-router-dom";
 import { StoreContext } from "../../redux/store/StoreProvider";
+import { WarehouseMap } from "../../components/warehouseMap/warehouseMap";
 
-type Props = {};
+type Props = {
+  value: number;
+  setValue: (newValue: number) => void;
+};
 
-function Dashboard({}: Props): React.ReactElement {
+function Dashboard({ value, setValue }: Props): React.ReactElement {
   return (
     <Grid
       container
@@ -15,25 +19,48 @@ function Dashboard({}: Props): React.ReactElement {
       spacing={2}
     >
       <Grid item>
-        <Button variant="contained" to="/suppliers" component={Link}>
+        <WarehouseMap />
+      </Grid>
+      {/* <Grid item>
+        <Button
+          variant="contained"
+          to="/suppliers"
+          component={Link}
+          onClick={() => setValue(1)}
+        >
           Suppliers
         </Button>
       </Grid>
       <Grid item>
-        <Button variant="contained" to="/customers" component={Link}>
+        <Button
+          variant="contained"
+          to="/customers"
+          component={Link}
+          onClick={() => setValue(2)}
+        >
           Customers
         </Button>
       </Grid>
       <Grid item>
-        <Button variant="contained" to="/product-library" component={Link}>
+        <Button
+          variant="contained"
+          to="/product-library"
+          component={Link}
+          onClick={() => setValue(3)}
+        >
           Product Library
         </Button>
       </Grid>
       <Grid item>
-        <Button variant="contained" to="/products" component={Link}>
+        <Button
+          variant="contained"
+          to="/products"
+          component={Link}
+          onClick={() => setValue(4)}
+        >
           Products
-        </Button>
-      </Grid>
+        </Button> 
+      </Grid> */}
     </Grid>
   );
 }

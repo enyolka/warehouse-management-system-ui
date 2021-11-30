@@ -18,6 +18,7 @@ type Props = {};
 function SuppliersScreen({}: Props): React.ReactElement {
   const { suppliersState, suppliersDispatch } = useContext(StoreContext);
   const [open, setOpen] = useState(false);
+  const disabled = !!(localStorage["admin"] === "false");
 
   const data: ClientFormModel[] = useMemo(
     () => suppliersState.data,
@@ -56,16 +57,18 @@ function SuppliersScreen({}: Props): React.ReactElement {
       </Grid>
 
       <Grid item>
-        <Button
-          variant="contained"
-          onClick={() => setOpen(true)}
-          style={{ marginRight: 10 }}
-        >
-          Add supplier
-        </Button>
-        <Button variant="contained" to="/dashboard" component={Link}>
+        {!disabled && (
+          <Button
+            variant="contained"
+            onClick={() => setOpen(true)}
+            style={{ marginRight: 10 }}
+          >
+            Add supplier
+          </Button>
+        )}
+        {/* <Button variant="contained" to="/dashboard" component={Link}>
           Dashboard
-        </Button>
+        </Button> */}
         <ClientForm
           open={open}
           handleClose={() => setOpen(false)}

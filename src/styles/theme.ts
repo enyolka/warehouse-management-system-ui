@@ -6,9 +6,12 @@ export const theme = createTheme({components:{
   MuiButton :{
     styleOverrides:{
       root: {
-        "&.MuiButton-contained": {
-          backgroundColor: colors.primary
-        }
+         "&.MuiButton-contained": {
+          backgroundColor: colors.primary,
+          "&Secondary" : {
+            backgroundColor: colors.close
+          }
+        },
       }
     }
   },
@@ -21,5 +24,19 @@ export const theme = createTheme({components:{
         overflowY: "auto",
       }
     }
-  }
+  },
+  MuiBottomNavigation: {
+    styleOverrides: {
+      root: {
+        height: "auto",
+      }
+    }
+  },
+  MuiBottomNavigationAction: {
+    styleOverrides: {
+      root: {
+        width: "10vw",
+      }
+    }
+  },
 }});

@@ -137,7 +137,7 @@ export function ProductFormFromTemplate({
                   <Field
                     label="Count"
                     name="count"
-                    type="text"
+                    type="number"
                     component={MyInput}
                     error={errors.count && touched.count}
                   />

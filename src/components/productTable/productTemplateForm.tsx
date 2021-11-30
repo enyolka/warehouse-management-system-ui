@@ -113,7 +113,7 @@ export function ProductTemplateForm({
                     <Field
                       label="Length"
                       name="length"
-                      type="text"
+                      type="number"
                       component={MyInput}
                       error={errors.length && touched.length}
                     />
@@ -127,7 +127,7 @@ export function ProductTemplateForm({
                     <Field
                       label="Width"
                       name="width"
-                      type="text"
+                      type="number"
                       component={MyInput}
                       error={errors.width && touched.width}
                     />
@@ -141,7 +141,7 @@ export function ProductTemplateForm({
                     <Field
                       label="Height"
                       name="height"
-                      type="text"
+                      type="number"
                       component={MyInput}
                       error={errors.height && touched.height}
                     />
@@ -155,7 +155,7 @@ export function ProductTemplateForm({
                     <Field
                       label="Weight"
                       name="weight"
-                      type="text"
+                      type="number"
                       component={MyInput}
                       error={errors.weight && touched.weight}
                     />

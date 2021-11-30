@@ -81,6 +81,8 @@ export function ProductForm({
     height: 0,
     weight: 0,
     status: statuses[0].value,
+    acceptance_at: new Date().toJSON(),
+    logistic_unit: "",
   };
 
   const validationSchema = Yup.object({

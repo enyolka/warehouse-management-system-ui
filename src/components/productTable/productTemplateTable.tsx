@@ -2,6 +2,7 @@ import {
   Button,
   Checkbox,
   checkboxClasses,
+  Pagination,
   Paper,
   Table,
   TableBody,
@@ -17,15 +18,19 @@ import DeletionModal from "../deletionModal/deletionModal";
 import { ProductTemplateModel } from "../../api/apiModel";
 import { ProductTemplateFormModel } from "./types";
 import ProductForm from "./productTemplateForm";
+import {
+  DataGrid,
+  GridColumns,
+  GridRowsProp,
+  useGridApiContext,
+  useGridState,
+} from "@mui/x-data-grid";
+import { CustomPagination } from "../pagination/customPagination";
 
 type Props = {
   data: ProductTemplateFormModel[];
   deleteRequest: (idx: number) => void;
   updateRequest: (model: ProductTemplateFormModel) => void;
-};
-
-type Checked = {
-  [id: number]: boolean;
 };
 
 const ProductTemplateTable = ({
@@ -37,9 +42,10 @@ const ProductTemplateTable = ({
   const [openUpdate, setOpenUpdate] = useState(false);
   const [openGeneralDelete, setOpenGeneralDelete] = useState(false);
   const [idx, setIdx] = useState<number>(0);
-  const [checked, setChecked] = useState<Checked[]>([]);
+  const [checked, setChecked] = useState<number[]>([]);
   const [updatedTemplate, setUpdatedTemplate] =
     useState<ProductTemplateFormModel>();
+  const disabled = !!(localStorage["admin"] === "false");
 
   const openDeleteModal = (idx: number) => {
     setOpenDelete(true);
@@ -51,78 +57,194 @@ const ProductTemplateTable = ({
     setUpdatedTemplate(model);
   };
 
+  const rows: GridRowsProp = data.map(
+    ({ id, name, supplier, length, width, height, weight }, row_id) => ({
+      row_id: row_id,
+      id: id,
+      name: name,
+      supplier: supplier.name,
+      length: length,
+      width: width,
+      height: height,
+      weight: weight,
+    })
+  );
+
+  const columnNames: GridColumns = [
+    {
+      field: "name",
+      headerName: "Name",
+      width: 220,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "supplier",
+      headerName: "Supplier",
+      width: 200,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "length",
+      headerName: "Length",
+      width: 100,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "width",
+      headerName: "Width",
+      width: 100,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "height",
+      headerName: "Height",
+      width: 100,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "weight",
+      headerName: "Weight",
+      width: 100,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "edit",
+      headerName: "",
+      width: 90,
+      renderCell: (params: any) => (
+        <Button
+          onClick={() => openUpdateModal(data[params.id])}
+          disabled={disabled}
+        >
+          <EditIcon />
+        </Button>
+      ),
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "delete",
+      headerName: "",
+      width: 90,
+      renderCell: (params: any) => (
+        <Button onClick={() => openDeleteModal(params.id)} disabled={disabled}>
+          <DeleteIcon />
+        </Button>
+      ),
+      headerAlign: "center",
+      align: "center",
+    },
+  ];
+
   return (
-    <TableContainer component={Paper}>
-      <Table size="medium" aria-label="Client table">
-        <TableHead>
-          <TableRow>
-            {columnNames.map(({ field, headerName }) => (
-              <TableCell key={field}>{headerName}</TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((template: ProductTemplateFormModel, id: number) => (
-            <TableRow
-              key={id}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell>{template.name}</TableCell>
-              <TableCell>{template.supplier?.name ?? ""}</TableCell>
-              <TableCell>{template.length ? template.length : "-"}</TableCell>
-              <TableCell>{template.width ? template.width : "-"}</TableCell>
-              <TableCell>{template.height ? template.height : "-"}</TableCell>
-              <TableCell>{template.weight ? template.weight : "-"}</TableCell>
-              <TableCell>
-                <Button onClick={() => openUpdateModal(template)}>
-                  <EditIcon color="action" />
-                </Button>
-                <Button onClick={() => openDeleteModal(template.id)}>
-                  <DeleteIcon color="action" />
-                </Button>
+    <div style={{ height: 600, maxWidth: 700, minWidth: "60vw" }}>
+      <DataGrid
+        rows={rows}
+        columns={columnNames}
+        components={{
+          Pagination: CustomPagination,
+        }}
+        componentsProps={{
+          pagination: { setOpenGeneralDelete, checked },
+        }}
+        checkboxSelection
+        onSelectionModelChange={(ids) => {
+          const selectedIDs = new Set(ids);
+          setChecked(
+            rows.filter((row) => selectedIDs.has(row.id)).map((x) => x.id)
+          );
+        }}
+      />
 
-                <DeletionModal
-                  open={openDelete}
-                  handleClose={() => setOpenDelete(false)}
-                  createRequest={deleteRequest}
-                  idxs={[idx]}
-                />
-                <ProductForm
-                  open={openUpdate}
-                  handleClose={() => setOpenUpdate(false)}
-                  createRequest={updateRequest}
-                  initialValues={updatedTemplate}
-                />
-              </TableCell>
-            </TableRow>
-          ))}
-          {/* <TableRow>
-            <TableCell>
-              <Button onClick={() => setOpenGeneralDelete(true)}>
-                <DeleteIcon color="action" />
-              </Button>
+      <DeletionModal
+        open={openGeneralDelete}
+        handleClose={() => setOpenGeneralDelete(false)}
+        createRequest={deleteRequest}
+        idxs={checked}
+      />
+      <DeletionModal
+        open={openDelete}
+        handleClose={() => setOpenDelete(false)}
+        createRequest={deleteRequest}
+        idxs={[idx]}
+      />
+      <ProductForm
+        open={openUpdate}
+        handleClose={() => setOpenUpdate(false)}
+        createRequest={updateRequest}
+        initialValues={updatedTemplate}
+      />
+    </div>
 
-              <DeletionModal
-                open={openGeneralDelete}
-                handleClose={() => setOpenGeneralDelete(false)}
-                createRequest={deleteRequest}
-                idxs={checked}
-              /> */}
-          {/* </TableCell>
-          </TableRow> */}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    //  return (
+    //   <TableContainer component={Paper}>
+    //     <Table size="medium" aria-label="Client table">
+    //       <TableHead>
+    //         <TableRow>
+    //           {columnNames.map(({ field, headerName }) => (
+    //             <TableCell key={field}>{headerName}</TableCell>
+    //           ))}
+    //         </TableRow>
+    //       </TableHead>
+    //       <TableBody>
+    //         {data.map((template: ProductTemplateFormModel, id: number) => (
+    //           <TableRow
+    //             key={id}
+    //             sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+    //           >
+    //             <TableCell>{template.name}</TableCell>
+    //             <TableCell>{template.supplier?.name ?? ""}</TableCell>
+    //             <TableCell>{template.length ? template.length : "-"}</TableCell>
+    //             <TableCell>{template.width ? template.width : "-"}</TableCell>
+    //             <TableCell>{template.height ? template.height : "-"}</TableCell>
+    //             <TableCell>{template.weight ? template.weight : "-"}</TableCell>
+    //             <TableCell>
+    //               <Button onClick={() => openUpdateModal(template)}>
+    //                 <EditIcon color="action" />
+    //               </Button>
+    //               <Button onClick={() => openDeleteModal(template.id)}>
+    //                 <DeleteIcon color="action" />
+    //               </Button>
+
+    //            <DeletionModal
+    //               open={openDelete}
+    //               handleClose={() => setOpenDelete(false)}
+    //               createRequest={deleteRequest}
+    //               idxs={[idx]}
+    //             />
+    //             <ProductForm
+    //               open={openUpdate}
+    //               handleClose={() => setOpenUpdate(false)}
+    //               createRequest={updateRequest}
+    //               initialValues={updatedTemplate}
+    //             />
+    //           </TableCell>
+    //         </TableRow>
+    //       ))} */}
+    //       <TableRow>
+    //         <TableCell>
+    //           <Button onClick={() => setOpenGeneralDelete(true)}>
+    //             <DeleteIcon color="action" />
+    //           </Button>
+
+    // <DeletionModal
+    //   open={openGeneralDelete}
+    //   handleClose={() => setOpenGeneralDelete(false)}
+    //   createRequest={deleteRequest}
+    //   idxs={checked}
+    //           />
+    //       </TableCell>
+    //       </TableRow> */}
+    //     </TableBody>
+    //   </Table>
+    // </TableContainer>
   );
 };
-
-const columnNames = [
-  { field: "name", headerName: "Name", width: 150 },
-  { field: "supplier", headerName: "Supplier", width: 120 },
-  { field: "length", headerName: "Length", width: 80 },
-  { field: "width", headerName: "Width", width: 80 },
-  { field: "height", headerName: "Height", width: 80 },
-  { field: "weight", headerName: "Weight", width: 80 },
-];
 
 export default ProductTemplateTable;

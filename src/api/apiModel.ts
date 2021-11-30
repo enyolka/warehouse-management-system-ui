@@ -39,6 +39,7 @@ export type ProductModel = {
   height?: number;
   weight?: number;
   status?: Status;
-  logistic_unit?: number;
+  logistic_unit?: string;
+  acceptance_at: string;
 };
 

@@ -36,6 +36,8 @@ export const translateToFormModel = (data: ProductModel[], suppliers: ClientForm
       weight: template.weight,
       created_by: model.created_by as UserFormModel,
       status: model.status,
+      acceptance_at: model.acceptance_at,
+      logistic_unit: model.logistic_unit ?? "",
     })});
   } catch(e) {
   return []
@@ -55,6 +57,8 @@ export const translatetoApiModel = (model: ProductFormModel, suppliers: ClientFo
       weight: model.weight,
       created_by: localStorage.user_id,
       status: model.status,
+      acceptance_at: model.acceptance_at,
+      logistic_unit: model.logistic_unit ?? "",
     }
 }
 
@@ -70,6 +74,8 @@ export const translateToPostApiModel = (model: ProductFormModel, suppliers: Clie
     weight: model.weight ?? 0,
     created_by: localStorage.user_id,
     status: model.status,
+    acceptance_at: model.acceptance_at,
+    logistic_unit: model.logistic_unit ?? "",
   }
 }
 
@@ -89,5 +95,7 @@ export const translateToPostFormModel = (data: any, suppliers: ClientFormModel[]
     weight: template.weight,
     created_by: localStorage.user_id,
     status: model.status,
+    acceptance_at: model.acceptance_at,
+    logistic_unit: model.logistic_unit ?? "",
   }});
 }

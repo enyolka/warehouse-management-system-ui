@@ -28,4 +28,6 @@ export type ProductFormModel = {
   height?: number;
   weight?: number;
   status?: Status;
+  logistic_unit?: string;
+  acceptance_at: string;
 };

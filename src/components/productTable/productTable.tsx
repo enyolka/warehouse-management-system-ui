@@ -10,7 +10,7 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
-import { DataGrid, GridRowsProp } from "@mui/x-data-grid";
+import { DataGrid, GridColumns, GridRowsProp } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useMemo, useState } from "react";
@@ -19,6 +19,7 @@ import ProductForm, { statuses } from "./productForm";
 import { ProductFormModel } from "./types";
 import styles from "./productTable.module.css";
 import { Status } from "../../api/apiModel";
+import { CustomPagination } from "../pagination/customPagination";
 
 type Props = {
   data: ProductFormModel[];
@@ -29,16 +30,17 @@ type Props = {
 const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
   const [openDelete, setOpenDelete] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
-  const [sortedColumn, setSortedColum] = useState<string>("");
+  const [openGeneralDelete, setOpenGeneralDelete] = useState(false);
   const [idx, setIdx] = useState<number>(0);
   const [updatedProduct, setUpdatedProduct] = useState<ProductFormModel>();
+  const [checked, setChecked] = useState<number[]>([]);
 
   const openDeleteModal = (idx: number) => {
     setOpenDelete(true);
     setIdx(idx);
   };
 
-  const findStatus = (value: Status | undefined) => {
+  const findStatus = (value: Status) => {
     return statuses.find((status) => value === status.value) ?? statuses[0];
   };
 
@@ -49,6 +51,7 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
   const rows: GridRowsProp = data.map(
     (
       {
+        id,
         template,
         name,
         supplier,
@@ -59,8 +62,9 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
         created_by,
         status,
       },
-      id
+      row_id
     ) => ({
+      row_id: row_id,
       id: id,
       template: template.name,
       name: name,
@@ -73,17 +77,53 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
     })
   );
 
-  const columnNames = [
+  const columnNames: GridColumns = [
     // { field: "template", headerName: "Template", width: 120},
-    { field: "name", headerName: "Name", width: 180 },
-    { field: "supplier", headerName: "Supplier", width: 160 },
-    { field: "length", headerName: "Length", width: 90 },
-    { field: "width", headerName: "Width", width: 90 },
-    { field: "height", headerName: "Height", width: 90 },
-    { field: "weight", headerName: "Weight", width: 90 },
+    {
+      field: "name",
+      headerName: "Name",
+      width: 180,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "supplier",
+      headerName: "Supplier",
+      width: 160,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "length",
+      headerName: "Length",
+      width: 90,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "width",
+      headerName: "Width",
+      width: 90,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "height",
+      headerName: "Height",
+      width: 90,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "weight",
+      headerName: "Weight",
+      width: 90,
+      headerAlign: "center",
+      align: "center",
+    },
     {
       field: "created_by",
-      headerName: "Accepting person",
+      headerName: "Last modification",
       width: 150,
     },
     {
@@ -91,9 +131,9 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
       headerName: "Status",
       width: 150,
       sortComparator: (v1: any, v2: any, param1: any, param2: any) =>
-        data[param1.id].status! < data[param2.id].status! ? -1 : 1,
+        data[param1.row_id].status! < data[param2.row_id].status! ? -1 : 1,
       renderCell: (params: any) => {
-        const val = findStatus(data[params.id].status);
+        const val = findStatus(data[params.id]?.status ?? "ACCEPTED");
         return (
           <Chip
             label={val.label}
@@ -107,6 +147,8 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
           />
         );
       },
+      headerAlign: "center",
+      align: "center",
     },
     {
       field: "edit",
@@ -114,25 +156,52 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
       width: 60,
       renderCell: (params: any) => (
         <Button onClick={() => openUpdateModal(data[params.id])}>
-          <EditIcon color="action" />
+          <EditIcon />
         </Button>
       ),
+      headerAlign: "center",
+      align: "center",
     },
     {
       field: "delete",
       headerName: "",
       width: 60,
       renderCell: (params: any) => (
-        <Button onClick={() => openDeleteModal(data[params.id].id)}>
-          <DeleteIcon color="action" />
+        <Button onClick={() => openDeleteModal(params.id)}>
+          <DeleteIcon />
         </Button>
       ),
+      headerAlign: "center",
+      align: "center",
     },
   ];
-
+  console.log(data);
   return (
-    <div style={{ height: 700, maxWidth: 700, minWidth: "67vw" }}>
-      <DataGrid rows={rows} columns={columnNames} checkboxSelection />
+    <div style={{ height: 600, maxWidth: 700, minWidth: "70vw" }}>
+      <DataGrid
+        rows={rows}
+        columns={columnNames}
+        components={{
+          Pagination: CustomPagination,
+        }}
+        componentsProps={{
+          pagination: { setOpenGeneralDelete, checked },
+        }}
+        checkboxSelection
+        onSelectionModelChange={(ids) => {
+          const selectedIDs = new Set(ids);
+          setChecked(
+            rows.filter((row) => selectedIDs.has(row.id)).map((x) => x.id)
+          );
+        }}
+        // getRowId={(row) => row.row_id}
+      />
+      <DeletionModal
+        open={openGeneralDelete}
+        handleClose={() => setOpenGeneralDelete(false)}
+        createRequest={deleteRequest}
+        idxs={checked}
+      />
       <DeletionModal
         open={openDelete}
         handleClose={() => setOpenDelete(false)}

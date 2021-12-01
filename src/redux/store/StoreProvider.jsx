@@ -12,8 +12,10 @@ import userReducer, { userInitialState } from "../users/reducer";
 import {productTemplatesReducer, productTemplatesInitialState} from "../productTemplates/reducer"
 import { getProductTemplates } from "../productTemplates/action";
 import {productsReducer, productsInitialState} from "../products/reducer"
+import {storagesReducer, storagesInitialState} from "../storage/reducer"
 import { getProducts } from "../products/action";
 import { getUsers } from "../users/action";
+import { getStorages } from "../../redux/storage/action";
 import { ProductFormModel } from "../../components/productTable/types";
 
 export const StoreContext = createContext();
@@ -25,6 +27,8 @@ const StoreProvider = ({ children }) => {
   const [suppliersState, suppliersDispatch] = useReducer(supplierReducer, supplierInitialState)
   const [productTemplatesState, productTemplatesDispatch] = useReducer(productTemplatesReducer, productTemplatesInitialState)
   const [productsState, productsDispatch] = useReducer(productsReducer, productsInitialState)
+  const [storageState, storageDispatch] = useReducer(storagesReducer, storagesInitialState)
+
 
   const extraData = useMemo(
     () => ({
@@ -41,6 +45,7 @@ const StoreProvider = ({ children }) => {
       getSuppliers()(suppliersDispatch);
       getProductTemplates()(productTemplatesDispatch)
       getProducts(extraData.suppliers, extraData.templates)(productsDispatch);
+      getStorages()(storageDispatch)
   }}, [loginState.data]);
 
   return (
@@ -56,7 +61,9 @@ const StoreProvider = ({ children }) => {
       productTemplatesState, 
       productTemplatesDispatch,
       productsState, 
-      productsDispatch  
+      productsDispatch, 
+      storageState, 
+      storageDispatch  
       }}>
       {children}
     </StoreContext.Provider>

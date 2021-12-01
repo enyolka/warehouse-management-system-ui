@@ -77,7 +77,6 @@ export const postFromTemplateProduct = (template: number, count: number, supplie
 
 
 export const putProduct = (model: ProductFormModel, suppliers: ClientFormModel[], templates: ProductTemplateFormModel[]) => (dispatch: any) => {
-  console.log(model)
   return request().put(
     `/storages/v1/products/${model.id}/`,
     translateToPostApiModel(model, suppliers),

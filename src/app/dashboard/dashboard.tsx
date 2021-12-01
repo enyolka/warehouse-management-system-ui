@@ -3,6 +3,11 @@ import { Button, Grid } from "@mui/material";
 import { Link } from "react-router-dom";
 import { StoreContext } from "../../redux/store/StoreProvider";
 import { WarehouseMap } from "../../components/warehouseMap/warehouseMap";
+import { WarehouseMapDiv } from "../../components/warehouseMap/warehouseMapDiv";
+import { useMemo } from "react";
+import { StorageModel } from "../../api/apiModel";
+import { getStorages } from "../../redux/storage/action";
+import { useEffect } from "react";
 
 type Props = {
   value: number;
@@ -10,6 +15,13 @@ type Props = {
 };
 
 function Dashboard({ value, setValue }: Props): React.ReactElement {
+  const { storageState, storageDispatch } = React.useContext(StoreContext);
+
+  const data: StorageModel = useMemo(() => {
+    getStorages()(storageDispatch);
+    return storageState.data;
+  }, []);
+
   return (
     <Grid
       container
@@ -18,8 +30,11 @@ function Dashboard({ value, setValue }: Props): React.ReactElement {
       alignItems="center"
       spacing={2}
     >
+      {/* <Grid item>
+        <WarehouseMap data={data} />
+      </Grid> */}
       <Grid item>
-        <WarehouseMap />
+        <WarehouseMapDiv data={data} />
       </Grid>
       {/* <Grid item>
         <Button

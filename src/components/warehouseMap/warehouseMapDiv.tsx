@@ -1,3 +1,4 @@
+import { Grid } from "@mui/material";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 import { LogisticUnitModel, StorageModel } from "../../api/apiModel";
@@ -47,42 +48,26 @@ type Props = {
   data: StorageModel;
 };
 
-function WarehouseMap({ data }: Props) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const position = useMousePosition();
-
-  const grid = make2DArray(10, 10);
-  const aisleNum = 4;
+function WarehouseMapDiv({ data }: Props) {
   const rackNum = data.storageplace_set.slice(0, -1).length / 9;
   const storages = data.storageplace_set.slice(0, -1);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas?.getContext("2d");
-    if (ctx == null) throw new Error("Could not get context");
-    ctx.beginPath();
-    ctx.strokeRect(0, 0, 600, 600);
-    ctx.fill();
-    console.log(storages);
-    console.log(position.x, position.y);
+  // useEffect(() =>
+  // , []);
 
-    if (storages.length > 0) {
-      console.log(storages);
-      for (let i = 0; i <= aisleNum; i++) {
-        for (let j = 0; j < 4; j++) {
-          console.log(storages[10 * i + j].logisticunit);
-          const a = storages[10 * i + j].logisticunit?.products;
-          ctx.beginPath();
-          ctx.fillStyle = a && a.length > 0 ? "yellow" : "gray";
-          ctx.fillRect(51 * j + 15, 30 * i * 2 + 15, 50, 30);
-          ctx.fillText("abc", position.x + 10, position.y + 10);
-          ctx.fill();
-        }
-      }
-    }
-  }, []);
-
-  return <canvas ref={canvasRef} height={600} width={600} />;
+  return (
+    <>
+      <Grid container direction="column">
+        {storages.map((item, idx) =>
+          idx % 9 === 0 ? (
+            <Grid item key={storages[idx].id}>
+              <div>{storages[idx].id}</div>
+            </Grid>
+          ) : null
+        )}
+      </Grid>
+    </>
+  );
 }
 
-export { WarehouseMap };
+export { WarehouseMapDiv };

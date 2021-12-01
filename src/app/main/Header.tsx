@@ -4,6 +4,9 @@ import {
   BottomNavigationAction,
   Box,
   Button,
+  Grow,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import { Link, useHistory } from "react-router-dom";
 import { StoreContext } from "../../redux/store/StoreProvider";
@@ -20,6 +23,14 @@ function Header({ value, setValue }: Props): React.ReactElement {
   const { loginDispatch } = React.useContext(StoreContext);
   const history = useHistory();
   const isUserLogged = Boolean(localStorage.token);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleLogout = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -45,15 +56,28 @@ function Header({ value, setValue }: Props): React.ReactElement {
             component={Link}
           />
           <BottomNavigationAction
-            label="Suppliers"
-            to="/suppliers"
-            component={Link}
+            label="Clients"
+            aria-controls="demo-positioned-menu"
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+            onClick={handleClick}
           />
-          <BottomNavigationAction
-            label="Customers"
-            to="/customers"
-            component={Link}
-          />
+          <Menu
+            id="demo-positioned-menu"
+            aria-labelledby="demo-positioned-button"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            TransitionComponent={Grow}
+          >
+            <MenuItem onClick={handleClose} to="/suppliers" component={Link}>
+              Suppliers
+            </MenuItem>
+            <MenuItem onClick={handleClose} to="/customers" component={Link}>
+              Customers
+            </MenuItem>
+          </Menu>
+
           <BottomNavigationAction
             label="Product Library"
             to="/product-library"

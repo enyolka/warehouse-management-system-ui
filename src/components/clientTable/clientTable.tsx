@@ -14,6 +14,8 @@ import { useState } from "react";
 import DeletionModal from "../deletionModal/deletionModal";
 import ClientForm from "./clientForm";
 import { ClientFormModel } from "./types";
+import { DataGrid, GridColumns, GridRowsProp } from "@mui/x-data-grid";
+import { CustomPagination } from "../pagination/customPagination";
 
 type Props = {
   data: ClientFormModel[];
@@ -24,6 +26,8 @@ type Props = {
 const ClientTable = ({ data, deleteRequest, updateRequest }: Props) => {
   const [openDelete, setOpenDelete] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
+  const [checked, setChecked] = useState<number[]>([]);
+  const [openGeneralDelete, setOpenGeneralDelete] = useState(false);
   const [idx, setIdx] = useState<number>(0);
   const [updatedCustomer, setUpdatedCustomer] = useState<ClientFormModel>();
   const disabled = !!(localStorage["admin"] === "false");
@@ -38,74 +42,205 @@ const ClientTable = ({ data, deleteRequest, updateRequest }: Props) => {
     setUpdatedCustomer(model);
   };
 
-  return (
-    <TableContainer component={Paper}>
-      <Table size="medium" aria-label="Client table">
-        <TableHead>
-          <TableRow>
-            {columnNames.map(({ field, headerName }) => (
-              <TableCell key={field}>{headerName}</TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((customer: ClientFormModel, id: number) => (
-            <TableRow
-              key={id}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {customer.name}
-              </TableCell>
-              <TableCell>{customer.phone ?? "-"}</TableCell>
-              <TableCell>{customer.email ?? "-"}</TableCell>
-              <TableCell>{customer.city}</TableCell>
-              <TableCell>{customer.zipCode}</TableCell>
-              <TableCell>{customer.streetName}</TableCell>
-              <TableCell>{customer.streetNumber}</TableCell>
-              <TableCell>
-                <Button
-                  onClick={() => openUpdateModal(customer)}
-                  disabled={disabled}
-                >
-                  <EditIcon />
-                </Button>
-                <Button
-                  onClick={() => openDeleteModal(customer.id)}
-                  disabled={disabled}
-                >
-                  <DeleteIcon />
-                </Button>
+  const rows: GridRowsProp = data.map(
+    (
+      { id, name, city, streetName, streetNumber, zipCode, phone, email },
+      row_id
+    ) => ({
+      row_id,
+      id,
+      name,
+      city,
+      streetName,
+      streetNumber,
+      zipCode,
+      phone,
+      email,
+    })
+  );
 
-                <DeletionModal
-                  open={openDelete}
-                  handleClose={() => setOpenDelete(false)}
-                  createRequest={deleteRequest}
-                  idxs={[idx]}
-                />
-                <ClientForm
-                  open={openUpdate}
-                  handleClose={() => setOpenUpdate(false)}
-                  createRequest={updateRequest}
-                  initialValues={updatedCustomer}
-                />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+  const columnNames: GridColumns = [
+    {
+      field: "name",
+      headerName: "Name",
+      width: 120,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "phone",
+      headerName: "Phone",
+      width: 150,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "email",
+      headerName: "E-mail",
+      width: 180,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "city",
+      headerName: "City",
+      width: 100,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "zipCode",
+      headerName: "Zip code",
+      width: 100,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "streetName",
+      headerName: "Street Name",
+      width: 120,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "streetNumber",
+      headerName: "Street Number",
+      width: 120,
+      headerAlign: "center",
+      align: "center",
+    },
+
+    {
+      field: "edit",
+      headerName: "",
+      width: 60,
+      renderCell: (params: any) => (
+        <Button onClick={() => openUpdateModal(data[params.row.row_id])}>
+          <EditIcon />
+        </Button>
+      ),
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "delete",
+      headerName: "",
+      width: 60,
+      renderCell: (params: any) => (
+        <Button onClick={() => openDeleteModal(params.id)}>
+          <DeleteIcon />
+        </Button>
+      ),
+      headerAlign: "center",
+      align: "center",
+    },
+  ];
+
+  return (
+    <div style={{ height: 600, maxWidth: 500, minWidth: "60vw" }}>
+      <DataGrid
+        rows={rows}
+        columns={columnNames}
+        components={{
+          Pagination: CustomPagination,
+        }}
+        componentsProps={{
+          pagination: { setOpenGeneralDelete, checked },
+        }}
+        checkboxSelection
+        onSelectionModelChange={(ids) => {
+          const selectedIDs = new Set(ids);
+          setChecked(
+            rows.filter((row) => selectedIDs.has(row.id)).map((x) => x.id)
+          );
+        }}
+      />
+      <DeletionModal
+        open={openDelete}
+        handleClose={() => setOpenDelete(false)}
+        createRequest={deleteRequest}
+        idxs={[idx]}
+      />
+      <DeletionModal
+        open={openGeneralDelete}
+        handleClose={() => setOpenGeneralDelete(false)}
+        createRequest={deleteRequest}
+        idxs={checked}
+      />
+      <ClientForm
+        open={openUpdate}
+        handleClose={() => setOpenUpdate(false)}
+        createRequest={updateRequest}
+        initialValues={updatedCustomer}
+      />
+    </div>
+    // <TableContainer component={Paper}>
+    //   <Table size="medium" aria-label="Client table">
+    //     <TableHead>
+    //       <TableRow>
+    //         {columnNames.map(({ field, headerName }) => (
+    //           <TableCell key={field}>{headerName}</TableCell>
+    //         ))}
+    //       </TableRow>
+    //     </TableHead>
+    //     <TableBody>
+    //       {data.map((customer: ClientFormModel, id: number) => (
+    //         <TableRow
+    //           key={id}
+    //           sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+    //         >
+    //           <TableCell component="th" scope="row">
+    //             {customer.name}
+    //           </TableCell>
+    //           <TableCell>{customer.phone ?? "-"}</TableCell>
+    //           <TableCell>{customer.email ?? "-"}</TableCell>
+    //           <TableCell>{customer.city}</TableCell>
+    //           <TableCell>{customer.zipCode}</TableCell>
+    //           <TableCell>{customer.streetName}</TableCell>
+    //           <TableCell>{customer.streetNumber}</TableCell>
+    //           <TableCell>
+    //             <Button
+    //               onClick={() => openUpdateModal(customer)}
+    //               disabled={disabled}
+    //             >
+    //               <EditIcon />
+    //             </Button>
+    //             <Button
+    //               onClick={() => openDeleteModal(customer.id)}
+    //               disabled={disabled}
+    //             >
+    //               <DeleteIcon />
+    //             </Button>
+
+    // <DeletionModal
+    //   open={openDelete}
+    //   handleClose={() => setOpenDelete(false)}
+    //   createRequest={deleteRequest}
+    //   idxs={[idx]}
+    // />
+    // <ClientForm
+    //   open={openUpdate}
+    //   handleClose={() => setOpenUpdate(false)}
+    //   createRequest={updateRequest}
+    //   initialValues={updatedCustomer}
+    // />
+    //           </TableCell>
+    //         </TableRow>
+    //       ))}
+    //     </TableBody>
+    //   </Table>
+    // </TableContainer>
   );
 };
 
-const columnNames = [
-  { field: "name", headerName: "Name", width: 120 },
-  { field: "phone", headerName: "Phone", width: 120 },
-  { field: "email", headerName: "E-mail", width: 150 },
-  { field: "city", headerName: "City", width: 100 },
-  { field: "zipCode", headerName: "Zip code", width: 100 },
-  { field: "streetName", headerName: "Street Name", width: 120 },
-  { field: "streetNumber", headerName: "Street Number", width: 80 },
-];
+// const columnNames = [
+//   { field: "name", headerName: "Name", width: 120 },
+//   { field: "phone", headerName: "Phone", width: 120 },
+//   { field: "email", headerName: "E-mail", width: 150 },
+//   { field: "city", headerName: "City", width: 100 },
+//   { field: "zipCode", headerName: "Zip code", width: 100 },
+//   { field: "streetName", headerName: "Street Name", width: 120 },
+//   { field: "streetNumber", headerName: "Street Number", width: 80 },
+// ];
 
 export default ClientTable;

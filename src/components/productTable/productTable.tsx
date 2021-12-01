@@ -1,15 +1,4 @@
-import {
-  Button,
-  Chip,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
-} from "@mui/material";
+import { Button, Chip } from "@mui/material";
 import { DataGrid, GridColumns, GridRowsProp } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -44,10 +33,11 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
     return statuses.find((status) => value === status.value) ?? statuses[0];
   };
 
-  const openUpdateModal = (model: ProductFormModel) => {
-    setOpenUpdate(true);
-    setUpdatedProduct(model);
-  };
+  // const openUpdateModal = (model: ProductFormModel) => {
+  //   setOpenUpdate(true);
+  //   setUpdatedProduct(model);
+  // };
+
   const rows: GridRowsProp = data.map(
     (
       {
@@ -78,7 +68,6 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
   );
 
   const columnNames: GridColumns = [
-    // { field: "template", headerName: "Template", width: 120},
     {
       field: "name",
       headerName: "Name",
@@ -150,18 +139,18 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
       headerAlign: "center",
       align: "center",
     },
-    {
-      field: "edit",
-      headerName: "",
-      width: 60,
-      renderCell: (params: any) => (
-        <Button onClick={() => openUpdateModal(data[params.row.row_id])}>
-          <EditIcon />
-        </Button>
-      ),
-      headerAlign: "center",
-      align: "center",
-    },
+    // {
+    //   field: "edit",
+    //   headerName: "",
+    //   width: 60,
+    //   renderCell: (params: any) => (
+    //     <Button onClick={() => openUpdateModal(data[params.row.row_id])}>
+    //       <EditIcon />
+    //     </Button>
+    //   ),
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
     {
       field: "delete",
       headerName: "",

@@ -63,24 +63,23 @@ function CustomersScreen({}: Props): React.ReactElement {
       </Grid>
 
       <Grid item>
-        {disabled && (
-            <Button
-              variant="contained"
-              onClick={() => setOpen(true)}
-              style={{ marginRight: 10 }}
-            >
-              Add customer
-            </Button>
-          ) && (
-            <CustomersForm
-              open={open}
-              handleClose={() => setOpen(false)}
-              createRequest={createRequest}
-            />
-          )}
-        <Button variant="contained" to="/dashboard" component={Link}>
+        {!disabled && (
+          <Button
+            variant="contained"
+            onClick={() => setOpen(true)}
+            style={{ marginRight: 10 }}
+          >
+            Add customer
+          </Button>
+        )}
+        {/* <Button variant="contained" to="/dashboard" component={Link}>
           Dashboard
-        </Button>
+        </Button> */}
+        <CustomersForm
+          open={open}
+          handleClose={() => setOpen(false)}
+          createRequest={createRequest}
+        />
       </Grid>
     </Grid>
   );

@@ -133,7 +133,7 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
       sortComparator: (v1: any, v2: any, param1: any, param2: any) =>
         data[param1.row_id].status! < data[param2.row_id].status! ? -1 : 1,
       renderCell: (params: any) => {
-        const val = findStatus(data[params.id]?.status ?? "ACCEPTED");
+        const val = findStatus(data[params.row.row_id]?.status ?? "ACCEPTED");
         return (
           <Chip
             label={val.label}
@@ -155,7 +155,7 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
       headerName: "",
       width: 60,
       renderCell: (params: any) => (
-        <Button onClick={() => openUpdateModal(data[params.id])}>
+        <Button onClick={() => openUpdateModal(data[params.row.row_id])}>
           <EditIcon />
         </Button>
       ),
@@ -175,6 +175,7 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
       align: "center",
     },
   ];
+
   console.log(data);
   return (
     <div style={{ height: 600, maxWidth: 700, minWidth: "70vw" }}>

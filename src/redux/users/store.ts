@@ -1,7 +1,7 @@
-import { UserFormModel } from "../../components/userTable/types"
- 
+import { UserModel } from "../../api/apiModel";
+
 export type UserSetStore = {
   loading: boolean;
-  data: UserFormModel[];
+  data: UserModel[];
   error: string | boolean;
 }

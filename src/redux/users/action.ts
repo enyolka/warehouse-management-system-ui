@@ -1,4 +1,4 @@
-import { UserFormModel } from "../../components/userTable/types";
+import { UserCreateModel } from "../../components/staffTable/types";
 import request from "../../helpers/request";
 // import { translateToModel, translatetoApiModel } from "../users/translatorUsers";
 
@@ -25,7 +25,8 @@ export const getUsers = () => (dispatch: any) => {
   });
 }
 
-export const postUser = (model: UserFormModel) => (dispatch: any) => {
+export const postUser = (model: UserCreateModel) => (dispatch: any) => {
+  console.log(model)
   return request().post(
     "/users/v1/users/",
     model,
@@ -46,7 +47,7 @@ export const postUser = (model: UserFormModel) => (dispatch: any) => {
   });
 }
 
-export const putUser = (model: UserFormModel) => (dispatch: any) => {
+export const putUser = (model: UserCreateModel) => (dispatch: any) => {
   return request().put(
     `/users/v1/users/${model.id}/`,
     model,

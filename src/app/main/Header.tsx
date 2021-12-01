@@ -55,6 +55,13 @@ function Header({ value, setValue }: Props): React.ReactElement {
             to="/dashboard"
             component={Link}
           />
+          {localStorage["admin"] === "true" && (
+            <BottomNavigationAction
+              label="Staff"
+              to="/staff"
+              component={Link}
+            />
+          )}
           <BottomNavigationAction
             label="Clients"
             aria-controls="demo-positioned-menu"

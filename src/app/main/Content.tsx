@@ -5,6 +5,7 @@ import CustomersScreen from "../customersScreen/customersScreen";
 import Dashboard from "../dashboard/dashboard";
 import ProductLibraryScreen from "../productLibraryScreen/productLibraryScreen";
 import ProductsScreen from "../productsScreen/productsScreen";
+import StaffScreen from "../staffScreen/staffScreen";
 import StartScreen from "../startScreen/startScreen";
 import SuppliersScreen from "../suppliersScreen/suppliersScreen";
 import styles from "./App.module.css";
@@ -30,6 +31,9 @@ const Content = ({ value, setValue }: Props) => {
             path="/dashboard"
             render={() => <Dashboard value={value} setValue={setValue} />}
           />
+        )}
+        {isUserLogged && localStorage["admin"] === "true" && (
+          <Route exact path="/staff" render={() => <StaffScreen />} />
         )}
         {isUserLogged && (
           <Route exact path="/suppliers" render={() => <SuppliersScreen />} />

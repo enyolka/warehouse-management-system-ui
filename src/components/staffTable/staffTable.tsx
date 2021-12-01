@@ -12,30 +12,30 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useState } from "react";
 import DeletionModal from "../deletionModal/deletionModal";
-import ClientForm from "./userForm";
-import { ClientFormModel } from "../clientTable/types";
+import ClientForm from "./staffForm";
+import { UserModel } from "../../api/apiModel";
+import { UserCreateModel } from "./types";
 
 type Props = {
-  data: ClientFormModel[];
+  data: UserModel[];
   deleteRequest: (idx: number) => void;
-  updateRequest: (model: ClientFormModel) => void;
+  updateRequest: (model: UserCreateModel) => void;
 };
 
-const ClientTable = ({ data, deleteRequest, updateRequest }: Props) => {
+const UserTable = ({ data, deleteRequest, updateRequest }: Props) => {
   const [openDelete, setOpenDelete] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
   const [idx, setIdx] = useState<number>(0);
-  const [updatedCustomer, setUpdatedCustomer] = useState<ClientFormModel>();
-  const disabled = !!(localStorage["admin"] === "false");
+  const [updatedUser, setUpdatedUser] = useState<UserCreateModel>();
 
   const openDeleteModal = (idx: number) => {
     setOpenDelete(true);
     setIdx(idx);
   };
 
-  const openUpdateModal = (model: ClientFormModel) => {
+  const openUpdateModal = (model: UserCreateModel) => {
     setOpenUpdate(true);
-    setUpdatedCustomer(model);
+    setUpdatedUser(model);
   };
 
   return (
@@ -49,26 +49,22 @@ const ClientTable = ({ data, deleteRequest, updateRequest }: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((customer: ClientFormModel, id: number) => (
+          {data.map((user: UserModel, id: number) => (
             <TableRow
               key={id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {customer.name}
+                {user.username}
               </TableCell>
-              <TableCell>{customer.email ?? "-"}</TableCell>
+              <TableCell>{user.email ?? "-"}</TableCell>
               <TableCell>
                 <Button
-                  onClick={() => openUpdateModal(customer)}
-                  disabled={disabled}
+                // onClick={() => openUpdateModal(user)}
                 >
                   <EditIcon />
                 </Button>
-                <Button
-                  onClick={() => openDeleteModal(customer.id)}
-                  disabled={disabled}
-                >
+                <Button onClick={() => openDeleteModal(user.id)}>
                   <DeleteIcon />
                 </Button>
 
@@ -82,7 +78,7 @@ const ClientTable = ({ data, deleteRequest, updateRequest }: Props) => {
                   open={openUpdate}
                   handleClose={() => setOpenUpdate(false)}
                   createRequest={updateRequest}
-                  initialValues={updatedCustomer}
+                  initialValues={updatedUser}
                 />
               </TableCell>
             </TableRow>
@@ -94,8 +90,9 @@ const ClientTable = ({ data, deleteRequest, updateRequest }: Props) => {
 };
 
 const columnNames = [
-  { field: "name", headerName: "Name", width: 120 },
+  { field: "username", headerName: "Userame", width: 120 },
   { field: "email", headerName: "E-mail", width: 150 },
+  { field: "is_staff", headerName: "Staff", width: 80 },
 ];
 
-export default ClientTable;
+export default UserTable;

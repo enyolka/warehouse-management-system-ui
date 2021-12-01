@@ -1,6 +1,6 @@
 import { Status } from "../../api/apiModel";
 import { ClientFormModel } from "../clientTable/types";
-import { UserFormModel } from "../userTable/types";
+import { UserFormModel } from "../staffTable/types";
 
 export type StatusModel = {
   label: string;

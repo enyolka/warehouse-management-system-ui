@@ -12,8 +12,10 @@ import {
   FormikErrors,
 } from "formik";
 import * as Yup from "yup";
-import styles from "./clientTable.module.css";
+import styles from "../clientTable/clientTable.module.css";
 import classNames from "classnames";
+import { UserModel } from "../../api/apiModel";
+import { UserCreateModel } from "./types";
 
 export interface FieldProps<V = any> {
   field: FieldInputProps<V>;
@@ -28,34 +30,25 @@ const MyInput = ({ field, form, ...props }: FieldProps) => {
 type Props = {
   open: boolean;
   handleClose: (value: React.SetStateAction<boolean>) => void;
-  createRequest: (model: ClientFormModel) => void;
-  initialValues?: ClientFormModel;
+  createRequest: (model: UserCreateModel) => void;
+  initialValues?: UserCreateModel;
 };
 
-export function ClientForm({
+export function UserForm({
   open,
   handleClose,
   createRequest,
   ...props
 }: Props): React.ReactElement {
-  const initialModel: ClientFormModel = {
+  const initialModel: UserCreateModel = {
     id: 0,
-    name: "",
-    city: "",
-    streetName: "",
-    streetNumber: "",
-    zipCode: "",
-    phone: "",
+    username: "",
     email: "",
+    password: "",
   };
 
-  const phoneRegExp =
-    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-  const zipCodeRegExp = /^(([0-9]{5})|([0-9]{2}-[0-9]{3}))$/;
-  const streetRegExp = /^([0-9]+|([0-9]+[/][0-9]+))$/;
-
   const validationSchema = Yup.object({
-    name: Yup.string()
+    username: Yup.string()
       .max(30, "Must be 30 characters or less")
       .required("Required"),
     email: Yup.string().email("Email is not valid"),
@@ -69,12 +62,13 @@ export function ClientForm({
       aria-describedby="modal-modal-description"
     >
       <Box className={classNames(styles.modal, styles.formBox)}>
-        <Formik<ClientFormModel>
+        <Formik<UserCreateModel>
           initialValues={props.initialValues ?? initialModel}
           enableReinitialize={true}
           validateOnChange={true}
           validateOnBlur={true}
           onSubmit={(values, { resetForm }) => {
+            console.log(values);
             createRequest(values);
             if (props.initialValues) handleClose(true);
             resetForm({});
@@ -86,11 +80,11 @@ export function ClientForm({
               <Grid container spacing={2} columns={1}>
                 <Grid item className={styles.field}>
                   <Field
-                    label="Name"
-                    name="name"
+                    label="Username"
+                    name="username"
                     type="text"
                     component={MyInput}
-                    error={errors.name && touched.name}
+                    error={errors.username && touched.username}
                   />
                   <ErrorMessage name="name">
                     {(msg) => <div className={styles.errorMessage}>{msg}</div>}
@@ -99,13 +93,13 @@ export function ClientForm({
 
                 <Grid item className={styles.field}>
                   <Field
-                    label="Email"
-                    name="email"
-                    type="text"
+                    label="Password"
+                    name="password"
+                    type="password"
                     component={MyInput}
-                    error={errors.email && touched.email}
+                    error={errors.password && touched.password}
                   />
-                  <ErrorMessage name="email">
+                  <ErrorMessage name="password">
                     {(msg) => <div className={styles.errorMessage}>{msg}</div>}
                   </ErrorMessage>
                 </Grid>
@@ -124,4 +118,4 @@ export function ClientForm({
   );
 }
 
-export default ClientForm;
+export default UserForm;

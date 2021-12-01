@@ -3,7 +3,7 @@ import { ClientModel, ProductModel, ProductTemplateModel, Status  } from "../../
 import { ClientFormModel } from "../../components/clientTable/types";
 import { statuses } from "../../components/productTable/productForm";
 import { ProductFormModel, ProductTemplateFormModel, StatusModel } from "../../components/productTable/types"
-import { UserFormModel } from "../../components/userTable/types";
+import { UserFormModel } from "../../components/staffTable/types";
 import { translateToModel as translateToClientModel, translatetoApiModel as translateToClientApiModel } from "../customers/translatorCustomers";
 import { translateToFormModel as translateToFormTemplateModel, translateToApiModel as translateToTemplateApiModel } from "../productTemplates/translatorProductTemplate";
 import { StoreContext } from "../store/StoreProvider";

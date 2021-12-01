@@ -43,3 +43,22 @@ export type ProductModel = {
   acceptance_at: string;
 };
 
+export type LogisticUnitModel = {
+  id: number;
+  products: ProductModel[];
+}
+
+export type StoragePlaceModel = {
+  id: number;
+  x: number;
+  y: 0 | 1 | 2;
+  z: 0 | 1 | 2;
+  logisticunit: LogisticUnitModel | null;
+}
+
+export type StorageModel = {
+  id: number;
+  title: string;
+  storage_type: 1 | 2 | 3;
+  storageplace_set: StoragePlaceModel[];
+}

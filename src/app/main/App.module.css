@@ -7,8 +7,12 @@
   /* justify-content: flex-end; */
   align-content: space-between;
   height: 5em;
-  padding: 1em;
-  /* background-color: rgb(125, 178, 209); */
+  padding: 0.5em 1em;
+  /* background-color: rgb(220, 234, 245); */
+}
+
+.header__navigation {
+  /* background-color: rgb(220, 234, 245); */
 }
 
 .btn__logout {

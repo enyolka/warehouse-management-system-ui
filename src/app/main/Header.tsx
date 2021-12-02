@@ -49,19 +49,19 @@ function Header({ value, setValue }: Props): React.ReactElement {
           onChange={(event, newValue) => {
             setValue(newValue);
           }}
+          className={styles.header__navigation}
         >
           <BottomNavigationAction
             label="Dashboard"
             to="/dashboard"
             component={Link}
           />
-          {localStorage["admin"] === "true" && (
-            <BottomNavigationAction
-              label="Staff"
-              to="/staff"
-              component={Link}
-            />
-          )}
+          <BottomNavigationAction
+            label="Actions"
+            to="/actions"
+            component={Link}
+            sx={{ fontWeight: 700 }}
+          />
           <BottomNavigationAction
             label="Clients"
             aria-controls="demo-positioned-menu"
@@ -100,6 +100,13 @@ function Header({ value, setValue }: Props): React.ReactElement {
             to="/storage"
             component={Link}
           />
+          {localStorage["admin"] === "true" && (
+            <BottomNavigationAction
+              label="Staff"
+              to="/staff"
+              component={Link}
+            />
+          )}
           <BottomNavigationAction
             label="Documents"
             to="/documents"

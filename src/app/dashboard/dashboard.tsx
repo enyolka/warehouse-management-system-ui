@@ -18,16 +18,28 @@ type Props = {
 function Dashboard({ value, setValue }: Props): React.ReactElement {
   const { storageState, storageDispatch } = React.useContext(StoreContext);
 
-  const data: StorageModel = useMemo(() => {
+  // useEffect(() => {
+  //   getStorages()(storageDispatch);
+  // }, [storageState.data]);
+
+  // const data: StorageModel = useMemo(() => {
+  //   getStorages()(storageDispatch);
+  //   return storageState.data;
+  // }, []);
+
+  useEffect(() => {
     getStorages()(storageDispatch);
-    return storageState.data;
   }, []);
+
+  const data: StorageModel = useMemo(() => {
+    return storageState.data;
+  }, [storageState.data]);
 
   return (
     <Grid
       container
       direction="row"
-      justifyContent="center"
+      justifyContent="stretch"
       alignItems="center"
       spacing={3}
     >

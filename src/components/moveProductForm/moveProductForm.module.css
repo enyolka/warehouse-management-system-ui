@@ -5,13 +5,14 @@
 .field {
   display: flex;
   width: 100%;
-  min-width: 340px;
+  min-width: 380px;
   flex-direction: column !important;
 }
 
 .submitButton {
   /* margin-left: auto; */
   margin-right: 0.5em;
+  width: 100%;
 }
 
 .errorMessage {

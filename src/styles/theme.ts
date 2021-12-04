@@ -15,8 +15,15 @@ export const theme = createTheme({components:{
           },
           "&Error" : {
             backgroundColor: colors.error
-          }
+          },
         },
+      }
+    }
+  },
+  MuiTab: { 
+    styleOverrides:{
+      root: {
+        minWidth: "150px",
       }
     }
   },

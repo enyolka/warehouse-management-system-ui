@@ -18,6 +18,8 @@ import ProductTable from "../../components/productTable/productTable";
 import ProductForm from "../../components/productTable/productForm";
 import { useEffect } from "react";
 import ProductFormFromTemplate from "../../components/productTable/productFormFromTemplate";
+import { getStorages } from "../../redux/storage/action";
+import { getLogisticUnits } from "../../redux/logisticUnit/action";
 
 type Props = {};
 
@@ -27,6 +29,8 @@ function ProductsScreen({}: Props): React.ReactElement {
     productsDispatch,
     suppliersState,
     productTemplatesState,
+    storageDispatch,
+    logisticUnitsDispatch,
   } = useContext(StoreContext);
   const [open, setOpen] = useState(false);
   const [openFromTemplate, setOpenFromTemplate] = useState(false);
@@ -69,6 +73,8 @@ function ProductsScreen({}: Props): React.ReactElement {
       extraData.templates
     )(productsDispatch);
     getProducts(extraData.suppliers, extraData.templates)(productsDispatch);
+    getStorages()(storageDispatch);
+    getLogisticUnits()(logisticUnitsDispatch);
   };
 
   const updateRequest = (model: ProductFormModel) => {

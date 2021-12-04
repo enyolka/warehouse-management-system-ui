@@ -3,40 +3,22 @@ import {
   Box,
   Button,
   Grid,
-  Modal,
-  PropTypes,
   TextField,
-  TextFieldProps,
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
-import {
-  Field,
-  FieldInputProps,
-  Form,
-  Formik,
-  FormikProps,
-  FieldMetaProps,
-  ErrorMessage,
-} from "formik";
+import { Field, Form, Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import style from "./moveProductForm.module.css";
 import { StoreContext } from "../../redux/store/StoreProvider";
-import { ClientFormModel } from "../clientTable/types";
+import { Autocomplete } from "formik-material-ui";
+import { LogisticUnitModel } from "../../api/apiModel";
 import {
-  Autocomplete,
-  fieldToTextField,
-  RadioGroup,
-  // ToggleButtonGroup,
-} from "formik-material-ui";
-import {
-  MyAutoComplete,
-  MyInput,
-  MyRadioGroup,
-} from "../input/inputComponents";
-import { LogisticUnitModel, Status } from "../../api/apiModel";
-import { StatusModel } from "../productTable/types";
-import { postLogisticUnitMovement } from "../../redux/logisticUnit/action";
+  getLogisticUnits,
+  postLogisticUnitMovement,
+} from "../../redux/logisticUnit/action";
+import { useEffect, useMemo } from "react";
+import { getStorages } from "../../redux/storage/action";
 
 type Props = {
   // createRequest: (logistic_unit_id: number, storage_type: number) => void;
@@ -51,6 +33,7 @@ export function MoveProductForm({}: Props): React.ReactElement {
     logisticUnitsDispatch,
     suppliersState,
     productTemplatesState,
+    storageDispatch,
   } = React.useContext(StoreContext);
   const [type, setType] = React.useState("ACCEPTED");
 
@@ -60,6 +43,14 @@ export function MoveProductForm({}: Props): React.ReactElement {
   ) => {
     setType(newType);
   };
+
+  // useEffect(() => {
+  //   getLogisticUnits()(logisticUnitsDispatch);
+  // }, [logisticUnitsState.data]);
+
+  const options: LogisticUnitModel[] = useMemo(() => {
+    return logisticUnitsState.data;
+  }, [logisticUnitsState]);
 
   const initialModel: MovementModel = {
     logistic_unit: logisticUnitsState.data[0],
@@ -101,6 +92,8 @@ export function MoveProductForm({}: Props): React.ReactElement {
         onSubmit={({ logistic_unit, storage_type }, { resetForm }) => {
           createRequest(logistic_unit.id, type === "ACCEPTED" ? 1 : 2);
           resetForm({});
+          getLogisticUnits()(logisticUnitsDispatch);
+          getStorages()(storageDispatch);
         }}
       >
         {({ errors, touched, values }) => (
@@ -112,8 +105,9 @@ export function MoveProductForm({}: Props): React.ReactElement {
                   name="logistic_unit"
                   type="select"
                   component={Autocomplete}
+                  // multiple
                   error={errors.logistic_unit && touched.logistic_unit}
-                  options={logisticUnitsState.data}
+                  options={options}
                   getOptionLabel={(option: LogisticUnitModel) =>
                     `ID${option.id} : ${option.products[0].name} (${option.products.length})`
                   }

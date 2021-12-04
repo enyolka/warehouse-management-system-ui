@@ -17,7 +17,7 @@ import { useContext } from "react";
 import { StoreContext } from "../../redux/store/StoreProvider";
 import { ClientFormModel } from "../clientTable/types";
 import { Autocomplete, fieldToTextField } from "formik-material-ui";
-import { MyAutoComplete, MyInput } from "./inputComponents";
+import { MyAutoComplete, MyInput } from "../input/inputComponents";
 
 type Props = {
   open: boolean;

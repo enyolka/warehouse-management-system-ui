@@ -5,7 +5,7 @@ export const getStorages = () => (dispatch: any) => {
   dispatch({type: "STORAGE_LOADING"});
 
   return request().get(
-    "/storages/v1/storages/admission/",
+    "/storages/v1/storages/main/",
     {
       headers: { Authorization: `Token ${localStorage.token}`}}
   )

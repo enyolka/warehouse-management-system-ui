@@ -13,7 +13,7 @@ import {
   ProductFormModel,
   ProductTemplateFormModel,
   StatusModel,
-} from "./types";
+} from "../productTable/types";
 
 export interface FieldProps<V = any> {
   field: FieldInputProps<V>;

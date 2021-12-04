@@ -36,7 +36,11 @@ import {
   RadioGroup,
   // ToggleButtonGroup,
 } from "formik-material-ui";
-import { MyAutoComplete, MyInput, MyRadioGroup } from "./inputComponents";
+import {
+  MyAutoComplete,
+  MyInput,
+  MyRadioGroup,
+} from "../input/inputComponents";
 import { Status } from "../../api/apiModel";
 
 type Props = {

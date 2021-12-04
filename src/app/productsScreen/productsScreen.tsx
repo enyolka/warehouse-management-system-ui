@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, Grid } from "@mui/material";
+import { Button, Grid, Modal } from "@mui/material";
 import { Link } from "react-router-dom";
 import { StoreContext } from "../../redux/store/StoreProvider";
 import { useContext, useMemo, useState } from "react";
@@ -130,11 +130,18 @@ function ProductsScreen({}: Props): React.ReactElement {
           handleClose={() => setOpen(false)}
           createRequest={createRequest}
         /> */}
-        <ProductFormFromTemplate
+        <Modal
           open={openFromTemplate}
-          handleClose={() => setOpenFromTemplate(false)}
-          createRequest={createFromTemplateRequest}
-        />
+          onClose={() => setOpenFromTemplate(false)}
+          aria-labelledby="Create from template form"
+          aria-describedby="Create from template form"
+        >
+          <ProductFormFromTemplate
+            open={openFromTemplate}
+            handleClose={() => setOpenFromTemplate(false)}
+            createRequest={createFromTemplateRequest}
+          />
+        </Modal>
       </Grid>
     </Grid>
   );

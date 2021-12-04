@@ -56,12 +56,12 @@ function Header({ value, setValue }: Props): React.ReactElement {
             to="/dashboard"
             component={Link}
           />
-          <BottomNavigationAction
+          {/* <BottomNavigationAction
             label="Actions"
             to="/actions"
             component={Link}
             sx={{ fontWeight: 700 }}
-          />
+          /> */}
           <BottomNavigationAction
             label="Clients"
             aria-controls="demo-positioned-menu"

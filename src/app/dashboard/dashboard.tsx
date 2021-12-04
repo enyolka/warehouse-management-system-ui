@@ -8,6 +8,7 @@ import { useMemo } from "react";
 import { StorageModel } from "../../api/apiModel";
 import { getStorages } from "../../redux/storage/action";
 import { useEffect } from "react";
+import ActionsScreen from "../actionsScreen/actionsScreen";
 
 type Props = {
   value: number;
@@ -25,14 +26,14 @@ function Dashboard({ value, setValue }: Props): React.ReactElement {
   return (
     <Grid
       container
-      direction="column"
+      direction="row"
       justifyContent="center"
       alignItems="center"
-      spacing={2}
+      spacing={3}
     >
-      {/* <Grid item>
-        <WarehouseMap data={data} />
-      </Grid> */}
+      <Grid item sx={{ width: "50%" }}>
+        <ActionsScreen />
+      </Grid>
       <Grid item>
         <WarehouseMapDiv data={data} />
       </Grid>

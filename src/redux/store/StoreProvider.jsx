@@ -13,10 +13,12 @@ import {productTemplatesReducer, productTemplatesInitialState} from "../productT
 import { getProductTemplates } from "../productTemplates/action";
 import {productsReducer, productsInitialState} from "../products/reducer"
 import {storagesReducer, storagesInitialState} from "../storage/reducer"
+import {logisticUnitsReducer, logisticUnitsInitialState} from "../logisticUnit/reducer"
 import { getProducts } from "../products/action";
 import { getUsers } from "../users/action";
 import { getStorages } from "../../redux/storage/action";
 import { ProductFormModel } from "../../components/productTable/types";
+import { getLogisticUnits } from "../logisticUnit/action";
 
 export const StoreContext = createContext();
 
@@ -27,6 +29,7 @@ const StoreProvider = ({ children }) => {
   const [suppliersState, suppliersDispatch] = useReducer(supplierReducer, supplierInitialState)
   const [productTemplatesState, productTemplatesDispatch] = useReducer(productTemplatesReducer, productTemplatesInitialState)
   const [productsState, productsDispatch] = useReducer(productsReducer, productsInitialState)
+  const [logisticUnitsState, logisticUnitsDispatch] = useReducer(logisticUnitsReducer, logisticUnitsInitialState)
   const [storageState, storageDispatch] = useReducer(storagesReducer, storagesInitialState)
 
 
@@ -45,6 +48,7 @@ const StoreProvider = ({ children }) => {
       getSuppliers()(suppliersDispatch);
       getProductTemplates()(productTemplatesDispatch)
       getProducts(extraData.suppliers, extraData.templates)(productsDispatch);
+      getLogisticUnits()(logisticUnitsDispatch);
       getStorages()(storageDispatch)
   }}, [loginState.data]);
 
@@ -62,6 +66,8 @@ const StoreProvider = ({ children }) => {
       productTemplatesDispatch,
       productsState, 
       productsDispatch, 
+      logisticUnitsState,
+      logisticUnitsDispatch,
       storageState, 
       storageDispatch  
       }}>

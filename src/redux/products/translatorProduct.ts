@@ -7,6 +7,7 @@ import { UserFormModel } from "../../components/staffTable/types";
 import { translateToModel as translateToClientModel, translatetoApiModel as translateToClientApiModel } from "../customers/translatorCustomers";
 import { translateToFormModel as translateToFormTemplateModel, translateToApiModel as translateToTemplateApiModel } from "../productTemplates/translatorProductTemplate";
 import { StoreContext } from "../store/StoreProvider";
+import { LogisticUnitModel } from "../../api/apiModel";
 
 const findSupplier = (template: number, suppliers: ClientFormModel[]): ClientFormModel => {
   return suppliers.find(
@@ -81,7 +82,8 @@ export const translateToPostApiModel = (model: ProductFormModel, suppliers: Clie
 
 
 export const translateToPostFormModel = (data: any, suppliers: ClientFormModel[], templates: ProductTemplateFormModel[]): ProductFormModel => {
-  
+  if(data.products) data = data.products
+
   return data.map((model: any) => {
     const template = templates.find(temp => temp.id === model.template)!
   return {

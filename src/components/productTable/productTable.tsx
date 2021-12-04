@@ -4,11 +4,12 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useMemo, useState } from "react";
 import DeletionModal from "../deletionModal/deletionModal";
-import ProductForm, { statuses } from "./productForm";
+import ProductForm from "./productForm";
 import { ProductFormModel } from "./types";
 import styles from "./productTable.module.css";
 import { Status } from "../../api/apiModel";
 import { CustomPagination } from "../pagination/customPagination";
+import { statuses } from "./productFormFromTemplate";
 
 type Props = {
   data: ProductFormModel[];
@@ -123,18 +124,7 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
         data[param1.row_id].status! < data[param2.row_id].status! ? -1 : 1,
       renderCell: (params: any) => {
         const val = findStatus(data[params.row.row_id]?.status ?? "ACCEPTED");
-        return (
-          <Chip
-            label={val.label}
-            color={
-              val?.value === "IN_STOCK"
-                ? "success"
-                : val?.value === "SHIPPED"
-                ? "secondary"
-                : "primary"
-            }
-          />
-        );
+        return <Chip label={val.label} color={val?.color ?? undefined} />;
       },
       headerAlign: "center",
       align: "center",

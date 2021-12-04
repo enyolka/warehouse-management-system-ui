@@ -20,10 +20,7 @@ import {
   ErrorMessage,
 } from "formik";
 import * as Yup from "yup";
-import styles from "../clientTable/clientTable.module.css";
-import classNames from "classnames";
-
-import { useContext } from "react";
+import style from "./moveProductForm.module.css";
 import { StoreContext } from "../../redux/store/StoreProvider";
 import { ClientFormModel } from "../clientTable/types";
 import {
@@ -55,21 +52,14 @@ export function MoveProductForm({}: Props): React.ReactElement {
     suppliersState,
     productTemplatesState,
   } = React.useContext(StoreContext);
+  const [type, setType] = React.useState("ACCEPTED");
 
-  // const statuses: Array<StatusModel> = [
-  //   {
-  //     label: "Accepted",
-  //     value: "ACCEPTED",
-  //   },
-  //   {
-  //     label: "In stock",
-  //     value: "IN_STOCK",
-  //   },
-  //   {
-  //     label: "Shipped",
-  //     value: "SHIPPED",
-  //   },
-  // ];
+  const handleChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newType: string
+  ) => {
+    setType(newType);
+  };
 
   const initialModel: MovementModel = {
     logistic_unit: logisticUnitsState.data[0],
@@ -93,22 +83,30 @@ export function MoveProductForm({}: Props): React.ReactElement {
 
   return (
     <Box>
+      <ToggleButtonGroup
+        className={style.toggle}
+        color="primary"
+        value={type}
+        exclusive
+        onChange={handleChange}
+      >
+        <ToggleButton value="ACCEPTED">To Main</ToggleButton>
+        <ToggleButton value="IN_STOCK">To Shipment</ToggleButton>
+      </ToggleButtonGroup>
       <Formik<MovementModel>
         initialValues={initialModel}
         enableReinitialize={true}
         validateOnChange={true}
         validateOnBlur={true}
         onSubmit={({ logistic_unit, storage_type }, { resetForm }) => {
-          createRequest(logistic_unit.id, storage_type);
-          // if (props.initialValues) handleClose(true);
+          createRequest(logistic_unit.id, type === "ACCEPTED" ? 1 : 2);
           resetForm({});
         }}
-        //validationSchema={validationSchema}
       >
         {({ errors, touched, values }) => (
           <Form>
             <Grid container spacing={2} columns={1}>
-              <Grid item className={styles.field}>
+              <Grid item className={style.field}>
                 <Field
                   label="Logistic unit"
                   name="logistic_unit"
@@ -117,7 +115,10 @@ export function MoveProductForm({}: Props): React.ReactElement {
                   error={errors.logistic_unit && touched.logistic_unit}
                   options={logisticUnitsState.data}
                   getOptionLabel={(option: LogisticUnitModel) =>
-                    `${option.id} - ${option.products[0].name} (${option.products.length})`
+                    `ID${option.id} : ${option.products[0].name} (${option.products.length})`
+                  }
+                  getOptionDisabled={(option: LogisticUnitModel) =>
+                    option.products[0].status !== type
                   }
                   renderInput={(params: any) => (
                     <TextField
@@ -128,10 +129,10 @@ export function MoveProductForm({}: Props): React.ReactElement {
                   )}
                 />
                 <ErrorMessage name="logistic_unit">
-                  {(msg) => <div className={styles.errorMessage}>{msg}</div>}
+                  {(msg) => <div className={style.errorMessage}>{msg}</div>}
                 </ErrorMessage>
               </Grid>
-
+              {/* 
               <Grid item className={styles.field}>
                 <Field
                   label="Storage"
@@ -143,8 +144,8 @@ export function MoveProductForm({}: Props): React.ReactElement {
                 <ErrorMessage name="storage_type">
                   {(msg) => <div className={styles.errorMessage}>{msg}</div>}
                 </ErrorMessage>
-              </Grid>
-              <Grid item className={styles.submitButton}>
+              </Grid> */}
+              <Grid item className={style.submitButton}>
                 <Button type="submit" variant="contained">
                   Move
                 </Button>

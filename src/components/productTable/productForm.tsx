@@ -41,7 +41,7 @@ import {
   MyInput,
   MyRadioGroup,
 } from "../input/inputComponents";
-import { Status } from "../../api/apiModel";
+import { statuses } from "./productFormFromTemplate";
 
 type Props = {
   open: boolean;
@@ -49,21 +49,6 @@ type Props = {
   createRequest: (model: ProductFormModel) => void;
   initialValues?: ProductFormModel;
 };
-
-export const statuses: Array<StatusModel> = [
-  {
-    label: "Accepted",
-    value: "ACCEPTED",
-  },
-  {
-    label: "In stock",
-    value: "IN_STOCK",
-  },
-  {
-    label: "Shipped",
-    value: "SHIPPED",
-  },
-];
 
 export function ProductForm({
   open,

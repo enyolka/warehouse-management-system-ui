@@ -1,13 +1,13 @@
 import { useContext } from "react";
 import { ClientModel, ProductModel, ProductTemplateModel, Status  } from "../../api/apiModel"
 import { ClientFormModel } from "../../components/clientTable/types";
-import { statuses } from "../../components/productTable/productForm";
 import { ProductFormModel, ProductTemplateFormModel, StatusModel } from "../../components/productTable/types"
 import { UserFormModel } from "../../components/staffTable/types";
 import { translateToModel as translateToClientModel, translatetoApiModel as translateToClientApiModel } from "../customers/translatorCustomers";
 import { translateToFormModel as translateToFormTemplateModel, translateToApiModel as translateToTemplateApiModel } from "../productTemplates/translatorProductTemplate";
 import { StoreContext } from "../store/StoreProvider";
 import { LogisticUnitModel } from "../../api/apiModel";
+import { statuses } from "../../components/productTable/productFormFromTemplate";
 
 const findSupplier = (template: number, suppliers: ClientFormModel[]): ClientFormModel => {
   return suppliers.find(

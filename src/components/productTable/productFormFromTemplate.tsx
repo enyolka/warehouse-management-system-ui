@@ -55,6 +55,29 @@ type ProductFromTemplateModel = {
   count: number;
 };
 
+export const statuses: Array<StatusModel> = [
+  {
+    label: "Accepted",
+    value: "ACCEPTED",
+    color: "primary",
+  },
+  {
+    label: "In stock",
+    value: "IN_STOCK",
+    color: "success",
+  },
+  {
+    label: "Packed",
+    value: "PACKED",
+    color: "secondary",
+  },
+  {
+    label: "Shipped",
+    value: "SHIPPED",
+    color: undefined,
+  },
+];
+
 export function ProductFormFromTemplate({
   open = false,
   // handleClose,
@@ -63,21 +86,6 @@ export function ProductFormFromTemplate({
 }: Props): React.ReactElement {
   const { suppliersState, productTemplatesState } =
     React.useContext(StoreContext);
-
-  const statuses: Array<StatusModel> = [
-    {
-      label: "Accepted",
-      value: "ACCEPTED",
-    },
-    {
-      label: "In stock",
-      value: "IN_STOCK",
-    },
-    {
-      label: "Shipped",
-      value: "SHIPPED",
-    },
-  ];
 
   const initialTemplateModel: ProductFromTemplateModel = {
     template: productTemplatesState.data[0],

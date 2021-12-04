@@ -1,0 +1,21 @@
+.toggle {
+  padding-bottom: 2em;
+}
+
+.field {
+  display: flex;
+  width: 100%;
+  min-width: 340px;
+  flex-direction: column !important;
+}
+
+.submitButton {
+  /* margin-left: auto; */
+  margin-right: 0.5em;
+}
+
+.errorMessage {
+  color: rgb(196, 2, 2);
+  margin: 0.5em 0.2em 0;
+  font-size: 0.8em;
+}

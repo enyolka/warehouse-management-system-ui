@@ -6,10 +6,15 @@ export const theme = createTheme({components:{
   MuiButton :{
     styleOverrides:{
       root: {
+        height: "3em",
+        fontWeight: 560,
          "&.MuiButton-contained": {
           backgroundColor: colors.primary,
           "&Secondary" : {
             backgroundColor: colors.close
+          },
+          "&Error" : {
+            backgroundColor: colors.error
           }
         },
       }
@@ -36,7 +41,15 @@ export const theme = createTheme({components:{
     styleOverrides: {
       root: {
         width: "10vw",
-      }
+      },
+        label: {
+          fontSize: "0.9rem",
+          "&.Mui-selected": {
+            fontSize: "1.1rem",
+            fontWeight: 600,
+            // textDecoration: "underline"
+          }
+        }
     }
   },
 }});

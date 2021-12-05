@@ -4,11 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import { LogisticUnitModel, StorageModel } from "../../api/apiModel";
 
 type Props = {
-  data: StorageModel;
+  data: StorageModel[];
+  type: number;
 };
 
-function WarehouseMapDiv({ data }: Props) {
-  const storages = data.storageplace_set;
+function WarehouseMapDiv({ data, type }: Props) {
+  const storages =
+    data.find(({ storage_type }) => storage_type === type)?.storageplace_set ??
+    [];
   let rackNum = 0;
   let isEmpty = 0;
   let tooltip: any[] = [];
@@ -46,7 +49,6 @@ function WarehouseMapDiv({ data }: Props) {
           return item.x === rackNum && item.y === 2 && item.z === 2
             ? ++rackNum && (
                 <Grid item key={storages[idx].id}>
-                  {console.log(isEmpty)}
                   <Tooltip title={<div>{tooltip}</div>} placement="right-start">
                     <Button
                       variant="contained"

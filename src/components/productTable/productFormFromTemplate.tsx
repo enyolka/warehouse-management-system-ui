@@ -42,6 +42,7 @@ import {
   MyRadioGroup,
 } from "../input/inputComponents";
 import { Status } from "../../api/apiModel";
+import { getStorages } from "../../redux/storage/action";
 
 type Props = {
   open?: boolean;
@@ -84,7 +85,7 @@ export function ProductFormFromTemplate({
   createRequest,
   ...props
 }: Props): React.ReactElement {
-  const { suppliersState, productTemplatesState } =
+  const { suppliersState, productTemplatesState, storageDispatch } =
     React.useContext(StoreContext);
 
   const initialTemplateModel: ProductFromTemplateModel = {
@@ -114,6 +115,7 @@ export function ProductFormFromTemplate({
           createRequest(template.id, count);
           // if (props.initialValues) handleClose(true);
           resetForm({});
+          getStorages("admission")(storageDispatch);
         }}
         //validationSchema={validationSchema}
       >

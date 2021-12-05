@@ -23,7 +23,6 @@ const productsReducer = (state = productsInitialState, action: any) => {
           data: action.payload || state.data,
       };
     case "PRODUCT_CREATE":
-      console.log(action.payload)
     return {
         ...state,
         error: false,
@@ -31,7 +30,6 @@ const productsReducer = (state = productsInitialState, action: any) => {
         data: [...state.data].concat(action.payload),
     };
     case "PRODUCT_UPDATE":
-      console.log(action.payload)
       const updatedData = state.data.map(prod => {
         if (prod.id === action.payload.id) {
           return action.payload;

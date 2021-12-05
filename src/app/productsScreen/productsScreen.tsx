@@ -46,8 +46,6 @@ function ProductsScreen({}: Props): React.ReactElement {
     [suppliersState, productTemplatesState]
   );
 
-  console.log(productsState.data);
-
   useEffect(() => {
     getProducts(extraData.suppliers, extraData.templates)(productsDispatch);
   }, [productTemplatesState.data]);
@@ -73,7 +71,7 @@ function ProductsScreen({}: Props): React.ReactElement {
       extraData.templates
     )(productsDispatch);
     getProducts(extraData.suppliers, extraData.templates)(productsDispatch);
-    getStorages()(storageDispatch);
+    getStorages("main")(storageDispatch);
     getLogisticUnits()(logisticUnitsDispatch);
   };
 

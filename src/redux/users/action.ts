@@ -26,7 +26,6 @@ export const getUsers = () => (dispatch: any) => {
 }
 
 export const postUser = (model: UserCreateModel) => (dispatch: any) => {
-  console.log(model)
   return request().post(
     "/users/v1/users/",
     model,

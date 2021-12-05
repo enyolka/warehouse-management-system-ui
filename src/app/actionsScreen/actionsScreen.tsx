@@ -30,7 +30,6 @@ function ActionsScreen({}: Props): React.ReactElement {
     suppliersState,
     productTemplatesState,
   } = React.useContext(StoreContext);
-  const [openFromTemplate, setOpenFromTemplate] = useState(false);
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {

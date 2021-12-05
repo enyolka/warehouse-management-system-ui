@@ -21,7 +21,6 @@ function StaffScreen({}: Props): React.ReactElement {
   const [open, setOpen] = useState(false);
 
   const data: UserModel[] = useMemo(() => userState.data, [userState]);
-  console.log(data);
 
   const createRequest = (model: UserCreateModel) => {
     postUser(model)(userDispatch).then(() => getUsers()(userDispatch));

@@ -68,7 +68,6 @@ export function UserForm({
           validateOnChange={true}
           validateOnBlur={true}
           onSubmit={(values, { resetForm }) => {
-            console.log(values);
             createRequest(values);
             if (props.initialValues) handleClose(true);
             resetForm({});

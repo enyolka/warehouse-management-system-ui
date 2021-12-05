@@ -34,6 +34,7 @@ export const postLogisticUnitMovement = (logistic_unit: number, storage_type: nu
      { headers: { Authorization: `Token ${localStorage.token}`}}
   ).then(
     resp => { 
+      console.log(resp)
       dispatch({
         type: "PRODUCT_UPDATE",        
         payload: translateToPostFormModel(resp.data, suppliers, templates), 

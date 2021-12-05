@@ -49,7 +49,9 @@ const StoreProvider = ({ children }) => {
       getProductTemplates()(productTemplatesDispatch)
       getProducts(extraData.suppliers, extraData.templates)(productsDispatch);
       getLogisticUnits()(logisticUnitsDispatch);
-      getStorages()(storageDispatch)
+      getStorages("main")(storageDispatch)
+      getStorages("admission")(storageDispatch);
+      getStorages("release")(storageDispatch);
   }}, [loginState.data]);
 
   return (

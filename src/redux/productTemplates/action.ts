@@ -33,7 +33,6 @@ export const postProductTemplate = (model: ProductTemplateFormModel, suppliers: 
      { headers: { Authorization: `Token ${localStorage.token}`}}
   ).then(
     resp => { 
-      console.log(resp.data)
       dispatch({
         type: "PRODUCT_TEMPLATE_CREATE",        
         payload: translateToPostFormModel(resp.data, suppliers),
@@ -49,14 +48,13 @@ export const postProductTemplate = (model: ProductTemplateFormModel, suppliers: 
 }
 
 export const putProductTemplate = (model: ProductTemplateFormModel, suppliers: ClientFormModel[]) => (dispatch: any) => {
-  console.log(model)
+
   return request().put(
     `/storages/v1/product-templates/${model.id}/`,
     translateToPostApiModel(model),
      { headers: { Authorization: `Token ${localStorage.token}`}}
   ).then(
     resp => { 
-      console.log(resp)
       dispatch({
         type: "PRODUCT_TEMPLATE_UPDATE", 
         payload: translateToPostFormModel(resp.data, suppliers),

@@ -155,7 +155,6 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
     },
   ];
 
-  console.log(data);
   return (
     <div style={{ height: 600, maxWidth: 700, minWidth: "70vw" }}>
       <DataGrid

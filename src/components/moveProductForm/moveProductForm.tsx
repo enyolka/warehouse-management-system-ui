@@ -93,7 +93,8 @@ export function MoveProductForm({}: Props): React.ReactElement {
           createRequest(logistic_unit.id, type === "ACCEPTED" ? 1 : 2);
           resetForm({});
           getLogisticUnits()(logisticUnitsDispatch);
-          getStorages()(storageDispatch);
+          getStorages("main")(storageDispatch);
+          getStorages("release")(storageDispatch);
         }}
       >
         {({ errors, touched, values }) => (

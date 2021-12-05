@@ -63,14 +63,10 @@ function WarehouseMap({ data }: Props) {
     ctx.beginPath();
     ctx.strokeRect(0, 0, 600, 600);
     ctx.fill();
-    console.log(storages);
-    console.log(position.x, position.y);
 
     if (storages.length > 0) {
-      console.log(storages);
       for (let i = 0; i <= aisleNum; i++) {
         for (let j = 0; j < 4; j++) {
-          console.log(storages[10 * i + j].logisticunit);
           const a = storages[10 * i + j].logisticunit?.products;
           ctx.beginPath();
           ctx.fillStyle = a && a.length > 0 ? "yellow" : "gray";

@@ -8,7 +8,7 @@ import { translateToFormModel as translateToFormTemplateModel, translateToApiMod
 import { StoreContext } from "../store/StoreProvider";
 import { LogisticUnitModel } from "../../api/apiModel";
 import { statuses } from "../../components/productTable/productFormFromTemplate";
-
+ 
 const findSupplier = (template: number, suppliers: ClientFormModel[]): ClientFormModel => {
   return suppliers.find(
     (it: ClientFormModel) => it.id == template
@@ -30,11 +30,13 @@ export const translateToFormModel = (data: ProductModel[], suppliers: ClientForm
       id: model.id,
       name: model.name,
       supplier: translateToClientModel([model.supplier as ClientModel])[0],
+      customer: translateToClientModel([model.customer as ClientModel])[0],
       template: template,
       length: template.width,
       width: template.width ,
       height: template.height,
       weight: template.weight,
+      price: template.price,
       created_by: model.created_by as UserFormModel,
       status: model.status,
       acceptance_at: model.acceptance_at,
@@ -51,11 +53,13 @@ export const translatetoApiModel = (model: ProductFormModel, suppliers: ClientFo
       id: model.id,
       name: model.name,
       supplier: model.template.supplier.id,
+      customer: translateToClientApiModel(model.customer as ClientFormModel),
       template: translateToTemplateApiModel(model.template),
       length: model.length ,
       width: model.width,
       height: model.height,
       weight: model.weight,
+      price: model.price,
       created_by: localStorage.user_id,
       status: model.status,
       acceptance_at: model.acceptance_at,
@@ -68,11 +72,13 @@ export const translateToPostApiModel = (model: ProductFormModel, suppliers: Clie
     id: model.id,
     name: model.name,
     supplier: model.template.supplier.id,//findSupplier(model.template.id, suppliers).id ?? suppliers[0].id,
+    customer: translateToClientApiModel(model.customer as ClientFormModel) ?? undefined,
     template: model.template.id,
     length: model.length,
     width: model.width ?? 0,
     height: model.height ?? 0,
     weight: model.weight ?? 0,
+    price: model.price,
     created_by: localStorage.user_id,
     status: model.status,
     acceptance_at: model.acceptance_at,
@@ -95,6 +101,8 @@ export const translateToPostFormModel = (data: any, suppliers: ClientFormModel[]
     width: template.width,
     height: template.height,
     weight: template.weight,
+    price: template.price,
+    customer: model.customer ?? null,
     created_by: localStorage.user_id,
     status: model.status,
     acceptance_at: model.acceptance_at,

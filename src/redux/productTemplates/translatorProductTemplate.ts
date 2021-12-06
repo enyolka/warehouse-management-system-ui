@@ -13,7 +13,8 @@ export const translateToFormModel = (data: ProductTemplateModel[]): ProductTempl
       length: model.length ?? 0,
       width: model.width ?? 0,
       height: model.height ?? 0,
-      weight: model.weight ?? 0
+      weight: model.weight ?? 0,
+      price: model.price ?? 0
     }));
   } catch(e) {
   return []
@@ -28,7 +29,8 @@ export const translateToApiModel = (model: ProductTemplateFormModel): ProductTem
       length: model.length ?? 0,
       width: model.width ?? 0,
       height: model.height ?? 0,
-      weight: model.weight ?? 0
+      weight: model.weight ?? 0,
+      price: model.price ?? 0
     }
 }
 
@@ -40,7 +42,8 @@ export const translateToPostApiModel = (model: ProductTemplateFormModel) => {
     length: model.length ?? 0,
     width: model.width ?? 0,
     height: model.height ?? 0,
-    weight: model.weight ?? 0
+    weight: model.weight ?? 0,
+    price: model.price ?? 0
   }
 }
 
@@ -53,6 +56,7 @@ export const translateToPostFormModel = (model: ProductTemplateModel, suppliers:
     length: model.length ?? 0,
     width: model.width ?? 0,
     height: model.height ?? 0,
-    weight: model.weight ?? 0
+    weight: model.weight ?? 0,
+    price: model.price ?? 0
   }
 }

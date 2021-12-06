@@ -42,6 +42,7 @@ export function ProductTemplateForm({
     width: 0,
     height: 0,
     weight: 0,
+    price: 0,
   };
 
   const validationSchema = Yup.object({
@@ -86,26 +87,44 @@ export function ProductTemplateForm({
                   </ErrorMessage>
                 </Grid>
 
-                <Grid item className={styles.field}>
-                  <Field
-                    label="Supplier"
-                    name="supplier"
-                    type="select"
-                    component={Autocomplete}
-                    error={errors.supplier && touched.supplier}
-                    options={suppliersState.data}
-                    getOptionLabel={(option: ClientFormModel) => option.name}
-                    renderInput={(params: any) => (
-                      <TextField
-                        {...params}
-                        label="Supplier"
-                        variant="outlined"
-                      />
-                    )}
-                  />
-                  <ErrorMessage name="supplier">
-                    {(msg) => <div className={styles.errorMessage}>{msg}</div>}
-                  </ErrorMessage>
+                <Grid item className={styles.fieldsRow}>
+                  <Grid item className={styles.field}>
+                    <Field
+                      label="Supplier"
+                      name="supplier"
+                      type="select"
+                      component={Autocomplete}
+                      error={errors.supplier && touched.supplier}
+                      options={suppliersState.data}
+                      getOptionLabel={(option: ClientFormModel) => option.name}
+                      renderInput={(params: any) => (
+                        <TextField
+                          {...params}
+                          label="Supplier"
+                          variant="outlined"
+                        />
+                      )}
+                    />
+                    <ErrorMessage name="supplier">
+                      {(msg) => (
+                        <div className={styles.errorMessage}>{msg}</div>
+                      )}
+                    </ErrorMessage>
+                  </Grid>
+                  <Grid item className={styles.field}>
+                    <Field
+                      label="Price"
+                      name="price"
+                      type="number"
+                      component={MyInput}
+                      error={errors.weight && touched.weight}
+                    />
+                    <ErrorMessage name="price">
+                      {(msg) => (
+                        <div className={styles.errorMessage}>{msg}</div>
+                      )}
+                    </ErrorMessage>
+                  </Grid>
                 </Grid>
 
                 <Grid item className={styles.fieldsRow}>

@@ -26,18 +26,21 @@ export type ProductTemplateFormModel = {
   width?: number;
   height?: number;
   weight?: number;
+  price?: number;
 };
 
 export type ProductFormModel = {
   id: number;
   name: string;
   supplier: ClientFormModel;
+  customer?: ClientFormModel;
   template: ProductTemplateFormModel;
   created_by: UserFormModel;
   length?: number;
   width?: number;
   height?: number;
   weight?: number;
+  price?: number;
   status?: Status;
   logistic_unit?: string;
   acceptance_at: string;

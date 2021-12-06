@@ -50,6 +50,7 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
         width,
         height,
         weight,
+        price,
         created_by,
         status,
       },
@@ -64,6 +65,7 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
       width: width,
       height: height,
       weight: weight,
+      price: price,
       created_by: created_by.username,
     })
   );
@@ -107,6 +109,13 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
     {
       field: "weight",
       headerName: "Weight",
+      width: 90,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "price",
+      headerName: "Price",
       width: 90,
       headerAlign: "center",
       align: "center",

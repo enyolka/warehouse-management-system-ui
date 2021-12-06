@@ -26,18 +26,21 @@ export type ProductTemplateModel= {
   width?: number;
   height?: number;
   weight?: number;
+  price?: number;
 };
 
 export type ProductModel = {
   id: number;
   name: string;
   supplier: ClientModel | number;
+  customer?: ClientModel;
   template: ProductTemplateModel | number;
   created_by: UserModel | number;
   length?: number;
   width?: number;
   height?: number;
   weight?: number;
+  price?: number;
   status?: Status;
   logistic_unit?: string;
   acceptance_at: string;

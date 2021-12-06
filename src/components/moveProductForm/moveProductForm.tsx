@@ -90,7 +90,7 @@ export function MoveProductForm({}: Props): React.ReactElement {
         validateOnChange={true}
         validateOnBlur={true}
         onSubmit={({ logistic_unit, storage_type }, { resetForm }) => {
-          createRequest(logistic_unit.id, type === "ACCEPTED" ? 1 : 2);
+          createRequest(logistic_unit.id, type === "ACCEPTED" ? 1 : 3);
           resetForm({});
           getLogisticUnits()(logisticUnitsDispatch);
           getStorages("main")(storageDispatch);

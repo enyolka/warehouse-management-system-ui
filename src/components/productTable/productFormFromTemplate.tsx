@@ -1,15 +1,7 @@
 import * as React from "react";
-import {
-  Box,
-  Button,
-  Grid,
-  Modal,
-  PropTypes,
-  TextField,
-  TextFieldProps,
-  ToggleButton,
-  ToggleButtonGroup,
-} from "@mui/material";
+import { Box, Button, Grid, IconButton, TextField } from "@mui/material";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import {
   Field,
   FieldInputProps,
@@ -18,6 +10,7 @@ import {
   FormikProps,
   FieldMetaProps,
   ErrorMessage,
+  FieldArray,
 } from "formik";
 import * as Yup from "yup";
 import styles from "../clientTable/clientTable.module.css";
@@ -54,6 +47,10 @@ type Props = {
 type ProductFromTemplateModel = {
   template: ProductTemplateFormModel;
   count: number;
+};
+
+type ProductFromTemplateModels = {
+  units: ProductFromTemplateModel[];
 };
 
 export const statuses: Array<StatusModel> = [
@@ -106,13 +103,17 @@ export function ProductFormFromTemplate({
         { [styles.formBox]: open }
       )}
     >
-      <Formik<ProductFromTemplateModel>
-        initialValues={initialTemplateModel}
+      <Formik<ProductFromTemplateModels>
+        initialValues={{ units: [initialTemplateModel] }}
         enableReinitialize={true}
         validateOnChange={true}
         validateOnBlur={true}
-        onSubmit={({ template, count }, { resetForm }) => {
-          createRequest(template.id, count);
+        onSubmit={({ units }, { resetForm }) => {
+          console.log(units);
+          units.forEach(({ template, count }) =>
+            createRequest(template.id, count)
+          );
+          // createRequest(template.id, count);
           // if (props.initialValues) handleClose(true);
           resetForm({});
           getStorages("admission")(storageDispatch);
@@ -121,63 +122,104 @@ export function ProductFormFromTemplate({
       >
         {({ errors, touched, values }) => (
           <Form>
-            <Grid container spacing={2} columns={1}>
-              <Grid item className={styles.field}>
-                <Field
-                  label="Template"
-                  name="template"
-                  type="select"
-                  component={Autocomplete}
-                  error={errors.template && touched.template}
-                  options={productTemplatesState.data}
-                  getOptionLabel={(option: ProductTemplateFormModel) =>
-                    `${option.name} (${option.supplier.name})`
-                  }
-                  renderInput={(params: any) => (
-                    <TextField
-                      {...params}
-                      label="Template"
-                      variant="outlined"
-                    />
+            <FieldArray
+              name="units"
+              render={(arrayHelpers) => (
+                <Grid
+                  container
+                  spacing={2}
+                  columns={1}
+                  sx={{ maxWidth: "500px" }}
+                >
+                  {values.units && values.units.length > 0 ? (
+                    values.units.map((unit, index) => (
+                      <>
+                        <Grid item className={styles.field}>
+                          <Field
+                            label="Template"
+                            name={`units[${index}].template`}
+                            type="select"
+                            component={Autocomplete}
+                            // error={errors.units[index].template && touched[index].template}
+                            options={productTemplatesState.data}
+                            getOptionLabel={(
+                              option: ProductTemplateFormModel
+                            ) => `${option.name} (${option.supplier.name})`}
+                            renderInput={(params: any) => (
+                              <TextField
+                                {...params}
+                                label="Template"
+                                variant="outlined"
+                              />
+                            )}
+                          />
+                          <ErrorMessage name={`units[${index}].template`}>
+                            {(msg) => (
+                              <div className={styles.errorMessage}>{msg}</div>
+                            )}
+                          </ErrorMessage>
+                        </Grid>
+                        <Grid item className={styles.fieldsRow}>
+                          <Grid item className={styles.field}>
+                            <Field
+                              label="Count"
+                              name={`units[${index}].count`}
+                              type="number"
+                              component={MyInput}
+                              // error={errors.count && touched.count}
+                            />
+                            <ErrorMessage name={`units[${index}].count`}>
+                              {(msg) => (
+                                <div className={styles.errorMessage}>{msg}</div>
+                              )}
+                            </ErrorMessage>
+                          </Grid>
+                          <Grid
+                            item
+                            className={styles.field}
+                            sx={{ width: "3em" }}
+                          >
+                            <IconButton
+                              // variant
+                              onClick={() => arrayHelpers.remove(index)} // remove a friend from the list
+                            >
+                              <RemoveCircleOutlineIcon />
+                            </IconButton>
+                          </Grid>
+                          <Grid
+                            item
+                            className={styles.field}
+                            sx={{ width: "3em" }}
+                          >
+                            <IconButton
+                              onClick={() =>
+                                arrayHelpers.insert(index, initialTemplateModel)
+                              } // insert an empty string at a position
+                            >
+                              <AddCircleOutlineIcon />
+                            </IconButton>
+                          </Grid>
+                        </Grid>
+                      </>
+                    ))
+                  ) : (
+                    <Grid item className={styles.field}>
+                      <Button
+                        variant="outlined"
+                        onClick={() => arrayHelpers.push(initialTemplateModel)}
+                      >
+                        Add an unit
+                      </Button>
+                    </Grid>
                   )}
-                />
-                <ErrorMessage name="template">
-                  {(msg) => <div className={styles.errorMessage}>{msg}</div>}
-                </ErrorMessage>
-              </Grid>
-
-              <Grid item className={styles.field}>
-                <Field
-                  label="Count"
-                  name="count"
-                  type="number"
-                  component={MyInput}
-                  error={errors.count && touched.count}
-                />
-                <ErrorMessage name="count">
-                  {(msg) => <div className={styles.errorMessage}>{msg}</div>}
-                </ErrorMessage>
-              </Grid>
-              {/* <Grid item className={styles.field}>
-                  <Field
-                    label="Status"
-                    name="status"
-                    type="select"
-                    component={MyRadioGroup}
-                    error={errors.status && touched.status}
-                    options={statuses}
-                  />
-                  <ErrorMessage name="status">
-                    {(msg) => <div className={styles.errorMessage}>{msg}</div>}
-                  </ErrorMessage>
-                </Grid> */}
-
-              <Grid item className={styles.submitButton}>
-                <Button type="submit" variant="contained">
-                  Submit
-                </Button>
-              </Grid>
-            </Grid>
+                  <Grid item className={styles.submitButton}>
+                    <Button type="submit" variant="contained">
+                      Submit
+                    </Button>
+                  </Grid>
+                </Grid>
+              )}
+            />
           </Form>
         )}
       </Formik>

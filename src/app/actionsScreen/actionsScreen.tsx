@@ -11,6 +11,7 @@ import {
 } from "../../redux/products/action";
 import styles from "./actionsScreen.module.css";
 import MoveProductForm from "../../components/moveProductForm/moveProductForm";
+import ReleaseForm from "../../components/releaseForm/releaseForm";
 
 type Props = {};
 
@@ -82,9 +83,7 @@ function ActionsScreen({}: Props): React.ReactElement {
         </Button> */}
       </div>
       <div className={styles.tab} hidden={2 !== value}>
-        <Button variant="contained" to="/release" component={Link}>
-          Release
-        </Button>
+        <ReleaseForm />
       </div>
       <Grid item></Grid>
       <Grid item></Grid>

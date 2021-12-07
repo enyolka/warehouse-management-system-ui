@@ -47,7 +47,7 @@ export const theme = createTheme({components:{
   MuiBottomNavigationAction: {
     styleOverrides: {
       root: {
-        width: "10vw",
+        width: "12vw",
       },
         label: {
           fontSize: "0.9rem",

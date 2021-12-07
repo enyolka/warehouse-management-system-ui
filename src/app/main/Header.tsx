@@ -95,11 +95,11 @@ function Header({ value, setValue }: Props): React.ReactElement {
             to="/products"
             component={Link}
           />
-          <BottomNavigationAction
+          {/* <BottomNavigationAction
             label="Storage"
             to="/storage"
             component={Link}
-          />
+          /> */}
           {localStorage["admin"] === "true" && (
             <BottomNavigationAction
               label="Staff"

@@ -27,17 +27,19 @@ export const getLogisticUnits = () => (dispatch: any) => {
 }
 
 
-export const postLogisticUnitMovement = (logistic_unit: number, storage_type: number, suppliers: ClientFormModel[], templates: ProductTemplateFormModel[]) => (dispatch: any) => {
+export const postLogisticUnitMovement = (logistic_unit: number, storage_type: number, suppliers: ClientFormModel[], templates: ProductTemplateFormModel[], customer?: number, customers?: ClientFormModel[]) => (dispatch: any) => {
   return request().post(
     `/storages/v1/logistic_units/${logistic_unit}/move/`,
-    {storage_type: storage_type},
+    {storage_type: storage_type,
+    customer: customer},
      { headers: { Authorization: `Token ${localStorage.token}`}}
   ).then(
     resp => { 
-      console.log(resp)
+      console.log(resp.data)
+      console.log(translateToPostFormModel(resp.data, suppliers, templates, customers))
       dispatch({
         type: "PRODUCT_UPDATE",        
-        payload: translateToPostFormModel(resp.data, suppliers, templates), 
+        payload: translateToPostFormModel(resp.data, suppliers, templates, customers), 
       });
     dispatch({type: "PRODUCT_SUCCESS"})
     })

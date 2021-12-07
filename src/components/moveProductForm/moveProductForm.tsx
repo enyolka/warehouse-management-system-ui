@@ -19,13 +19,18 @@ import {
 } from "../../redux/logisticUnit/action";
 import { useEffect, useMemo } from "react";
 import { getStorages } from "../../redux/storage/action";
+import { ClientFormModel } from "../clientTable/types";
 
 type Props = {
   // createRequest: (logistic_unit_id: number, storage_type: number) => void;
   // initialValues?: LogisticUnitModel;
 };
 
-type MovementModel = { logistic_unit: LogisticUnitModel; storage_type: number };
+type MovementModel = {
+  logistic_unit: LogisticUnitModel;
+  storage_type: number;
+  customer?: ClientFormModel;
+};
 
 export function MoveProductForm({}: Props): React.ReactElement {
   const {
@@ -34,35 +39,50 @@ export function MoveProductForm({}: Props): React.ReactElement {
     suppliersState,
     productTemplatesState,
     storageDispatch,
+    customersState,
+    customersDispatch,
   } = React.useContext(StoreContext);
-  const [type, setType] = React.useState("ACCEPTED");
+  const [currentType, setCurrentType] = React.useState<"ACCEPTED" | "IN_STOCK">(
+    "ACCEPTED"
+  );
 
   const handleChange = (
     event: React.MouseEvent<HTMLElement>,
-    newType: string
+    newCurrentType: "ACCEPTED" | "IN_STOCK"
   ) => {
-    setType(newType);
+    setCurrentType(newCurrentType);
   };
 
   // useEffect(() => {
   //   getLogisticUnits()(logisticUnitsDispatch);
   // }, [logisticUnitsState.data]);
 
-  const options: LogisticUnitModel[] = useMemo(() => {
+  const unitsOptions: LogisticUnitModel[] = useMemo(() => {
     return logisticUnitsState.data;
   }, [logisticUnitsState]);
 
+  const customersOptions: ClientFormModel[] = useMemo(() => {
+    return customersState.data;
+  }, [customersState]);
+
   const initialModel: MovementModel = {
-    logistic_unit: logisticUnitsState.data[0],
+    logistic_unit: unitsOptions[0],
     storage_type: 1,
+    customer: customersOptions[0],
   };
 
-  const createRequest = (logistic_unit: number, storage_type: number) => {
+  const createRequest = (
+    logistic_unit: number,
+    storage_type: number,
+    customer?: number
+  ) => {
     postLogisticUnitMovement(
       logistic_unit,
       storage_type,
       suppliersState.data,
-      productTemplatesState.data
+      productTemplatesState.data,
+      customer,
+      customersState.data
     )(logisticUnitsDispatch);
   };
 
@@ -77,7 +97,7 @@ export function MoveProductForm({}: Props): React.ReactElement {
       <ToggleButtonGroup
         className={style.toggle}
         color="primary"
-        value={type}
+        value={currentType}
         exclusive
         onChange={handleChange}
       >
@@ -89,8 +109,15 @@ export function MoveProductForm({}: Props): React.ReactElement {
         enableReinitialize={true}
         validateOnChange={true}
         validateOnBlur={true}
-        onSubmit={({ logistic_unit, storage_type }, { resetForm }) => {
-          createRequest(logistic_unit.id, type === "ACCEPTED" ? 1 : 3);
+        onSubmit={(
+          { logistic_unit, storage_type, customer },
+          { resetForm }
+        ) => {
+          createRequest(
+            logistic_unit.id,
+            currentType === "ACCEPTED" ? 1 : 3,
+            customer?.id
+          );
           resetForm({});
           getLogisticUnits()(logisticUnitsDispatch);
           getStorages("main")(storageDispatch);
@@ -99,7 +126,7 @@ export function MoveProductForm({}: Props): React.ReactElement {
       >
         {({ errors, touched, values }) => (
           <Form>
-            <Grid container spacing={2} columns={1}>
+            <Grid container spacing={2} columns={1} sx={{ maxWidth: "480px" }}>
               <Grid item className={style.field}>
                 <Field
                   label="Logistic unit"
@@ -108,12 +135,12 @@ export function MoveProductForm({}: Props): React.ReactElement {
                   component={Autocomplete}
                   // multiple
                   error={errors.logistic_unit && touched.logistic_unit}
-                  options={options}
+                  options={unitsOptions}
                   getOptionLabel={(option: LogisticUnitModel) =>
                     `ID${option.id} : ${option.products[0].name} (${option.products.length})`
                   }
                   getOptionDisabled={(option: LogisticUnitModel) =>
-                    option.products[0].status !== type
+                    option.products[0].status !== currentType
                   }
                   renderInput={(params: any) => (
                     <TextField
@@ -127,19 +154,32 @@ export function MoveProductForm({}: Props): React.ReactElement {
                   {(msg) => <div className={style.errorMessage}>{msg}</div>}
                 </ErrorMessage>
               </Grid>
-              {/* 
-              <Grid item className={styles.field}>
-                <Field
-                  label="Storage"
-                  name="storage_type"
-                  type="number"
-                  component={MyInput}
-                  error={errors.storage_type && touched.storage_type}
-                />
-                <ErrorMessage name="storage_type">
-                  {(msg) => <div className={styles.errorMessage}>{msg}</div>}
-                </ErrorMessage>
-              </Grid> */}
+              {currentType === "IN_STOCK" && (
+                <Grid item className={style.field}>
+                  <Field
+                    label="Customer"
+                    name="customer"
+                    type="select"
+                    component={Autocomplete}
+                    // multiple
+                    error={errors.customer && touched.customer}
+                    options={customersOptions}
+                    getOptionLabel={(option: ClientFormModel) =>
+                      `${option.name}`
+                    }
+                    renderInput={(params: any) => (
+                      <TextField
+                        {...params}
+                        label="Template"
+                        variant="outlined"
+                      />
+                    )}
+                  />
+                  <ErrorMessage name="customer">
+                    {(msg) => <div className={style.customer}>{msg}</div>}
+                  </ErrorMessage>
+                </Grid>
+              )}
               <Grid item className={style.submitButton}>
                 <Button type="submit" variant="contained">
                   Move

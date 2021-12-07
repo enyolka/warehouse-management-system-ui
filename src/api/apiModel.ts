@@ -33,7 +33,7 @@ export type ProductModel = {
   id: number;
   name: string;
   supplier: ClientModel | number;
-  customer?: ClientModel;
+  customer?: ClientModel | number;
   template: ProductTemplateModel | number;
   created_by: UserModel | number;
   length?: number;

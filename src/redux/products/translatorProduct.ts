@@ -9,8 +9,8 @@ import { StoreContext } from "../store/StoreProvider";
 import { LogisticUnitModel } from "../../api/apiModel";
 import { statuses } from "../../components/productTable/productFormFromTemplate";
  
-const findSupplier = (template: number, suppliers: ClientFormModel[]): ClientFormModel => {
-  return suppliers.find(
+const findClient = (template: number, clients: ClientFormModel[]): ClientFormModel => {
+  return clients.find(
     (it: ClientFormModel) => it.id == template
   )!;
 }
@@ -21,7 +21,7 @@ const findStatus = (value: Status | undefined): StatusModel => {
 }
 
 
-export const translateToFormModel = (data: ProductModel[], suppliers: ClientFormModel[], templates: ProductTemplateFormModel[]): ProductFormModel[] => {
+export const translateToFormModel = (data: ProductModel[], suppliers: ClientFormModel[], templates: ProductTemplateFormModel[]): ProductFormModel[] => { 
   try {
     return data.map((model : ProductModel) => {
     const template = templates.find(temp => temp.id === model.template)!;
@@ -53,7 +53,7 @@ export const translatetoApiModel = (model: ProductFormModel, suppliers: ClientFo
       id: model.id,
       name: model.name,
       supplier: model.template.supplier.id,
-      customer: translateToClientApiModel(model.customer as ClientFormModel),
+      customer: model.customer?.id ,
       template: translateToTemplateApiModel(model.template),
       length: model.length ,
       width: model.width,
@@ -72,7 +72,7 @@ export const translateToPostApiModel = (model: ProductFormModel, suppliers: Clie
     id: model.id,
     name: model.name,
     supplier: model.template.supplier.id,//findSupplier(model.template.id, suppliers).id ?? suppliers[0].id,
-    customer: translateToClientApiModel(model.customer as ClientFormModel) ?? undefined,
+    customer: model.customer?.id,
     template: model.template.id,
     length: model.length,
     width: model.width ?? 0,
@@ -87,7 +87,7 @@ export const translateToPostApiModel = (model: ProductFormModel, suppliers: Clie
 }
 
 
-export const translateToPostFormModel = (data: any, suppliers: ClientFormModel[], templates: ProductTemplateFormModel[]): ProductFormModel => {
+export const translateToPostFormModel = (data: any, suppliers: ClientFormModel[], templates: ProductTemplateFormModel[], customers?:  ClientFormModel[]): ProductFormModel => {
   if(data.products) data = data.products
 
   return data.map((model: any) => {
@@ -95,14 +95,14 @@ export const translateToPostFormModel = (data: any, suppliers: ClientFormModel[]
   return {
     id: model.id,
     name: model.name,
-    supplier:  findSupplier(model.supplier as number, suppliers)!,
+    supplier:  findClient(model.supplier as number, suppliers)!,
     template: template,
     length: template.length,
     width: template.width,
     height: template.height,
     weight: template.weight,
     price: template.price,
-    customer: model.customer ?? null,
+    customer: findClient(model.customer as number, customers??[]),
     created_by: localStorage.user_id,
     status: model.status,
     acceptance_at: model.acceptance_at,

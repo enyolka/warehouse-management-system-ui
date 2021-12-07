@@ -1,7 +1,9 @@
 import { Button, Grid, Paper, Tooltip } from "@mui/material";
 import * as React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { LogisticUnitModel, StorageModel } from "../../api/apiModel";
+import { StoreContext } from "../../redux/store/StoreProvider";
+import { ClientFormModel } from "../clientTable/types";
 
 type Props = {
   data: StorageModel[];
@@ -9,6 +11,7 @@ type Props = {
 };
 
 function WarehouseMapDiv({ data, type }: Props) {
+  const { customersState } = useContext(StoreContext);
   const storages =
     data.find(({ storage_type }) => storage_type === type)?.storageplace_set ??
     [];
@@ -42,7 +45,13 @@ function WarehouseMapDiv({ data, type }: Props) {
 
           tooltip.push(
             <p>
-              {item.y}.{item.z}: {item.logisticunit?.products[0].name ?? "-"}
+              {item.y}.{item.z}: {item.logisticunit?.products[0].name ?? "-"}{" "}
+              {item.logisticunit?.products[0].customer
+                ? customersState.data.find(
+                    ({ id }: ClientFormModel) =>
+                      id === item.logisticunit?.products[0].customer
+                  ).name
+                : ""}
             </p>
           );
 

@@ -66,9 +66,9 @@ export function ClientForm({
     streetNumber: Yup.string()
       .matches(streetRegExp, "Street number is not valid")
       .required("Required"),
-    zipCode: Yup.string()
-      .matches(zipCodeRegExp, "Zip code is not valid. Must be 5 numbers")
-      .required("Required"),
+    // zipCode: Yup.string()
+    //   .matches(zipCodeRegExp, "Zip code is not valid. Must be 5 numbers")
+    //   .required("Required"),
     city: Yup.string()
       .max(20, "Must be 20 characters or less")
       .required("Required"),

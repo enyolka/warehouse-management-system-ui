@@ -12,6 +12,8 @@ import {
 import styles from "./actionsScreen.module.css";
 import MoveProductForm from "../../components/moveProductForm/moveProductForm";
 import ReleaseForm from "../../components/releaseForm/releaseForm";
+import { ProductFormModel } from "../../components/productTable/types";
+import { postLogisticUnitMovement } from "../../redux/logisticUnit/action";
 
 type Props = {};
 
@@ -30,8 +32,10 @@ function ActionsScreen({}: Props): React.ReactElement {
     productsDispatch,
     suppliersState,
     productTemplatesState,
+    logisticUnitsDispatch,
   } = React.useContext(StoreContext);
   const [value, setValue] = React.useState(0);
+  const [newIds, setNewIds] = React.useState<ProductFormModel[]>([]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -47,7 +51,24 @@ function ActionsScreen({}: Props): React.ReactElement {
       count,
       suppliersState.data,
       productTemplatesState.data
+    )(productsDispatch).then((resp) => {
+      setNewIds((prev) => (resp ? [...prev, ...resp] : prev));
+    });
+    getProducts(
+      suppliersState.data,
+      productTemplatesState.data
     )(productsDispatch);
+  };
+
+  const moveRequest = (logistic_unit: number) => {
+    postLogisticUnitMovement(
+      logistic_unit,
+      4,
+      suppliersState.data,
+      productTemplatesState.data
+    )(logisticUnitsDispatch).then((resp) => {
+      setNewIds((prev) => (resp ? [...prev, ...resp] : prev));
+    });
     getProducts(
       suppliersState.data,
       productTemplatesState.data
@@ -74,7 +95,11 @@ function ActionsScreen({}: Props): React.ReactElement {
         </Tabs>
       </Box>
       <div className={styles.tab} hidden={0 !== value}>
-        <ProductFormFromTemplate createRequest={createFromTemplateRequest} />
+        <ProductFormFromTemplate
+          createRequest={createFromTemplateRequest}
+          newIds={newIds}
+          setNewIds={setNewIds}
+        />
       </div>
       <div className={styles.tab} hidden={1 !== value}>
         <MoveProductForm />
@@ -83,7 +108,11 @@ function ActionsScreen({}: Props): React.ReactElement {
         </Button> */}
       </div>
       <div className={styles.tab} hidden={2 !== value}>
-        <ReleaseForm />
+        <ReleaseForm
+          createRequest={moveRequest}
+          newIds={newIds}
+          setNewIds={setNewIds}
+        />
       </div>
       <Grid item></Grid>
       <Grid item></Grid>

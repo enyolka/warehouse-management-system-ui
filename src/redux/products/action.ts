@@ -60,6 +60,7 @@ export const postFromTemplateProduct = (template: number, count: number, supplie
         payload: translateToPostFormModel(resp.data, suppliers, templates), 
       });
     dispatch({type: "PRODUCT_SUCCESS"})
+    return translateToPostFormModel(resp.data, suppliers, templates)
     })
   .catch((err) => {Promise.reject(err);       
     dispatch({

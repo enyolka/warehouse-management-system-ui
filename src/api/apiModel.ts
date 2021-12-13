@@ -42,13 +42,16 @@ export type ProductModel = {
   weight?: number;
   price?: number;
   status?: Status;
-  logistic_unit?: string;
+  logistic_unit?: number;
   acceptance_at: string;
 };
 
 export type LogisticUnitModel = {
   id: number;
   products: ProductModel[];
+  admission_file_url?: string;
+  release_file_url?: string;
+  total_price: string;
 }
 
 export type StoragePlaceModel = {

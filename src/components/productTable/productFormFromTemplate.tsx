@@ -34,14 +34,22 @@ import {
   MyInput,
   MyRadioGroup,
 } from "../input/inputComponents";
-import { Status } from "../../api/apiModel";
+import { LogisticUnitModel, Status } from "../../api/apiModel";
 import { getStorages } from "../../redux/storage/action";
+import {
+  getLogisticUnits,
+  postDocuments,
+} from "../../redux/logisticUnit/action";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 type Props = {
   open?: boolean;
   handleClose?: (value: React.SetStateAction<boolean>) => void;
   createRequest: (template_id: number, count: number) => void;
   initialValues?: ProductFormModel;
+  newIds: ProductFormModel[];
+  setNewIds: (newValue: ProductFormModel[]) => void;
 };
 
 type ProductFromTemplateModel = {
@@ -78,12 +86,18 @@ export const statuses: Array<StatusModel> = [
 
 export function ProductFormFromTemplate({
   open = false,
-  // handleClose,
   createRequest,
   ...props
 }: Props): React.ReactElement {
-  const { suppliersState, productTemplatesState, storageDispatch } =
-    React.useContext(StoreContext);
+  const {
+    suppliersState,
+    productTemplatesState,
+    storageDispatch,
+    logisticUnitsState,
+    logisticUnitsDispatch,
+  } = React.useContext(StoreContext);
+  const [isDownloadButton, setIsDownloadButton] = useState(false);
+  const [url, setUrl] = useState("");
 
   const initialTemplateModel: ProductFromTemplateModel = {
     template: productTemplatesState.data[0],
@@ -96,6 +110,11 @@ export function ProductFormFromTemplate({
       .required("Required"),
   });
 
+  const fileDownload = require("js-file-download");
+  // fileDownload(
+  //   "localhost:8000/uploads/2021-12-09/document-2021-12-09-221241622311-0f1092c5-8.pdf",
+  //   "filename.pdf"
+  // );
   return (
     <Box
       className={classNames(
@@ -109,13 +128,14 @@ export function ProductFormFromTemplate({
         validateOnChange={true}
         validateOnBlur={true}
         onSubmit={({ units }, { resetForm }) => {
-          console.log(units);
           units.forEach(({ template, count }) =>
             createRequest(template.id, count)
           );
+          setIsDownloadButton(true);
           // createRequest(template.id, count);
           // if (props.initialValues) handleClose(true);
           resetForm({});
+          getLogisticUnits()(logisticUnitsDispatch);
           getStorages("admission")(storageDispatch);
         }}
         //validationSchema={validationSchema}
@@ -165,6 +185,7 @@ export function ProductFormFromTemplate({
                               label="Count"
                               name={`units[${index}].count`}
                               type="number"
+                              InputProps={{ inputProps: { min: 0 } }}
                               component={MyInput}
                               // error={errors.count && touched.count}
                             />
@@ -216,6 +237,49 @@ export function ProductFormFromTemplate({
                     <Button type="submit" variant="contained">
                       Submit
                     </Button>
+                  </Grid>
+                  <Grid item className={styles.submitButton}>
+                    {isDownloadButton && (
+                      <Button
+                        onClick={() => {
+                          postDocuments(
+                            Array.from(
+                              new Set(
+                                props.newIds.map(
+                                  ({ logistic_unit }) => logistic_unit!
+                                )
+                              )
+                            ),
+                            4,
+                            "admission"
+                          )(logisticUnitsDispatch).then((resp) => {
+                            getLogisticUnits()(logisticUnitsDispatch).then(
+                              (resp) => {
+                                console.log(props.newIds);
+                                console.log(
+                                  resp?.find(
+                                    ({ id }: LogisticUnitModel) =>
+                                      id === props.newIds[0].logistic_unit
+                                  )
+                                );
+                                const newWindow = window.open(
+                                  "http://localhost:8000" +
+                                    (resp
+                                      ? resp.find(
+                                          ({ id }: LogisticUnitModel) =>
+                                            id === props.newIds[0].logistic_unit
+                                        )?.admission_file_url!
+                                      : "")
+                                );
+                                if (newWindow) newWindow.opener = null;
+                              }
+                            );
+                          });
+                        }}
+                      >
+                        GRN Document (PZ)
+                      </Button>
+                    )}
                   </Grid>
                 </Grid>
               )}

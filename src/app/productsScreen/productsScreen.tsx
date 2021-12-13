@@ -33,6 +33,7 @@ function ProductsScreen({}: Props): React.ReactElement {
     logisticUnitsDispatch,
   } = useContext(StoreContext);
   const [open, setOpen] = useState(false);
+  const [newIds, setNewIds] = React.useState<ProductFormModel[]>([]);
   const [openFromTemplate, setOpenFromTemplate] = useState(false);
 
   const extraData: {
@@ -146,6 +147,8 @@ function ProductsScreen({}: Props): React.ReactElement {
             open={openFromTemplate}
             handleClose={() => setOpenFromTemplate(false)}
             createRequest={createFromTemplateRequest}
+            newIds={newIds}
+            setNewIds={setNewIds}
           />
         </Modal>
       </Grid>

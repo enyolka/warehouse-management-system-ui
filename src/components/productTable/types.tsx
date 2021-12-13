@@ -42,6 +42,6 @@ export type ProductFormModel = {
   weight?: number;
   price?: number;
   status?: Status;
-  logistic_unit?: string;
+  logistic_unit?: number;
   acceptance_at: string;
 };

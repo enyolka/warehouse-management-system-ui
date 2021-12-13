@@ -23,6 +23,26 @@ const logisticUnitsReducer = (state = logisticUnitsInitialState, action: any) =>
           loading: false,
           data: action.payload,
       };
+    case "LOGISTIC_UNIT_CREATE":
+      return {
+          ...state,
+          error: false,
+          loading: true,
+          data: [...state.data].concat(action.payload),
+      };
+      case "LOGISTIC_UNIT_UPDATE":
+        const updatedData = state.data.map(unit => {
+          if (unit.id === action.payload.id) {
+            return action.payload;
+          }
+          return unit ;
+        })
+        return {
+            ...state,
+            error: false,
+            loading: true,
+            data: updatedData
+        };
     case "LOGISTIC_UNIT_ERROR":
       return {
           ...state,

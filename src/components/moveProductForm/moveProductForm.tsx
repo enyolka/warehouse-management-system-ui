@@ -58,8 +58,10 @@ export function MoveProductForm({}: Props): React.ReactElement {
   // }, [logisticUnitsState.data]);
 
   const unitsOptions: LogisticUnitModel[] = useMemo(() => {
-    return logisticUnitsState.data;
-  }, [logisticUnitsState]);
+    return logisticUnitsState.data.filter(
+      (option: LogisticUnitModel) => option.products[0]?.status === currentType
+    );
+  }, [logisticUnitsState, currentType]);
 
   const customersOptions: ClientFormModel[] = useMemo(() => {
     return customersState.data;
@@ -120,6 +122,7 @@ export function MoveProductForm({}: Props): React.ReactElement {
           );
           resetForm({});
           getLogisticUnits()(logisticUnitsDispatch);
+          getStorages("admission")(storageDispatch);
           getStorages("main")(storageDispatch);
           getStorages("release")(storageDispatch);
         }}
@@ -137,10 +140,10 @@ export function MoveProductForm({}: Props): React.ReactElement {
                   error={errors.logistic_unit && touched.logistic_unit}
                   options={unitsOptions}
                   getOptionLabel={(option: LogisticUnitModel) =>
-                    `ID${option.id} : ${option.products[0].name} (${option.products.length})`
+                    `ID${option.id} : ${option.products[0]?.name} (${option.products.length})`
                   }
                   getOptionDisabled={(option: LogisticUnitModel) =>
-                    option.products[0].status !== currentType
+                    option.products[0]?.status !== currentType
                   }
                   renderInput={(params: any) => (
                     <TextField
@@ -170,7 +173,7 @@ export function MoveProductForm({}: Props): React.ReactElement {
                     renderInput={(params: any) => (
                       <TextField
                         {...params}
-                        label="Template"
+                        label="Customer"
                         variant="outlined"
                       />
                     )}

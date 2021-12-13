@@ -49,7 +49,7 @@ function WarehouseMapDiv({ data, type }: Props) {
               {item.logisticunit?.products[0].customer
                 ? customersState.data.find(
                     ({ id }: ClientFormModel) =>
-                      id === item.logisticunit?.products[0].customer
+                      id === item.logisticunit?.products[0]?.customer
                   ).name
                 : ""}
             </p>

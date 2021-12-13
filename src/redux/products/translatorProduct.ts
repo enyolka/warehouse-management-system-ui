@@ -40,7 +40,7 @@ export const translateToFormModel = (data: ProductModel[], suppliers: ClientForm
       created_by: model.created_by as UserFormModel,
       status: model.status,
       acceptance_at: model.acceptance_at,
-      logistic_unit: model.logistic_unit ?? "",
+      logistic_unit: model.logistic_unit,
     })});
   } catch(e) {
   return []
@@ -63,7 +63,7 @@ export const translatetoApiModel = (model: ProductFormModel, suppliers: ClientFo
       created_by: localStorage.user_id,
       status: model.status,
       acceptance_at: model.acceptance_at,
-      logistic_unit: model.logistic_unit ?? "",
+      logistic_unit: model.logistic_unit,
     }
 }
 
@@ -82,12 +82,12 @@ export const translateToPostApiModel = (model: ProductFormModel, suppliers: Clie
     created_by: localStorage.user_id,
     status: model.status,
     acceptance_at: model.acceptance_at,
-    logistic_unit: model.logistic_unit ?? "",
+    logistic_unit: model.logistic_unit,
   }
 }
 
 
-export const translateToPostFormModel = (data: any, suppliers: ClientFormModel[], templates: ProductTemplateFormModel[], customers?:  ClientFormModel[]): ProductFormModel => {
+export const translateToPostFormModel = (data: any, suppliers: ClientFormModel[], templates: ProductTemplateFormModel[], customers?:  ClientFormModel[]): ProductFormModel[] => {
   if(data.products) data = data.products
 
   return data.map((model: any) => {
@@ -106,6 +106,20 @@ export const translateToPostFormModel = (data: any, suppliers: ClientFormModel[]
     created_by: localStorage.user_id,
     status: model.status,
     acceptance_at: model.acceptance_at,
-    logistic_unit: model.logistic_unit ?? "",
+    logistic_unit: model.logistic_unit,
   }});
+}
+
+export const translateToFormModelLU = (data: LogisticUnitModel[]): LogisticUnitModel[] => { 
+  try {
+    return data.map((model : LogisticUnitModel) => ({
+      id: model.id,
+      products: model.products,
+      admission_file_url: model.admission_file_url,
+      release_file_url: model.release_file_url,
+      total_price: model.total_price
+    }));
+  } catch(e) {
+  return []
+  }
 }

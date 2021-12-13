@@ -151,7 +151,7 @@ const ProductTemplateTable = ({
   ];
 
   return (
-    <div style={{ height: 600, maxWidth: 700, minWidth: "60vw" }}>
+    <div style={{ height: 600, maxWidth: 800, minWidth: "65vw" }}>
       <DataGrid
         rows={rows}
         columns={columnNames}

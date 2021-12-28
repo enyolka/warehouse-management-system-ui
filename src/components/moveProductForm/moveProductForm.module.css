@@ -2,18 +2,16 @@
   padding-bottom: 2em;
 }
 
-.field {
-  display: flex;
-  width: 100%;
-  min-width: 380px;
-  max-width: 500px;
-  flex-direction: column !important;
-}
-
 .fieldsRow {
   display: flex;
   flex-direction: row;
   width: 100%;
+}
+
+.field {
+  display: flex;
+  width: 100%;
+  flex-direction: column !important;
 }
 
 .submitButton {

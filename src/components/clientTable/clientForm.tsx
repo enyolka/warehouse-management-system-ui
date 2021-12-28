@@ -9,7 +9,6 @@ import {
   FormikProps,
   FieldMetaProps,
   ErrorMessage,
-  FormikErrors,
 } from "formik";
 import * as Yup from "yup";
 import styles from "./clientTable.module.css";

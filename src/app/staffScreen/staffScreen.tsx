@@ -1,8 +1,7 @@
 import * as React from "react";
 import { Button, Grid } from "@mui/material";
-import { Link } from "react-router-dom";
 import { StoreContext } from "../../redux/store/StoreProvider";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import { UserModel } from "../../api/apiModel";
 import {
   deleteUser,
@@ -14,9 +13,7 @@ import { UserCreateModel } from "../../components/staffTable/types";
 import StaffTable from "../../components/staffTable/staffTable";
 import StaffForm from "../../components/staffTable/staffForm";
 
-type Props = {};
-
-function StaffScreen({}: Props): React.ReactElement {
+function StaffScreen(): React.ReactElement {
   const { userState, userDispatch } = useContext(StoreContext);
   const [open, setOpen] = useState(false);
 

@@ -1,29 +1,22 @@
 import * as React from "react";
 import { Button, Grid, Modal } from "@mui/material";
-import { Link } from "react-router-dom";
 import { StoreContext } from "../../redux/store/StoreProvider";
 import { useContext, useMemo, useState } from "react";
 import { ClientFormModel } from "../../components/clientTable/types";
-import ClientForm from "../../components/clientTable/clientForm";
-import ClientTable from "../../components/clientTable/clientTable";
 import { ProductFormModel } from "../../components/productTable/types";
 import {
   deleteProduct,
   getProducts,
   postFromTemplateProduct,
-  postProduct,
   putProduct,
 } from "../../redux/products/action";
 import ProductTable from "../../components/productTable/productTable";
-import ProductForm from "../../components/productTable/productForm";
 import { useEffect } from "react";
 import ProductFormFromTemplate from "../../components/productTable/productFormFromTemplate";
 import { getStorages } from "../../redux/storage/action";
 import { getLogisticUnits } from "../../redux/logisticUnit/action";
 
-type Props = {};
-
-function ProductsScreen({}: Props): React.ReactElement {
+function ProductsScreen(): React.ReactElement {
   const {
     productsState,
     productsDispatch,
@@ -32,7 +25,7 @@ function ProductsScreen({}: Props): React.ReactElement {
     storageDispatch,
     logisticUnitsDispatch,
   } = useContext(StoreContext);
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   const [newIds, setNewIds] = React.useState<ProductFormModel[]>([]);
   const [openFromTemplate, setOpenFromTemplate] = useState(false);
 
@@ -55,14 +48,14 @@ function ProductsScreen({}: Props): React.ReactElement {
     return productsState.data;
   }, [productsState]);
 
-  const createRequest = (model: ProductFormModel) => {
-    postProduct(
-      model,
-      extraData.suppliers,
-      extraData.templates
-    )(productsDispatch);
-    getProducts(extraData.suppliers, extraData.templates)(productsDispatch);
-  };
+  // const createRequest = (model: ProductFormModel) => {
+  //   postProduct(
+  //     model,
+  //     extraData.suppliers,
+  //     extraData.templates
+  //   )(productsDispatch);
+  //   getProducts(extraData.suppliers, extraData.templates)(productsDispatch);
+  // };
 
   const createFromTemplateRequest = (template_id: number, count: number) => {
     postFromTemplateProduct(

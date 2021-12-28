@@ -1,46 +1,13 @@
 import * as React from "react";
-import {
-  Box,
-  Button,
-  Grid,
-  Modal,
-  PropTypes,
-  TextField,
-  TextFieldProps,
-  ToggleButton,
-  ToggleButtonGroup,
-} from "@mui/material";
-import {
-  Field,
-  FieldInputProps,
-  Form,
-  Formik,
-  FormikProps,
-  FieldMetaProps,
-  ErrorMessage,
-} from "formik";
+import { Box, Button, Grid, Modal, TextField } from "@mui/material";
+import { Field, Form, Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import styles from "../clientTable/clientTable.module.css";
 import classNames from "classnames";
-import {
-  ProductFormModel,
-  ProductTemplateFormModel,
-  StatusModel,
-} from "./types";
-import { useContext } from "react";
+import { ProductFormModel, ProductTemplateFormModel } from "./types";
 import { StoreContext } from "../../redux/store/StoreProvider";
-import { ClientFormModel } from "../clientTable/types";
-import {
-  Autocomplete,
-  fieldToTextField,
-  RadioGroup,
-  // ToggleButtonGroup,
-} from "formik-material-ui";
-import {
-  MyAutoComplete,
-  MyInput,
-  MyRadioGroup,
-} from "../input/inputComponents";
+import { Autocomplete } from "formik-material-ui";
+import { MyInput, MyRadioGroup } from "../input/inputComponents";
 import { statuses } from "./productFormFromTemplate";
 
 type Props = {

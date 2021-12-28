@@ -44,13 +44,13 @@ export type ProductModel = {
   status?: Status;
   logistic_unit?: number;
   acceptance_at: string;
+  admission_file_url?: string;
+  release_file_url?: string;
 };
 
 export type LogisticUnitModel = {
   id: number;
   products: ProductModel[];
-  admission_file_url?: string;
-  release_file_url?: string;
   total_price: string;
 }
 

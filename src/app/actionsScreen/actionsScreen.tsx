@@ -1,9 +1,6 @@
 import * as React from "react";
-import { Box, Button, Grid, Tab, Tabs } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Box, Grid, Tab, Tabs } from "@mui/material";
 import { StoreContext } from "../../redux/store/StoreProvider";
-import { useMemo, useState } from "react";
-import ProductForm from "../../components/productTable/productForm";
 import ProductFormFromTemplate from "../../components/productTable/productFormFromTemplate";
 import {
   getProducts,
@@ -15,8 +12,6 @@ import ReleaseForm from "../../components/releaseForm/releaseForm";
 import { ProductFormModel } from "../../components/productTable/types";
 import { postLogisticUnitMovement } from "../../redux/logisticUnit/action";
 
-type Props = {};
-
 function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
@@ -24,11 +19,8 @@ function a11yProps(index: number) {
   };
 }
 
-function ActionsScreen({}: Props): React.ReactElement {
+function ActionsScreen(): React.ReactElement {
   const {
-    storageState,
-    storageDispatch,
-    productsState,
     productsDispatch,
     suppliersState,
     productTemplatesState,
@@ -41,9 +33,9 @@ function ActionsScreen({}: Props): React.ReactElement {
     setValue(newValue);
   };
 
-  const data = useMemo(() => {
-    return storageState.data;
-  }, []);
+  // const data = useMemo(() => {
+  //   return storageState.data;
+  // }, []);
 
   const createFromTemplateRequest = (template_id: number, count: number) => {
     postFromTemplateProduct(
@@ -60,7 +52,7 @@ function ActionsScreen({}: Props): React.ReactElement {
     )(productsDispatch);
   };
 
-  const moveRequest = (logistic_unit: number) => {
+  const releaseRequest = (logistic_unit: number) => {
     postLogisticUnitMovement(
       logistic_unit,
       4,
@@ -109,7 +101,7 @@ function ActionsScreen({}: Props): React.ReactElement {
       </div>
       <div className={styles.tab} hidden={2 !== value}>
         <ReleaseForm
-          createRequest={moveRequest}
+          createRequest={releaseRequest}
           newIds={newIds}
           setNewIds={setNewIds}
         />

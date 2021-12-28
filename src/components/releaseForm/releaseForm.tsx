@@ -1,13 +1,5 @@
 import * as React from "react";
-import {
-  Box,
-  Button,
-  Grid,
-  IconButton,
-  TextField,
-  ToggleButton,
-  ToggleButtonGroup,
-} from "@mui/material";
+import { Box, Button, Grid, IconButton, TextField } from "@mui/material";
 import { Field, Form, Formik, ErrorMessage, FieldArray } from "formik";
 import * as Yup from "yup";
 import style from "./moveProductForm.module.css";
@@ -17,14 +9,13 @@ import { LogisticUnitModel } from "../../api/apiModel";
 import {
   getLogisticUnits,
   postDocuments,
-  postLogisticUnitMovement,
 } from "../../redux/logisticUnit/action";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { getStorages } from "../../redux/storage/action";
-import { ClientFormModel } from "../clientTable/types";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { ProductFormModel } from "../productTable/types";
+import { useHistory } from "react-router-dom";
 
 type Props = {
   createRequest: (logistic_unit: number) => void;
@@ -64,6 +55,7 @@ export function ReleaseForm({
   //     .max(30, "Must be 30 characters or less")
   //     .required("Required"),
   // });
+  const history = useHistory();
 
   return (
     <Box>
@@ -150,53 +142,58 @@ export function ReleaseForm({
                       </Button>
                     </Grid>
                   )}
-                  <Grid item className={style.submitButton}>
-                    <Button type="submit" variant="contained">
-                      Release
-                    </Button>
-                  </Grid>
-                  <Grid item className={style.submitButton}>
-                    {isDownloadButton && (
-                      <Button
-                        onClick={() => {
-                          postDocuments(
-                            Array.from(
-                              new Set(
-                                props.newIds.map(
-                                  ({ logistic_unit }) => logistic_unit!
-                                )
-                              )
-                            ),
-                            4,
-                            "release"
-                          )(logisticUnitsDispatch).then((resp) => {
-                            getLogisticUnits()(logisticUnitsDispatch).then(
-                              (resp) => {
-                                console.log(props.newIds);
-                                console.log(
-                                  resp?.find(
-                                    ({ id }: LogisticUnitModel) =>
-                                      id === props.newIds[0].logistic_unit
-                                  )
-                                );
-                                const newWindow = window.open(
-                                  "http://localhost:8000" +
-                                    (resp
-                                      ? resp.find(
-                                          ({ id }: LogisticUnitModel) =>
-                                            id === props.newIds[0].logistic_unit
-                                        )?.release_file_url!
-                                      : "")
-                                );
-                                if (newWindow) newWindow.opener = null;
-                              }
-                            );
-                          });
-                        }}
-                      >
-                        GRN Document (PZ)
+                  <Grid container item className={style.fieldsRow}>
+                    <Grid item className={style.submitButton}>
+                      <Button type="submit" variant="contained">
+                        Release
                       </Button>
-                    )}
+                    </Grid>
+                    <Grid item className={style.submitButton}>
+                      {isDownloadButton && (
+                        <Button
+                          onClick={() => {
+                            postDocuments(
+                              Array.from(
+                                new Set(
+                                  props.newIds.map(
+                                    ({ logistic_unit }) => logistic_unit!
+                                  )
+                                )
+                              ),
+                              4,
+                              "release"
+                            )(logisticUnitsDispatch).then((resp) => {
+                              getLogisticUnits()(logisticUnitsDispatch).then(
+                                (resp) => {
+                                  const newWindow = window.open(
+                                    "http://localhost:8000" +
+                                      (resp
+                                        ? resp.find(
+                                            ({ id }: LogisticUnitModel) =>
+                                              id ===
+                                              props.newIds[0].logistic_unit
+                                          )?.products[0].release_file_url!
+                                        : "")
+                                  );
+                                  if (newWindow) newWindow.opener = null;
+                                }
+                              );
+                            });
+                          }}
+                        >
+                          GRN Document (PZ)
+                        </Button>
+                      )}
+                    </Grid>
+                    {/* <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => history.go(0)}
+                      // component={Link}
+                      // to="/dashboard"
+                    >
+                      New order
+                    </Button> */}
                   </Grid>
                 </Grid>
               )}

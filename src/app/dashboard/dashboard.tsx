@@ -1,8 +1,6 @@
 import * as React from "react";
-import { Box, Button, Grid, Tab, Tabs } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Box, Grid, Tab, Tabs } from "@mui/material";
 import { StoreContext } from "../../redux/store/StoreProvider";
-import { WarehouseMap } from "../../components/warehouseMap/warehouseMap";
 import { WarehouseMapDiv } from "../../components/warehouseMap/warehouseMapDiv";
 import { useMemo } from "react";
 import { StorageModel } from "../../api/apiModel";

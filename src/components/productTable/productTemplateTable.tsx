@@ -1,30 +1,11 @@
-import {
-  Button,
-  Checkbox,
-  checkboxClasses,
-  Pagination,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@mui/material";
+import { Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useState } from "react";
 import DeletionModal from "../deletionModal/deletionModal";
-import { ProductTemplateModel } from "../../api/apiModel";
 import { ProductTemplateFormModel } from "./types";
 import ProductForm from "./productTemplateForm";
-import {
-  DataGrid,
-  GridColumns,
-  GridRowsProp,
-  useGridApiContext,
-  useGridState,
-} from "@mui/x-data-grid";
+import { DataGrid, GridColumns, GridRowsProp } from "@mui/x-data-grid";
 import { CustomPagination } from "../pagination/customPagination";
 
 type Props = {
@@ -127,7 +108,7 @@ const ProductTemplateTable = ({
       width: 90,
       renderCell: (params: any) => (
         <Button
-          onClick={() => openUpdateModal(data[params.id])}
+          onClick={() => openUpdateModal(data[params.row.row_id])}
           disabled={disabled}
         >
           <EditIcon />
@@ -141,7 +122,10 @@ const ProductTemplateTable = ({
       headerName: "",
       width: 90,
       renderCell: (params: any) => (
-        <Button onClick={() => openDeleteModal(params.id)} disabled={disabled}>
+        <Button
+          onClick={() => openDeleteModal(params.row.row_id)}
+          disabled={disabled}
+        >
           <DeleteIcon />
         </Button>
       ),

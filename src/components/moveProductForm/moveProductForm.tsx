@@ -20,16 +20,12 @@ import {
 import { useEffect, useMemo } from "react";
 import { getStorages } from "../../redux/storage/action";
 import { ClientFormModel } from "../clientTable/types";
+import MoveToMain from "./moveToMain";
+import MoveToRelease from "./moveToRelease";
 
 type Props = {
   // createRequest: (logistic_unit_id: number, storage_type: number) => void;
   // initialValues?: LogisticUnitModel;
-};
-
-type MovementModel = {
-  logistic_unit: LogisticUnitModel;
-  storage_type: number;
-  customer?: ClientFormModel;
 };
 
 export function MoveProductForm({}: Props): React.ReactElement {
@@ -63,31 +59,6 @@ export function MoveProductForm({}: Props): React.ReactElement {
     );
   }, [logisticUnitsState, currentType]);
 
-  const customersOptions: ClientFormModel[] = useMemo(() => {
-    return customersState.data;
-  }, [customersState]);
-
-  const initialModel: MovementModel = {
-    logistic_unit: unitsOptions[0],
-    storage_type: 1,
-    customer: customersOptions[0],
-  };
-
-  const createRequest = (
-    logistic_unit: number,
-    storage_type: number,
-    customer?: number
-  ) => {
-    postLogisticUnitMovement(
-      logistic_unit,
-      storage_type,
-      suppliersState.data,
-      productTemplatesState.data,
-      customer,
-      customersState.data
-    )(logisticUnitsDispatch);
-  };
-
   // const validationSchema = Yup.object({
   //   name: Yup.string()
   //     .max(30, "Must be 30 characters or less")
@@ -106,7 +77,12 @@ export function MoveProductForm({}: Props): React.ReactElement {
         <ToggleButton value="ACCEPTED">To Main</ToggleButton>
         <ToggleButton value="IN_STOCK">To Shipment</ToggleButton>
       </ToggleButtonGroup>
-      <Formik<MovementModel>
+      {currentType === "ACCEPTED" ? (
+        <MoveToMain options={unitsOptions} />
+      ) : (
+        <MoveToRelease options={unitsOptions} />
+      )}
+      {/* <Formik<MovementModel>
         initialValues={initialModel}
         enableReinitialize={true}
         validateOnChange={true}
@@ -191,7 +167,7 @@ export function MoveProductForm({}: Props): React.ReactElement {
             </Grid>
           </Form>
         )}
-      </Formik>
+      </Formik> */}
     </Box>
   );
 }

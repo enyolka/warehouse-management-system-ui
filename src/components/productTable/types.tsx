@@ -44,4 +44,6 @@ export type ProductFormModel = {
   status?: Status;
   logistic_unit?: number;
   acceptance_at: string;
+  admission_file_url?: string;
+  release_file_url?: string;
 };

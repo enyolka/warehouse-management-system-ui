@@ -45,13 +45,16 @@ function WarehouseMapDiv({ data, type }: Props) {
 
           tooltip.push(
             <p>
-              {item.y}.{item.z}: {item.logisticunit?.products[0].name ?? "-"}{" "}
-              {item.logisticunit?.products[0].customer
-                ? customersState.data.find(
-                    ({ id }: ClientFormModel) =>
-                      id === item.logisticunit?.products[0]?.customer
-                  ).name
-                : ""}
+              {item.y}.{item.z}:{" "}
+              {item.logisticunit ? item.logisticunit?.products[0]?.name : "-"}{" "}
+              {item.logisticunit
+                ? item.logisticunit?.products[0]?.customer
+                  ? customersState.data.find(
+                      ({ id }: ClientFormModel) =>
+                        id === item.logisticunit?.products[0]?.customer
+                    ).name
+                  : ""
+                : null}
             </p>
           );
 

@@ -1,25 +1,20 @@
-import { useContext } from "react";
-import { ClientModel, ProductModel, ProductTemplateModel, Status  } from "../../api/apiModel"
+import { ClientModel, ProductModel } from "../../api/apiModel"
 import { ClientFormModel } from "../../components/clientTable/types";
-import { ProductFormModel, ProductTemplateFormModel, StatusModel } from "../../components/productTable/types"
+import { ProductFormModel, ProductTemplateFormModel } from "../../components/productTable/types"
 import { UserFormModel } from "../../components/staffTable/types";
 import { translateToModel as translateToClientModel, translatetoApiModel as translateToClientApiModel } from "../customers/translatorCustomers";
 import { translateToFormModel as translateToFormTemplateModel, translateToApiModel as translateToTemplateApiModel } from "../productTemplates/translatorProductTemplate";
-import { StoreContext } from "../store/StoreProvider";
 import { LogisticUnitModel } from "../../api/apiModel";
-import { statuses } from "../../components/productTable/productFormFromTemplate";
  
 const findClient = (template: number, clients: ClientFormModel[]): ClientFormModel => {
   return clients.find(
-    (it: ClientFormModel) => it.id == template
+    (it: ClientFormModel) => it.id === template
   )!;
 }
 
-
-const findStatus = (value: Status | undefined): StatusModel => {
-  return statuses.find((status) => value === status.value) ?? statuses[0]
-}
-
+// const findStatus = (value: Status | undefined): StatusModel => {
+//   return statuses.find((status) => value === status.value) ?? statuses[0]
+// }
 
 export const translateToFormModel = (data: ProductModel[], suppliers: ClientFormModel[], templates: ProductTemplateFormModel[]): ProductFormModel[] => { 
   try {
@@ -41,6 +36,8 @@ export const translateToFormModel = (data: ProductModel[], suppliers: ClientForm
       status: model.status,
       acceptance_at: model.acceptance_at,
       logistic_unit: model.logistic_unit,
+      admission_file_url: model.admission_file_url,
+      release_file_url: model.release_file_url,
     })});
   } catch(e) {
   return []
@@ -64,6 +61,8 @@ export const translatetoApiModel = (model: ProductFormModel, suppliers: ClientFo
       status: model.status,
       acceptance_at: model.acceptance_at,
       logistic_unit: model.logistic_unit,
+      admission_file_url: model.admission_file_url,
+      release_file_url: model.release_file_url,
     }
 }
 
@@ -83,6 +82,8 @@ export const translateToPostApiModel = (model: ProductFormModel, suppliers: Clie
     status: model.status,
     acceptance_at: model.acceptance_at,
     logistic_unit: model.logistic_unit,
+    admission_file_url: model.admission_file_url,
+    release_file_url: model.release_file_url,
   }
 }
 
@@ -107,6 +108,8 @@ export const translateToPostFormModel = (data: any, suppliers: ClientFormModel[]
     status: model.status,
     acceptance_at: model.acceptance_at,
     logistic_unit: model.logistic_unit,
+    admission_file_url: model.admission_file_url,
+    release_file_url: model.release_file_url,
   }});
 }
 
@@ -115,8 +118,6 @@ export const translateToFormModelLU = (data: LogisticUnitModel[]): LogisticUnitM
     return data.map((model : LogisticUnitModel) => ({
       id: model.id,
       products: model.products,
-      admission_file_url: model.admission_file_url,
-      release_file_url: model.release_file_url,
       total_price: model.total_price
     }));
   } catch(e) {

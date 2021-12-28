@@ -1,23 +1,14 @@
 import * as React from "react";
-import { Box, Button, Grid, Modal, PropTypes, TextField } from "@mui/material";
-import {
-  Field,
-  FieldInputProps,
-  Form,
-  Formik,
-  FormikProps,
-  FieldMetaProps,
-  ErrorMessage,
-} from "formik";
+import { Box, Button, Grid, Modal, TextField } from "@mui/material";
+import { Field, Form, Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import styles from "../clientTable/clientTable.module.css";
 import classNames from "classnames";
 import { ProductTemplateFormModel } from "./types";
-import { useContext } from "react";
 import { StoreContext } from "../../redux/store/StoreProvider";
 import { ClientFormModel } from "../clientTable/types";
-import { Autocomplete, fieldToTextField } from "formik-material-ui";
-import { MyAutoComplete, MyInput } from "../input/inputComponents";
+import { Autocomplete } from "formik-material-ui";
+import { MyInput } from "../input/inputComponents";
 
 type Props = {
   open: boolean;

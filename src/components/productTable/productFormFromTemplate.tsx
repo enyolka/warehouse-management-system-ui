@@ -2,16 +2,7 @@ import * as React from "react";
 import { Box, Button, Grid, IconButton, TextField } from "@mui/material";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import {
-  Field,
-  FieldInputProps,
-  Form,
-  Formik,
-  FormikProps,
-  FieldMetaProps,
-  ErrorMessage,
-  FieldArray,
-} from "formik";
+import { Field, Form, Formik, ErrorMessage, FieldArray } from "formik";
 import * as Yup from "yup";
 import styles from "../clientTable/clientTable.module.css";
 import classNames from "classnames";
@@ -20,28 +11,20 @@ import {
   ProductTemplateFormModel,
   StatusModel,
 } from "./types";
-import { useContext } from "react";
 import { StoreContext } from "../../redux/store/StoreProvider";
-import { ClientFormModel } from "../clientTable/types";
-import {
-  Autocomplete,
-  fieldToTextField,
-  RadioGroup,
-  // ToggleButtonGroup,
-} from "formik-material-ui";
-import {
-  MyAutoComplete,
-  MyInput,
-  MyRadioGroup,
-} from "../input/inputComponents";
-import { LogisticUnitModel, Status } from "../../api/apiModel";
+import { Autocomplete } from "formik-material-ui";
+import { MyInput } from "../input/inputComponents";
+import { LogisticUnitModel } from "../../api/apiModel";
 import { getStorages } from "../../redux/storage/action";
 import {
   getLogisticUnits,
   postDocuments,
 } from "../../redux/logisticUnit/action";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import {
+  getProducts,
+  postFromTemplateProduct,
+} from "../../redux/products/action";
 
 type Props = {
   open?: boolean;
@@ -90,14 +73,14 @@ export function ProductFormFromTemplate({
   ...props
 }: Props): React.ReactElement {
   const {
-    suppliersState,
     productTemplatesState,
     storageDispatch,
-    logisticUnitsState,
     logisticUnitsDispatch,
+    productsState,
+    productsDispatch,
+    suppliersState,
   } = React.useContext(StoreContext);
   const [isDownloadButton, setIsDownloadButton] = useState(false);
-  const [url, setUrl] = useState("");
 
   const initialTemplateModel: ProductFromTemplateModel = {
     template: productTemplatesState.data[0],
@@ -110,11 +93,28 @@ export function ProductFormFromTemplate({
       .required("Required"),
   });
 
-  const fileDownload = require("js-file-download");
-  // fileDownload(
-  //   "localhost:8000/uploads/2021-12-09/document-2021-12-09-221241622311-0f1092c5-8.pdf",
-  //   "filename.pdf"
-  // );
+  const createFromTemplateRequest = (template_id: number, count: number) => {
+    postFromTemplateProduct(
+      template_id,
+      count,
+      suppliersState.data,
+      productTemplatesState.data
+    )(productsDispatch);
+    getProducts(
+      suppliersState.data,
+      productTemplatesState.data
+    )(productsDispatch);
+    getStorages("main")(storageDispatch);
+    getLogisticUnits()(logisticUnitsDispatch);
+  };
+
+  async function createSubmitRequest(units: ProductFromTemplateModel[]) {
+    debugger;
+    for (const unit of units) {
+      await createFromTemplateRequest(unit.template.id, unit.count);
+    }
+  }
+
   return (
     <Box
       className={classNames(
@@ -127,10 +127,11 @@ export function ProductFormFromTemplate({
         enableReinitialize={true}
         validateOnChange={true}
         validateOnBlur={true}
-        onSubmit={({ units }, { resetForm }) => {
-          units.forEach(({ template, count }) =>
-            createRequest(template.id, count)
-          );
+        onSubmit={async ({ units }, { resetForm }) => {
+          // units.forEach(({ template, count }) =>
+          //   createRequest(template.id, count)
+          // );
+          await createSubmitRequest(units);
           setIsDownloadButton(true);
           // createRequest(template.id, count);
           // if (props.initialValues) handleClose(true);
@@ -238,52 +239,45 @@ export function ProductFormFromTemplate({
                       Submit
                     </Button>
                   </Grid>
-                  <Grid item className={styles.submitButton}>
-                    {isDownloadButton && (
-                      <Button
-                        onClick={() => {
-                          postDocuments(
-                            Array.from(
-                              new Set(
-                                props.newIds.map(
-                                  ({ logistic_unit }) => logistic_unit!
-                                )
-                              )
-                            ),
-                            4,
-                            "admission"
-                          )(logisticUnitsDispatch).then((resp) => {
-                            getLogisticUnits()(logisticUnitsDispatch).then(
-                              (resp) => {
-                                console.log(props.newIds);
-                                console.log(
-                                  resp?.find(
-                                    ({ id }: LogisticUnitModel) =>
-                                      id === props.newIds[0].logistic_unit
-                                  )
-                                );
-                                const newWindow = window.open(
-                                  "http://localhost:8000" +
-                                    (resp
-                                      ? resp.find(
-                                          ({ id }: LogisticUnitModel) =>
-                                            id === props.newIds[0].logistic_unit
-                                        )?.admission_file_url!
-                                      : "")
-                                );
-                                if (newWindow) newWindow.opener = null;
-                              }
-                            );
-                          });
-                        }}
-                      >
-                        GRN Document (PZ)
-                      </Button>
-                    )}
-                  </Grid>
                 </Grid>
               )}
             />
+            <Grid item className={styles.submitButton}>
+              {isDownloadButton && (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => {
+                    postDocuments(
+                      Array.from(
+                        new Set(
+                          props.newIds.map(
+                            ({ logistic_unit }) => logistic_unit!
+                          )
+                        )
+                      ),
+                      4,
+                      "admission"
+                    )(logisticUnitsDispatch).then((resp) => {
+                      getLogisticUnits()(logisticUnitsDispatch).then((resp) => {
+                        const newWindow = window.open(
+                          "http://localhost:8000" +
+                            (resp
+                              ? resp.find(
+                                  ({ id }: LogisticUnitModel) =>
+                                    id === props.newIds[0].logistic_unit
+                                )?.products[0].admission_file_url!
+                              : "")
+                        );
+                        if (newWindow) newWindow.opener = null;
+                      });
+                    });
+                  }}
+                >
+                  GRN Document (PZ)
+                </Button>
+              )}
+            </Grid>
           </Form>
         )}
       </Formik>

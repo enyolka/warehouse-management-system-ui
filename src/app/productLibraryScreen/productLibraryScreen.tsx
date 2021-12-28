@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Button, Grid } from "@mui/material";
-import { Link } from "react-router-dom";
 import { StoreContext } from "../../redux/store/StoreProvider";
 import { useContext, useMemo, useState } from "react";
 import { ClientFormModel } from "../../components/clientTable/types";
@@ -14,9 +13,7 @@ import {
 import ProductTemplateForm from "../../components/productTable/productTemplateForm";
 import ProductTemplateTable from "../../components/productTable/productTemplateTable";
 
-type Props = {};
-
-function ProductLibraryScreen({}: Props): React.ReactElement {
+function ProductLibraryScreen(): React.ReactElement {
   const { productTemplatesState, productTemplatesDispatch, suppliersState } =
     useContext(StoreContext);
   const [open, setOpen] = useState(false);

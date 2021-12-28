@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Button, Grid } from "@mui/material";
-import { Link } from "react-router-dom";
 import { StoreContext } from "../../redux/store/StoreProvider";
 import {
   deleteCustomer,
@@ -8,14 +7,12 @@ import {
   postCustomer,
   putCustomer,
 } from "../../redux/customers/action";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import { ClientFormModel } from "../../components/clientTable/types";
 import CustomersForm from "../../components/clientTable/clientForm";
 import CustomersTable from "../../components/clientTable/clientTable";
 
-type Props = {};
-
-function CustomersScreen({}: Props): React.ReactElement {
+function CustomersScreen(): React.ReactElement {
   const { customersState, customersDispatch } = useContext(StoreContext);
   const [open, setOpen] = useState(false);
   const disabled = !!(localStorage["admin"] === "false");

@@ -107,11 +107,11 @@ function Header({ value, setValue }: Props): React.ReactElement {
               component={Link}
             />
           )}
-          <BottomNavigationAction
+          {/* <BottomNavigationAction
             label="Documents"
             to="/documents"
             component={Link}
-          />
+          /> */}
         </BottomNavigation>
       )}
       {isUserLogged && (

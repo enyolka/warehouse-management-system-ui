@@ -62,12 +62,12 @@ export const postDocuments = (logistic_units: number[], customer: number, type: 
   ).then(
     resp => {
     dispatch({
-      type: "LOGISTIC_UNIT_UPDATE",
+      type: "PRODUCT_UPDATE",
       payload: resp.data
     }); })
   .catch((err) => {Promise.reject(err);       
     dispatch({
-    type: "LOGISTIC_UNIT_ERROR",
+    type: "PRODUCT_UPDATE",
     payload: err.response ? err.response.data : "COULD NOT CONNECT",
     });
   });

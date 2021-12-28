@@ -55,12 +55,37 @@ export const postFromTemplateProduct = (template: number, count: number, supplie
      { headers: { Authorization: `Token ${localStorage.token}`}}
   ).then(
     resp => { 
+      console.log(resp)
       dispatch({
         type: "PRODUCT_CREATE",        
         payload: translateToPostFormModel(resp.data, suppliers, templates), 
       });
     dispatch({type: "PRODUCT_SUCCESS"})
     return translateToPostFormModel(resp.data, suppliers, templates)
+    })
+  .catch((err) => {Promise.reject(err);       
+    dispatch({
+    type: "PRODUCT_ERROR",
+    payload: err.response ? err.response.data : "COULD NOT CONNECT",
+    });
+  });
+}
+
+export const postProductsMovement = (products: number[], customer: number,templates: ProductTemplateFormModel[], suppliers: ClientFormModel[],  customers: ClientFormModel[]) => (dispatch: any) => {
+  return request().post(
+    `/storages/v1/products/move/release/`,
+    {products: products,
+    customer: customer},
+     { headers: { Authorization: `Token ${localStorage.token}`}}
+  ).then(
+    resp => { 
+      console.log(resp)
+      dispatch({
+        type: "PRODUCT_UPDATE",        
+        payload: translateToPostFormModel(resp.data.products, suppliers, templates, customers), 
+      });
+    dispatch({type: "PRODUCT_SUCCESS"})
+    return translateToPostFormModel(resp.data.products, suppliers, templates, customers);
     })
   .catch((err) => {Promise.reject(err);       
     dispatch({

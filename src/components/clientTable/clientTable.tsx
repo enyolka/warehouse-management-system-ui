@@ -12,9 +12,15 @@ type Props = {
   data: ClientFormModel[];
   deleteRequest: (idx: number) => void;
   updateRequest: (model: ClientFormModel) => void;
+  clientType: "supplier" | "customer";
 };
 
-const ClientTable = ({ data, deleteRequest, updateRequest }: Props) => {
+const ClientTable = ({
+  data,
+  deleteRequest,
+  updateRequest,
+  clientType,
+}: Props) => {
   const [openDelete, setOpenDelete] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
   const [checked, setChecked] = useState<number[]>([]);
@@ -35,12 +41,13 @@ const ClientTable = ({ data, deleteRequest, updateRequest }: Props) => {
 
   const rows: GridRowsProp = data.map(
     (
-      { id, name, city, streetName, streetNumber, zipCode, phone, email },
+      { id, name, nip, city, streetName, streetNumber, zipCode, phone, email },
       row_id
     ) => ({
       row_id,
       id,
       name,
+      nip,
       city,
       streetName,
       streetNumber,
@@ -54,6 +61,13 @@ const ClientTable = ({ data, deleteRequest, updateRequest }: Props) => {
     {
       field: "name",
       headerName: "Name",
+      width: 120,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "nip",
+      headerName: "NIP",
       width: 120,
       headerAlign: "center",
       align: "center",
@@ -163,6 +177,7 @@ const ClientTable = ({ data, deleteRequest, updateRequest }: Props) => {
         handleClose={() => setOpenUpdate(false)}
         createRequest={updateRequest}
         initialValues={updatedCustomer}
+        clientType={clientType}
       />
     </div>
     // <TableContainer component={Paper}>

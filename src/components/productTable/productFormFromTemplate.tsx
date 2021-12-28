@@ -93,25 +93,9 @@ export function ProductFormFromTemplate({
       .required("Required"),
   });
 
-  const createFromTemplateRequest = (template_id: number, count: number) => {
-    postFromTemplateProduct(
-      template_id,
-      count,
-      suppliersState.data,
-      productTemplatesState.data
-    )(productsDispatch);
-    getProducts(
-      suppliersState.data,
-      productTemplatesState.data
-    )(productsDispatch);
-    getStorages("main")(storageDispatch);
-    getLogisticUnits()(logisticUnitsDispatch);
-  };
-
   async function createSubmitRequest(units: ProductFromTemplateModel[]) {
-    debugger;
     for (const unit of units) {
-      await createFromTemplateRequest(unit.template.id, unit.count);
+      await createRequest(unit.template.id, unit.count);
     }
   }
 
@@ -270,6 +254,7 @@ export function ProductFormFromTemplate({
                               : "")
                         );
                         if (newWindow) newWindow.opener = null;
+                        props.setNewIds([]);
                       });
                     });
                   }}

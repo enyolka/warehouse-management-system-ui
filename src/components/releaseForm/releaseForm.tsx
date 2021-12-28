@@ -176,12 +176,13 @@ export function ReleaseForm({
                                         : "")
                                   );
                                   if (newWindow) newWindow.opener = null;
+                                  props.setNewIds([]);
                                 }
                               );
                             });
                           }}
                         >
-                          GRN Document (PZ)
+                          Goods Issued Note (WZ)
                         </Button>
                       )}
                     </Grid>

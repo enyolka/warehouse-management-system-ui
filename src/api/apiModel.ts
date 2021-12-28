@@ -10,6 +10,7 @@ export type UserModel = {
 export type ClientModel = {
   id: number;
   name: string;
+  nip: string;
   phone?: string;
   email?: string;
   city: string;
@@ -25,7 +26,7 @@ export type ProductTemplateModel= {
   length?: number;
   width?: number;
   height?: number;
-  weight?: number;
+  weight: number;
   price?: number;
 };
 
@@ -39,7 +40,7 @@ export type ProductModel = {
   length?: number;
   width?: number;
   height?: number;
-  weight?: number;
+  weight: number;
   price?: number;
   status?: Status;
   logistic_unit?: number;

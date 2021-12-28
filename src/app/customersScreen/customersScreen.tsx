@@ -56,6 +56,7 @@ function CustomersScreen(): React.ReactElement {
           deleteRequest={deleteRequest}
           updateRequest={updateRequest}
           data={data}
+          clientType="customer"
         />
       </Grid>
 
@@ -76,6 +77,7 @@ function CustomersScreen(): React.ReactElement {
           open={open}
           handleClose={() => setOpen(false)}
           createRequest={createRequest}
+          clientType="customer"
         />
       </Grid>
     </Grid>

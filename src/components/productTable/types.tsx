@@ -25,7 +25,7 @@ export type ProductTemplateFormModel = {
   length?: number;
   width?: number;
   height?: number;
-  weight?: number;
+  weight: number;
   price?: number;
 };
 
@@ -39,7 +39,7 @@ export type ProductFormModel = {
   length?: number;
   width?: number;
   height?: number;
-  weight?: number;
+  weight: number;
   price?: number;
   status?: Status;
   logistic_unit?: number;

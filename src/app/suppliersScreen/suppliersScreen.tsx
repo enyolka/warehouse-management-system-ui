@@ -53,6 +53,7 @@ function SuppliersScreen({}: Props): React.ReactElement {
           deleteRequest={deleteRequest}
           updateRequest={updateRequest}
           data={data}
+          clientType="supplier"
         />
       </Grid>
 
@@ -73,6 +74,7 @@ function SuppliersScreen({}: Props): React.ReactElement {
           open={open}
           handleClose={() => setOpen(false)}
           createRequest={createRequest}
+          clientType="supplier"
         />
       </Grid>
     </Grid>

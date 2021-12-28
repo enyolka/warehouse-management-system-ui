@@ -1,15 +1,14 @@
 import { Button, Chip } from "@mui/material";
 import { DataGrid, GridColumns, GridRowsProp } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import DeletionModal from "../deletionModal/deletionModal";
 import ProductForm from "./productForm";
 import { ProductFormModel } from "./types";
 import styles from "./productTable.module.css";
-import { Status } from "../../api/apiModel";
 import { CustomPagination } from "../pagination/customPagination";
 import { statuses } from "./productFormFromTemplate";
+import { Status } from "../../api/apiModel";
 
 type Props = {
   data: ProductFormModel[];
@@ -138,18 +137,6 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
       headerAlign: "center",
       align: "center",
     },
-    // {
-    //   field: "edit",
-    //   headerName: "",
-    //   width: 60,
-    //   renderCell: (params: any) => (
-    //     <Button onClick={() => openUpdateModal(data[params.row.row_id])}>
-    //       <EditIcon />
-    //     </Button>
-    //   ),
-    //   headerAlign: "center",
-    //   align: "center",
-    // },
     {
       field: "delete",
       headerName: "",
@@ -203,61 +190,6 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
         initialValues={updatedProduct}
       />
     </div>
-    // <TableContainer component={Paper}>
-    //   <Table size="medium" aria-label="Client table">
-    //     <TableHead>
-    //       <TableRow>
-    //         {columnNames.map(({ field, headerName, isSorted }) => (
-    //           <TableCell key={field} onClick={() => setSortedColum(headerName)}>
-    //             {headerName}
-    //           </TableCell>
-    //         ))}
-    //       </TableRow>
-    //     </TableHead>
-    //     <TableBody>
-    //       {data.map((product: ProductFormModel, id: number) => (
-    //         <TableRow
-    //           key={id}
-    //           sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-    //           className={classNames({
-    //             [styles.shipped]: product.status === "SHIPPED",
-    //           })}
-    //         >
-    //           {/* <TableCell>{product.template?.name ?? ""}</TableCell> */}
-    //           <TableCell>{product.name}</TableCell>
-    //           <TableCell>{product.supplier?.name ?? ""}</TableCell>
-    //           <TableCell>{product.length ? product.length : "-"}</TableCell>
-    //           <TableCell>{product.width ? product.width : "-"}</TableCell>
-    //           <TableCell>{product.height ? product.height : "-"}</TableCell>
-    //           <TableCell>{product.weight ? product.weight : "-"}</TableCell>
-    //           <TableCell>{product.created_by.username ?? "-"}</TableCell>
-    //           <TableCell>{product.status ?? "-"}</TableCell>
-    //           <TableCell>
-    //             <Button onClick={() => openUpdateModal(product)}>
-    //               <EditIcon color="action" />
-    //             </Button>
-    //             <Button onClick={() => openDeleteModal(product.id)}>
-    //               <DeleteIcon color="action" />
-    //             </Button>
-
-    //             <DeletionModal
-    //               open={openDelete}
-    //               handleClose={() => setOpenDelete(false)}
-    //               createRequest={deleteRequest}
-    //               idxs={[idx]}
-    //             />
-    //             <ProductForm
-    //               open={openUpdate}
-    //               handleClose={() => setOpenUpdate(false)}
-    //               createRequest={updateRequest}
-    //               initialValues={updatedProduct}
-    //             />
-    //           </TableCell>
-    //         </TableRow>
-    //       ))}
-    //     </TableBody>
-    //   </Table>
-    // </TableContainer>
   );
 };
 

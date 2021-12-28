@@ -13,6 +13,8 @@ import {
 import * as Yup from "yup";
 import styles from "./clientTable.module.css";
 import classNames from "classnames";
+import { StoreContext } from "../../redux/store/StoreProvider";
+import { useContext } from "react";
 
 export interface FieldProps<V = any> {
   field: FieldInputProps<V>;
@@ -29,17 +31,26 @@ type Props = {
   handleClose: (value: React.SetStateAction<boolean>) => void;
   createRequest: (model: ClientFormModel) => void;
   initialValues?: ClientFormModel;
+  clientType: "supplier" | "customer";
 };
 
 export function ClientForm({
   open,
   handleClose,
   createRequest,
+  clientType,
   ...props
 }: Props): React.ReactElement {
+  const {
+    suppliersState,
+    customersState,
+    suppliersDispatch,
+    customersDispatch,
+  } = useContext(StoreContext);
   const initialModel: ClientFormModel = {
     id: 0,
     name: "",
+    nip: "",
     city: "",
     streetName: "",
     streetNumber: "",
@@ -52,10 +63,29 @@ export function ClientForm({
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
   const zipCodeRegExp = /^(([0-9]{5})|([0-9]{2}-[0-9]{3}))$/;
   const streetRegExp = /^([0-9]+|([0-9]+[/][0-9]+))$/;
+  const nipRegExp = /^[0-9]{10}$/;
+
+  const duplicateNameCheck = (value: string | undefined) => {
+    const list =
+      clientType === "customer" ? customersState.data : suppliersState.data;
+    for (var i = 0; i < list.length; i++)
+      if (value === list[i].nip) {
+        return false;
+      }
+    return true;
+  };
 
   const validationSchema = Yup.object({
     name: Yup.string()
       .max(30, "Must be 30 characters or less")
+      .required("Required"),
+    nip: Yup.string()
+      .max(10, "Must be 10 characters")
+      .min(10, "Must be 10 characters")
+      // .matches(nipRegExp, "NIP is not valid")
+      .test("Unique", "Nip needs te be unique", (value: any) => {
+        return value ? duplicateNameCheck(value) : false;
+      })
       .required("Required"),
     phone: Yup.string().matches(phoneRegExp, "Phone number is not valid"),
     email: Yup.string().email("Email is not valid"),
@@ -107,20 +137,23 @@ export function ClientForm({
                   <ErrorMessage name="name">
                     {(msg) => <div className={styles.errorMessage}>{msg}</div>}
                   </ErrorMessage>
-                  {/* <Grid item className={styles.field}>
-                    <Field
-                      name="lastName"
-                      label="Last name"
-                      type="text"
-                      component={MyInput}
-                      error={errors.lastName && touched.lastName}
-                    />
-                    <ErrorMessage name="lastName">
-                      {(msg) => (
-                        <div className={styles.errorMessage}>{msg}</div>
-                      )}
-                    </ErrorMessage>
-                  </Grid> */}
+                </Grid>
+                <Grid item className={styles.field}>
+                  <Field
+                    label="NIP"
+                    name="nip"
+                    type="text"
+                    onKeyPress={(event: any) => {
+                      if (!/[0-9]/.test(event.key)) {
+                        event.preventDefault();
+                      }
+                    }}
+                    component={MyInput}
+                    error={errors.nip && touched.nip}
+                  />
+                  <ErrorMessage name="nip">
+                    {(msg) => <div className={styles.errorMessage}>{msg}</div>}
+                  </ErrorMessage>
                 </Grid>
                 <Grid item className={styles.fieldsRow}>
                   <Grid item className={styles.field}>

@@ -40,6 +40,9 @@ export function ProductTemplateForm({
     name: Yup.string()
       .max(30, "Must be 30 characters or less")
       .required("Required"),
+    weight: Yup.number()
+      .min(0.01, "Must be greater than 0")
+      .required("Required"),
   });
 
   return (

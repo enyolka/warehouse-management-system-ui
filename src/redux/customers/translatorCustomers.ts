@@ -4,9 +4,10 @@ import { ClientFormModel } from "../../components/clientTable/types"
 export const translateToModel = (data: ClientModel[] | number): ClientFormModel[] => {
   try {
     if(!(typeof data == "number"))
-    return data.map(({ id, name, phone, email, city, street_name, street_number, zip_code} : any) => ({
+    return data.map(({ id, name, nip, phone, email, city, street_name, street_number, zip_code} : any) => ({
       id: id,
       name: name,
+      nip: nip,
       phone: phone || "",
       email: email || "",
       city: city,
@@ -24,6 +25,7 @@ export const translatetoApiModel = (model: ClientFormModel): ClientModel => {
     return {
       id: model.id,
       name: model.name,
+      nip: model.nip ?? "",
       phone: model.phone || "",
       email: model.email || "",
       city: model.city,

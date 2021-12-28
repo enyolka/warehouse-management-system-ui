@@ -93,20 +93,6 @@ export function ProductForm({
                     {(msg) => <div className={styles.errorMessage}>{msg}</div>}
                   </ErrorMessage>
                 </Grid>
-                {/* 
-                <Grid item className={styles.field}>
-                  <Field
-                    label="Supplier"
-                    name="supplier"
-                    type="text"
-                    value={suppliersState.data.find(
-                      (it: ClientFormModel) => it.id === values.template.id
-                    )}
-                    // disabled={true}
-                    component={MyInput}
-                    error={errors.supplier && touched.supplier}
-                  />
-                </Grid> */}
 
                 <Grid item className={styles.field}>
                   <Field
@@ -120,65 +106,6 @@ export function ProductForm({
                     {(msg) => <div className={styles.errorMessage}>{msg}</div>}
                   </ErrorMessage>
                 </Grid>
-
-                {/* <Grid item className={styles.fieldsRow}>
-                  <Grid item className={styles.field}>
-                    <Field
-                      label="Length"
-                      name="length"
-                      type="text"
-                      component={MyInput}
-                      error={errors.length && touched.length}
-                    />
-                    <ErrorMessage name="length">
-                      {(msg) => (
-                        <div className={styles.errorMessage}>{msg}</div>
-                      )}
-                    </ErrorMessage>
-                  </Grid>
-                  <Grid item className={styles.field}>
-                    <Field
-                      label="Width"
-                      name="width"
-                      type="text"
-                      component={MyInput}
-                      error={errors.width && touched.width}
-                    />
-                    <ErrorMessage name="width">
-                      {(msg) => (
-                        <div className={styles.errorMessage}>{msg}</div>
-                      )}
-                    </ErrorMessage>
-                  </Grid>
-                  <Grid item className={styles.field}>
-                    <Field
-                      label="Height"
-                      name="height"
-                      type="text"
-                      component={MyInput}
-                      error={errors.height && touched.height}
-                    />
-                    <ErrorMessage name="height">
-                      {(msg) => (
-                        <div className={styles.errorMessage}>{msg}</div>
-                      )}
-                    </ErrorMessage>
-                  </Grid>
-                  <Grid item className={styles.field}>
-                    <Field
-                      label="Weight"
-                      name="weight"
-                      type="text"
-                      component={MyInput}
-                      error={errors.weight && touched.weight}
-                    />
-                    <ErrorMessage name="weight">
-                      {(msg) => (
-                        <div className={styles.errorMessage}>{msg}</div>
-                      )}
-                    </ErrorMessage>
-                  </Grid>
-                </Grid> */}
 
                 <Grid item className={styles.field}>
                   <Field

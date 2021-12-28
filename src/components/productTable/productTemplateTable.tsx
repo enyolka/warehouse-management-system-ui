@@ -173,69 +173,6 @@ const ProductTemplateTable = ({
         initialValues={updatedTemplate}
       />
     </div>
-
-    //  return (
-    //   <TableContainer component={Paper}>
-    //     <Table size="medium" aria-label="Client table">
-    //       <TableHead>
-    //         <TableRow>
-    //           {columnNames.map(({ field, headerName }) => (
-    //             <TableCell key={field}>{headerName}</TableCell>
-    //           ))}
-    //         </TableRow>
-    //       </TableHead>
-    //       <TableBody>
-    //         {data.map((template: ProductTemplateFormModel, id: number) => (
-    //           <TableRow
-    //             key={id}
-    //             sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-    //           >
-    //             <TableCell>{template.name}</TableCell>
-    //             <TableCell>{template.supplier?.name ?? ""}</TableCell>
-    //             <TableCell>{template.length ? template.length : "-"}</TableCell>
-    //             <TableCell>{template.width ? template.width : "-"}</TableCell>
-    //             <TableCell>{template.height ? template.height : "-"}</TableCell>
-    //             <TableCell>{template.weight ? template.weight : "-"}</TableCell>
-    //             <TableCell>
-    //               <Button onClick={() => openUpdateModal(template)}>
-    //                 <EditIcon color="action" />
-    //               </Button>
-    //               <Button onClick={() => openDeleteModal(template.id)}>
-    //                 <DeleteIcon color="action" />
-    //               </Button>
-
-    //            <DeletionModal
-    //               open={openDelete}
-    //               handleClose={() => setOpenDelete(false)}
-    //               createRequest={deleteRequest}
-    //               idxs={[idx]}
-    //             />
-    //             <ProductForm
-    //               open={openUpdate}
-    //               handleClose={() => setOpenUpdate(false)}
-    //               createRequest={updateRequest}
-    //               initialValues={updatedTemplate}
-    //             />
-    //           </TableCell>
-    //         </TableRow>
-    //       ))} */}
-    //       <TableRow>
-    //         <TableCell>
-    //           <Button onClick={() => setOpenGeneralDelete(true)}>
-    //             <DeleteIcon color="action" />
-    //           </Button>
-
-    // <DeletionModal
-    //   open={openGeneralDelete}
-    //   handleClose={() => setOpenGeneralDelete(false)}
-    //   createRequest={deleteRequest}
-    //   idxs={checked}
-    //           />
-    //       </TableCell>
-    //       </TableRow> */}
-    //     </TableBody>
-    //   </Table>
-    // </TableContainer>
   );
 };
 

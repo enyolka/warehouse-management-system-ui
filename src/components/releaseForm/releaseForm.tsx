@@ -149,7 +149,7 @@ export function ReleaseForm({
                       </Button>
                     </Grid>
                     <Grid item className={style.submitButton}>
-                      {isDownloadButton && (
+                      {isDownloadButton && props.setNewIds.length > 0 && (
                         <Button
                           onClick={() => {
                             postDocuments(

@@ -8,9 +8,11 @@ import { ClientFormModel } from "../clientTable/types";
 type Props = {
   data: StorageModel[];
   type: number;
+  routes?: number[];
+  setRoutes?: (arr: number[]) => void;
 };
 
-function WarehouseMapDiv({ data, type }: Props) {
+function WarehouseMapDiv({ data, type, routes, setRoutes }: Props) {
   const { customersState } = useContext(StoreContext);
   const storages =
     data.find(({ storage_type }) => storage_type === type)?.storageplace_set ??
@@ -65,7 +67,9 @@ function WarehouseMapDiv({ data, type }: Props) {
                     <Button
                       variant="contained"
                       color={
-                        isEmpty > 0
+                        routes && routes[0] === storages[idx].x
+                          ? "success"
+                          : isEmpty > 0
                           ? isEmpty === 9
                             ? "error"
                             : "primary"

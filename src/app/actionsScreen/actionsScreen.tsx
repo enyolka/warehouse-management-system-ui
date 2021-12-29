@@ -19,7 +19,19 @@ function a11yProps(index: number) {
   };
 }
 
-function ActionsScreen(): React.ReactElement {
+type Props = {
+  routes: number[];
+  setRoutes: (arr: number[]) => void;
+  routesString: string;
+  setRoutesString: (value: string) => void;
+};
+
+function ActionsScreen({
+  routes,
+  setRoutes,
+  routesString,
+  setRoutesString,
+}: Props): React.ReactElement {
   const {
     productsDispatch,
     suppliersState,
@@ -94,7 +106,12 @@ function ActionsScreen(): React.ReactElement {
         />
       </div>
       <div className={styles.tab} hidden={1 !== value}>
-        <MoveProductForm />
+        <MoveProductForm
+          routes={routes}
+          setRoutes={setRoutes}
+          routesString={routesString}
+          setRoutesString={setRoutesString}
+        />
         {/* <Button variant="contained" to="/move" component={Link}>
           Move to MAIN
         </Button> */}

@@ -93,9 +93,24 @@ export function ProductFormFromTemplate({
       .required("Required"),
   });
 
+  async function createFromTemplateRequest(template_id: number, count: number) {
+    postFromTemplateProduct(
+      template_id,
+      count,
+      suppliersState.data,
+      productTemplatesState.data
+    )(productsDispatch);
+    getProducts(
+      suppliersState.data,
+      productTemplatesState.data
+    )(productsDispatch);
+    getStorages("main")(storageDispatch);
+    getLogisticUnits()(logisticUnitsDispatch);
+  }
+
   async function createSubmitRequest(units: ProductFromTemplateModel[]) {
     for (const unit of units) {
-      await createRequest(unit.template.id, unit.count);
+      await createFromTemplateRequest(unit.template.id, unit.count);
     }
   }
 
@@ -227,7 +242,7 @@ export function ProductFormFromTemplate({
               )}
             />
             <Grid item className={styles.submitButton}>
-              {isDownloadButton && (
+              {isDownloadButton && props.setNewIds.length > 0 && (
                 <Button
                   variant="contained"
                   color="secondary"

@@ -57,7 +57,7 @@ function ProductsScreen(): React.ReactElement {
   //   getProducts(extraData.suppliers, extraData.templates)(productsDispatch);
   // };
 
-  const createFromTemplateRequest = (template_id: number, count: number) => {
+  async function createFromTemplateRequest(template_id: number, count: number) {
     postFromTemplateProduct(
       template_id,
       count,
@@ -67,7 +67,7 @@ function ProductsScreen(): React.ReactElement {
     getProducts(extraData.suppliers, extraData.templates)(productsDispatch);
     getStorages("main")(storageDispatch);
     getLogisticUnits()(logisticUnitsDispatch);
-  };
+  }
 
   const updateRequest = (model: ProductFormModel) => {
     putProduct(

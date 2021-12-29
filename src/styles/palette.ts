@@ -4,4 +4,5 @@ export const colors = {
   violet: "#875da8",
   close: "#6a7880",
   error: "#b0020a",
+  order: '#fca903'
 }

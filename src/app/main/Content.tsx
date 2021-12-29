@@ -33,9 +33,9 @@ const Content = ({ value, setValue }: Props) => {
             render={() => <Dashboard value={value} setValue={setValue} />}
           />
         )}
-        {isUserLogged && (
+        {/* {isUserLogged && (
           <Route exact path="/actions" render={() => <ActionsScreen />} />
-        )}
+        )} */}
         {isUserLogged && localStorage["admin"] === "true" && (
           <Route exact path="/staff" render={() => <StaffScreen />} />
         )}

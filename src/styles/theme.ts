@@ -13,9 +13,15 @@ export const theme = createTheme({components:{
           "&Secondary" : {
             backgroundColor: colors.close
           },
+          "&Success" : {
+            backgroundColor: colors.order
+          },
           "&Error" : {
             backgroundColor: colors.error
           },
+          "&.Mui-disabled": {
+            backgroundColor: "rgba(0, 0, 0, 0.12)"
+          }
         },
       }
     }

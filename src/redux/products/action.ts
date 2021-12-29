@@ -74,18 +74,25 @@ export const postFromTemplateProduct = (template: number, count: number, supplie
 export const postProductsMovement = (products: number[], customer: number,templates: ProductTemplateFormModel[], suppliers: ClientFormModel[],  customers: ClientFormModel[]) => (dispatch: any) => {
   return request().post(
     `/storages/v1/products/move/release/`,
-    {products: products,
-    customer: customer},
+    {
+      products: products,
+      customer: customer,
+      routes: [],
+      routes_string: ""
+    },
      { headers: { Authorization: `Token ${localStorage.token}`}}
   ).then(
     resp => { 
-      console.log(resp)
       dispatch({
         type: "PRODUCT_UPDATE",        
         payload: translateToPostFormModel(resp.data.products, suppliers, templates, customers), 
       });
-    dispatch({type: "PRODUCT_SUCCESS"})
-    return translateToPostFormModel(resp.data.products, suppliers, templates, customers);
+      dispatch({type: "PRODUCT_SUCCESS"})
+      return {
+        products: translateToPostFormModel(resp.data.products, suppliers, templates, customers),
+        routes: resp.data.routes,
+        routesString: resp.data.routes_string
+      };
     })
   .catch((err) => {Promise.reject(err);       
     dispatch({

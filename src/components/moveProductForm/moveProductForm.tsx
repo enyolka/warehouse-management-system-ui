@@ -1,43 +1,26 @@
 import * as React from "react";
-import {
-  Box,
-  Button,
-  Grid,
-  TextField,
-  ToggleButton,
-  ToggleButtonGroup,
-} from "@mui/material";
-import { Field, Form, Formik, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import { Box, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import style from "./moveProductForm.module.css";
 import { StoreContext } from "../../redux/store/StoreProvider";
-import { Autocomplete } from "formik-material-ui";
 import { LogisticUnitModel } from "../../api/apiModel";
-import {
-  getLogisticUnits,
-  postLogisticUnitMovement,
-} from "../../redux/logisticUnit/action";
-import { useEffect, useMemo } from "react";
-import { getStorages } from "../../redux/storage/action";
-import { ClientFormModel } from "../clientTable/types";
+import { useMemo } from "react";
 import MoveToMain from "./moveToMain";
 import MoveToRelease from "./moveToRelease";
 
 type Props = {
-  // createRequest: (logistic_unit_id: number, storage_type: number) => void;
-  // initialValues?: LogisticUnitModel;
+  routes: number[];
+  setRoutes: (arr: number[]) => void;
+  routesString: string;
+  setRoutesString: (value: string) => void;
 };
 
-export function MoveProductForm({}: Props): React.ReactElement {
-  const {
-    logisticUnitsState,
-    logisticUnitsDispatch,
-    suppliersState,
-    productTemplatesState,
-    storageDispatch,
-    customersState,
-    customersDispatch,
-  } = React.useContext(StoreContext);
+export function MoveProductForm({
+  routes,
+  setRoutes,
+  routesString,
+  setRoutesString,
+}: Props): React.ReactElement {
+  const { logisticUnitsState, productsState } = React.useContext(StoreContext);
   const [currentType, setCurrentType] = React.useState<"ACCEPTED" | "IN_STOCK">(
     "ACCEPTED"
   );
@@ -49,15 +32,11 @@ export function MoveProductForm({}: Props): React.ReactElement {
     setCurrentType(newCurrentType);
   };
 
-  // useEffect(() => {
-  //   getLogisticUnits()(logisticUnitsDispatch);
-  // }, [logisticUnitsState.data]);
-
   const unitsOptions: LogisticUnitModel[] = useMemo(() => {
     return logisticUnitsState.data.filter(
       (option: LogisticUnitModel) => option.products[0]?.status === currentType
     );
-  }, [logisticUnitsState, currentType]);
+  }, [logisticUnitsState, currentType, productsState]);
 
   // const validationSchema = Yup.object({
   //   name: Yup.string()
@@ -80,7 +59,13 @@ export function MoveProductForm({}: Props): React.ReactElement {
       {currentType === "ACCEPTED" ? (
         <MoveToMain options={unitsOptions} />
       ) : (
-        <MoveToRelease options={unitsOptions} />
+        <MoveToRelease
+          options={unitsOptions}
+          routes={routes}
+          setRoutes={setRoutes}
+          routesString={routesString}
+          setRoutesString={setRoutesString}
+        />
       )}
       {/* <Formik<MovementModel>
         initialValues={initialModel}

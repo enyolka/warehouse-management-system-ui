@@ -1,13 +1,5 @@
 import * as React from "react";
-import {
-  Box,
-  Button,
-  Grid,
-  IconButton,
-  TextField,
-  ToggleButton,
-  ToggleButtonGroup,
-} from "@mui/material";
+import { Button, Grid, IconButton, TextField } from "@mui/material";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { MyInput } from "../input/inputComponents";
@@ -30,6 +22,10 @@ import { useEffect } from "react";
 
 type Props = {
   options: LogisticUnitModel[];
+  routes: number[];
+  setRoutes: (arr: number[]) => void;
+  routesString: string;
+  setRoutesString: (value: string) => void;
 };
 
 type ProductFromTemplateModel = {
@@ -42,9 +38,16 @@ type ProductFromTemplateModels = {
   customer: ClientFormModel;
 };
 
-export function MoveToRelease({ options }: Props): React.ReactElement {
+export function MoveToRelease({
+  options,
+  routes,
+  setRoutes,
+  routesString,
+  setRoutesString,
+}: Props): React.ReactElement {
   const {
     productsState,
+    logisticUnitsState,
     productsDispatch,
     logisticUnitsDispatch,
     suppliersState,
@@ -53,20 +56,32 @@ export function MoveToRelease({ options }: Props): React.ReactElement {
     customersState,
   } = React.useContext(StoreContext);
   const [unitsOptionsState, setUnitsOptionsState] = useState<any>([]);
+  const [modalOpen, setModalOpen] = useState(false);
 
-  // useEffect(() => {
-  //   getProducts(suppliersState, productTemplatesState)(productsDispatch);
-  // }, []);
+  const extraData: {
+    suppliers: ClientFormModel[];
+    templates: ProductFormModel[];
+  } = useMemo(
+    () => ({
+      suppliers: suppliersState.data,
+      templates: productTemplatesState.data,
+    }),
+    [suppliersState, productTemplatesState]
+  );
+
+  useEffect(() => {
+    getProducts(extraData.suppliers, extraData.templates)(productsDispatch);
+  }, []);
 
   const unitsOptions = useMemo(() => {
     const x = options
-      .flatMap(({ products }) => products)
-      .reduce((arr: any, product, idx) => {
+      .flatMap(({ products }: LogisticUnitModel) => products)
+      .reduce((arr: any, product: any, idx: number) => {
         return { ...arr, [product.name]: (arr[product.name] || 0) + 1 };
       }, {});
     setUnitsOptionsState(x);
     return x;
-  }, [options]);
+  }, [logisticUnitsState]);
 
   const templatesOptions: ProductTemplateFormModel[] = useMemo(() => {
     return productTemplatesState.data.filter(
@@ -83,7 +98,6 @@ export function MoveToRelease({ options }: Props): React.ReactElement {
     count: 0,
   };
 
-  console.log(productsState.data);
   const createRequest = (
     units: ProductFromTemplateModel[],
     customer: number
@@ -99,15 +113,22 @@ export function MoveToRelease({ options }: Props): React.ReactElement {
           .slice(0, unit.count)
       )
       .flat();
-
-    console.log(list);
     postProductsMovement(
       list,
       customer,
       productTemplatesState.data,
       suppliersState.data,
       customersState.data
+    )(productsDispatch).then((resp) => {
+      setModalOpen(true);
+      setRoutes(resp?.routes.flat() ?? []);
+      setRoutesString(resp?.routesString ?? "");
+    });
+    getProducts(
+      suppliersState.data,
+      productTemplatesState.data
     )(productsDispatch);
+    getLogisticUnits()(logisticUnitsDispatch);
   };
 
   // const validationSchema = Yup.object({
@@ -276,7 +297,11 @@ export function MoveToRelease({ options }: Props): React.ReactElement {
                   </ErrorMessage>
                 </Grid>
                 <Grid item className={styles.submitButton}>
-                  <Button type="submit" variant="contained">
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    disabled={!!(routes.length > 0)}
+                  >
                     Submit
                   </Button>
                 </Grid>

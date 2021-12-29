@@ -1,10 +1,8 @@
 import * as React from "react";
 import { Button, Grid } from "@mui/material";
-import { Link } from "react-router-dom";
 import { StoreContext } from "../../redux/store/StoreProvider";
 import {
   deleteSupplier,
-  getSuppliers,
   postSupplier,
   putSupplier,
 } from "../../redux/suppliers/action";
@@ -13,9 +11,7 @@ import { ClientFormModel } from "../../components/clientTable/types";
 import ClientForm from "../../components/clientTable/clientForm";
 import ClientTable from "../../components/clientTable/clientTable";
 
-type Props = {};
-
-function SuppliersScreen({}: Props): React.ReactElement {
+function SuppliersScreen(): React.ReactElement {
   const { suppliersState, suppliersDispatch } = useContext(StoreContext);
   const [open, setOpen] = useState(false);
   const disabled = !!(localStorage["admin"] === "false");
@@ -67,9 +63,6 @@ function SuppliersScreen({}: Props): React.ReactElement {
             Add supplier
           </Button>
         )}
-        {/* <Button variant="contained" to="/dashboard" component={Link}>
-          Dashboard
-        </Button> */}
         <ClientForm
           open={open}
           handleClose={() => setOpen(false)}

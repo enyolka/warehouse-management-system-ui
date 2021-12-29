@@ -94,7 +94,7 @@ export function MoveToRelease({
   }, [customersState]);
 
   const initialTemplateModel: ProductFromTemplateModel = {
-    template: productTemplatesState.data[0],
+    template: templatesOptions[0],
     count: 0,
   };
 
@@ -131,12 +131,6 @@ export function MoveToRelease({
     getLogisticUnits()(logisticUnitsDispatch);
   };
 
-  // const validationSchema = Yup.object({
-  //   name: Yup.string()
-  //     .max(30, "Must be 30 characters or less")
-  //     .required("Required"),
-  // });
-
   return (
     <Formik<ProductFromTemplateModels>
       initialValues={{
@@ -160,18 +154,36 @@ export function MoveToRelease({
           <FieldArray
             name="units"
             render={(arrayHelpers) => (
-              <Grid
-                container
-                spacing={2}
-                columns={1}
-                sx={{ maxWidth: "400px" }}
-              >
+              <Grid container spacing={2} columns={1} sx={{ width: "400px" }}>
+                <Grid item className={styles.field}>
+                  <Field
+                    label="Customert"
+                    name={`customer`}
+                    type="select"
+                    component={Autocomplete}
+                    // error={errors.units[index].template && touched[index].template}
+                    options={customersOptions}
+                    getOptionLabel={(option: ClientFormModel) =>
+                      `${option.name}`
+                    }
+                    renderInput={(params: any) => (
+                      <TextField
+                        {...params}
+                        label="Customer"
+                        variant="outlined"
+                      />
+                    )}
+                  />
+                  <ErrorMessage name={`customer`}>
+                    {(msg) => <div className={styles.errorMessage}>{msg}</div>}
+                  </ErrorMessage>
+                </Grid>
                 {values.units && values.units.length > 0 ? (
                   values.units.map((unit, index) => (
                     <>
                       <Grid item className={styles.field}>
                         <Field
-                          label="Template"
+                          label="Product"
                           name={`units[${index}].template`}
                           type="select"
                           component={Autocomplete}
@@ -183,7 +195,7 @@ export function MoveToRelease({
                           renderInput={(params: any) => (
                             <TextField
                               {...params}
-                              label="Template"
+                              label="Product"
                               variant="outlined"
                             />
                           )}
@@ -203,7 +215,9 @@ export function MoveToRelease({
                             InputProps={{
                               inputProps: {
                                 min: 0,
-                                max: unitsOptionsState[unit.template.name] ?? 0,
+                                max: unit?.template?.name
+                                  ? unitsOptionsState[unit.template.name]
+                                  : 0,
                               },
                             }}
                             component={MyInput}
@@ -273,29 +287,7 @@ export function MoveToRelease({
                     </Button>
                   </Grid>
                 )}
-                <Grid item className={styles.field}>
-                  <Field
-                    label="Customert"
-                    name={`customer`}
-                    type="select"
-                    component={Autocomplete}
-                    // error={errors.units[index].template && touched[index].template}
-                    options={customersOptions}
-                    getOptionLabel={(option: ClientFormModel) =>
-                      `${option.name}`
-                    }
-                    renderInput={(params: any) => (
-                      <TextField
-                        {...params}
-                        label="Customer"
-                        variant="outlined"
-                      />
-                    )}
-                  />
-                  <ErrorMessage name={`customer`}>
-                    {(msg) => <div className={styles.errorMessage}>{msg}</div>}
-                  </ErrorMessage>
-                </Grid>
+
                 <Grid item className={styles.submitButton}>
                   <Button
                     type="submit"

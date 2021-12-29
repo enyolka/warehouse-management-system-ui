@@ -117,7 +117,7 @@ function Header({ value, setValue }: Props): React.ReactElement {
       {isUserLogged && (
         <Button
           className={styles.btn__logout}
-          variant="text"
+          variant="outlined"
           onClick={handleLogout}
           to="/"
           component={Link}

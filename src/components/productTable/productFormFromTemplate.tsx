@@ -70,7 +70,8 @@ export const statuses: Array<StatusModel> = [
 export function ProductFormFromTemplate({
   open = false,
   createRequest,
-  ...props
+  newIds,
+  setNewIds,
 }: Props): React.ReactElement {
   const {
     productTemplatesState,
@@ -81,6 +82,7 @@ export function ProductFormFromTemplate({
     suppliersState,
   } = React.useContext(StoreContext);
   const [isDownloadButton, setIsDownloadButton] = useState(false);
+  // const [newIds, setNewIds] = React.useState<ProductFormModel[]>([]);
 
   const initialTemplateModel: ProductFromTemplateModel = {
     template: productTemplatesState.data[0],
@@ -100,18 +102,21 @@ export function ProductFormFromTemplate({
       suppliersState.data,
       productTemplatesState.data
     )(productsDispatch);
-    getProducts(
-      suppliersState.data,
-      productTemplatesState.data
-    )(productsDispatch);
-    getStorages("main")(storageDispatch);
-    getLogisticUnits()(logisticUnitsDispatch);
+    // .then((resp) => {
+    //   setNewIds((prev: any) => (resp ? [...prev, ...resp] : prev));
+    // });
   }
 
   async function createSubmitRequest(units: ProductFromTemplateModel[]) {
     for (const unit of units) {
       await createFromTemplateRequest(unit.template.id, unit.count);
     }
+    getProducts(
+      suppliersState.data,
+      productTemplatesState.data
+    )(productsDispatch);
+    getStorages("main")(storageDispatch);
+    getLogisticUnits()(logisticUnitsDispatch);
   }
 
   return (
@@ -127,10 +132,10 @@ export function ProductFormFromTemplate({
         validateOnChange={true}
         validateOnBlur={true}
         onSubmit={async ({ units }, { resetForm }) => {
-          // units.forEach(({ template, count }) =>
-          //   createRequest(template.id, count)
-          // );
-          await createSubmitRequest(units);
+          units.forEach(({ template, count }) =>
+            createRequest(template.id, count)
+          );
+          // await createSubmitRequest(units);
           setIsDownloadButton(true);
           // createRequest(template.id, count);
           // if (props.initialValues) handleClose(true);
@@ -233,51 +238,56 @@ export function ProductFormFromTemplate({
                       </Button>
                     </Grid>
                   )}
-                  <Grid item className={styles.submitButton}>
-                    <Button type="submit" variant="contained">
-                      Submit
-                    </Button>
+                  <Grid container item spacing={1} className={styles.fieldsRow}>
+                    <Grid item className={styles.submitButton}>
+                      <Button type="submit" variant="contained">
+                        Submit
+                      </Button>
+                    </Grid>
+
+                    <Grid item className={styles.submitButton}>
+                      {isDownloadButton && setNewIds.length >= 0 && (
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          onClick={() => {
+                            postDocuments(
+                              Array.from(
+                                new Set(
+                                  newIds.map(
+                                    ({ logistic_unit }) => logistic_unit!
+                                  )
+                                )
+                              ),
+                              suppliersState.data[0].id,
+                              "admission"
+                            )(logisticUnitsDispatch).then((resp) => {
+                              getLogisticUnits()(logisticUnitsDispatch).then(
+                                (resp) => {
+                                  const newWindow = window.open(
+                                    "http://localhost:8000" +
+                                      (resp
+                                        ? resp.find(
+                                            ({ id }: LogisticUnitModel) =>
+                                              id === newIds[0].logistic_unit
+                                          )?.products[0].admission_file_url!
+                                        : "")
+                                  );
+                                  if (newWindow) newWindow.opener = null;
+                                  setNewIds([]);
+                                }
+                              );
+                            });
+                          }}
+                        >
+                          GRN Document (PZ)
+                        </Button>
+                      )}
+                    </Grid>
                   </Grid>
                 </Grid>
               )}
             />
-            <Grid item className={styles.submitButton}>
-              {isDownloadButton && props.setNewIds.length > 0 && (
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={() => {
-                    postDocuments(
-                      Array.from(
-                        new Set(
-                          props.newIds.map(
-                            ({ logistic_unit }) => logistic_unit!
-                          )
-                        )
-                      ),
-                      4,
-                      "admission"
-                    )(logisticUnitsDispatch).then((resp) => {
-                      getLogisticUnits()(logisticUnitsDispatch).then((resp) => {
-                        const newWindow = window.open(
-                          "http://localhost:8000" +
-                            (resp
-                              ? resp.find(
-                                  ({ id }: LogisticUnitModel) =>
-                                    id === props.newIds[0].logistic_unit
-                                )?.products[0].admission_file_url!
-                              : "")
-                        );
-                        if (newWindow) newWindow.opener = null;
-                        props.setNewIds([]);
-                      });
-                    });
-                  }}
-                >
-                  GRN Document (PZ)
-                </Button>
-              )}
-            </Grid>
           </Form>
         )}
       </Formik>

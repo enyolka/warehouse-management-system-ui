@@ -45,10 +45,6 @@ function ActionsScreen({
     setValue(newValue);
   };
 
-  // const data = useMemo(() => {
-  //   return storageState.data;
-  // }, []);
-
   const createFromTemplateRequest = (template_id: number, count: number) => {
     postFromTemplateProduct(
       template_id,
@@ -112,9 +108,6 @@ function ActionsScreen({
           routesString={routesString}
           setRoutesString={setRoutesString}
         />
-        {/* <Button variant="contained" to="/move" component={Link}>
-          Move to MAIN
-        </Button> */}
       </div>
       <div className={styles.tab} hidden={2 !== value}>
         <ReleaseForm

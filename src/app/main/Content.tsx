@@ -1,7 +1,6 @@
 import { useContext, useMemo } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { StoreContext } from "../../redux/store/StoreProvider";
-import ActionsScreen from "../actionsScreen/actionsScreen";
 import CustomersScreen from "../customersScreen/customersScreen";
 import Dashboard from "../dashboard/dashboard";
 import ProductLibraryScreen from "../productLibraryScreen/productLibraryScreen";
@@ -33,9 +32,7 @@ const Content = ({ value, setValue }: Props) => {
             render={() => <Dashboard value={value} setValue={setValue} />}
           />
         )}
-        {/* {isUserLogged && (
-          <Route exact path="/actions" render={() => <ActionsScreen />} />
-        )} */}
+
         {isUserLogged && localStorage["admin"] === "true" && (
           <Route exact path="/staff" render={() => <StaffScreen />} />
         )}

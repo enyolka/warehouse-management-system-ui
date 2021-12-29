@@ -41,12 +41,7 @@ export function ClientForm({
   clientType,
   ...props
 }: Props): React.ReactElement {
-  const {
-    suppliersState,
-    customersState,
-    suppliersDispatch,
-    customersDispatch,
-  } = useContext(StoreContext);
+  const { suppliersState, customersState } = useContext(StoreContext);
   const initialModel: ClientFormModel = {
     id: 0,
     name: "",

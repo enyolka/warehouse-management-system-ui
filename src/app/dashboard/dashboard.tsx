@@ -59,8 +59,6 @@ function Dashboard({ value, setValue }: Props): React.ReactElement {
     getProducts(extraData.suppliers, extraData.templates)(productsDispatch);
   }, []);
 
-  const s = `Route for vehicle 0: \n 0 Load(0) -> 0 Load(0)\nDistance of the  route: 0m\nLoad of the route: 0\nRoute for vehicle 1:\n 0 Load(0) -  > 0 Load(0)\nDistance of the route: 0m\nLoad of the route:  0\nRoute for vehicle 2:\n 0 Load(0) -> 1 Load(4.00) -> 0 Load(4.00)\nDistance of the route: 24m\nLoad of the route: 4.00\n`;
-
   const data: StorageModel[] = useMemo(() => {
     return storageState.data;
   }, [storageState.data]);
@@ -107,9 +105,10 @@ function Dashboard({ value, setValue }: Props): React.ReactElement {
             {routes.length > 0 && (
               <Grid item>
                 <Button
-                  onClick={() =>
-                    setRoutes((prev) => (prev ? prev.slice(1) : []))
-                  }
+                  onClick={() => {
+                    setRoutes((prev) => (prev ? prev.slice(1) : []));
+                    console.log(routes);
+                  }}
                 >
                   Next stop
                 </Button>
@@ -117,59 +116,28 @@ function Dashboard({ value, setValue }: Props): React.ReactElement {
             )}
             {routes.length > 0 && (
               <Grid item>
-                <Button onClick={() => setRoutes([])}>Remove directions</Button>
+                <Button
+                  onClick={() => {
+                    setRoutes([]);
+                    setRoutesString("");
+                  }}
+                >
+                  Remove directions
+                </Button>
               </Grid>
             )}
           </Grid>
-          <Alert severity="info">
-            <AlertTitle>Info</AlertTitle>
-            <pre>{routesString}</pre>
-          </Alert>
+          {routesString.length > 0 && !(routes.length === 0) && (
+            <Alert severity="info" className={styles.alert}>
+              <AlertTitle>Info</AlertTitle>
+              <pre>{routesString}</pre>
+            </Alert>
+          )}
         </div>
         <div className={styles.tab} hidden={2 !== card}>
           <WarehouseMapDiv data={data} type={3} />
         </div>
       </Grid>
-      {/* <Grid item>
-        <Button
-          variant="contained"
-          to="/suppliers"
-          component={Link}
-          onClick={() => setValue(1)}
-        >
-          Suppliers
-        </Button>
-      </Grid>
-      <Grid item>
-        <Button
-          variant="contained"
-          to="/customers"
-          component={Link}
-          onClick={() => setValue(2)}
-        >
-          Customers
-        </Button>
-      </Grid>
-      <Grid item>
-        <Button
-          variant="contained"
-          to="/product-library"
-          component={Link}
-          onClick={() => setValue(3)}
-        >
-          Product Library
-        </Button>
-      </Grid>
-      <Grid item>
-        <Button
-          variant="contained"
-          to="/products"
-          component={Link}
-          onClick={() => setValue(4)}
-        >
-          Products
-        </Button> 
-      </Grid> */}
     </Grid>
   );
 }

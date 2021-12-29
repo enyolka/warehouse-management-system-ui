@@ -14,7 +14,7 @@ export default (history = null) => {
   }
 
   const request = axios.create({
-    baseURL: "http://localhost:8000/api",
+    baseURL: baseURL,
     headers,
     // validateStatus: false,
   });

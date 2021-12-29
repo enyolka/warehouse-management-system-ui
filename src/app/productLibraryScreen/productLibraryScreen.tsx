@@ -72,14 +72,6 @@ function ProductLibraryScreen(): React.ReactElement {
             Add product template
           </Button>
         )}
-        {/* <Button
-          variant="contained"
-          color="secondary"
-          to="/dashboard"
-          component={Link}
-        >
-          Dashboard
-        </Button> */}
         <ProductTemplateForm
           open={open}
           handleClose={() => setOpen(false)}

@@ -8,8 +8,9 @@
   /* justify-content: flex-end; */
   align-content: space-between;
   height: 5em;
-  padding: 0.5em 1em;
-  /* background-color: rgb(220, 234, 245); */
+  margin: 0 5em;
+  padding: 0.5em 2em;
+  background-color: #ffff;
 }
 
 .header__navigation {
@@ -19,7 +20,7 @@
 
 .btn__logout {
   margin-left: auto !important;
-  color: rgb(14, 122, 216);
+  margin-top: 1em !important;
   font-weight: 700;
 }
 
@@ -32,5 +33,7 @@
 }
 
 .main {
+  margin: 0em 5em;
   padding: 2em;
+  background-color: #ffff;
 }

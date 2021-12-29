@@ -7,9 +7,7 @@ import { StoreContext } from "../../redux/store/StoreProvider";
 import { useHistory } from "react-router-dom";
 import { login as loginAction } from "../../redux/login/action";
 
-type Props = {};
-
-function StartScreen({}: Props): React.ReactElement {
+function StartScreen(): React.ReactElement {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { loginDispatch } = React.useContext(StoreContext);

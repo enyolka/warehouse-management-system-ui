@@ -48,15 +48,6 @@ function ProductsScreen(): React.ReactElement {
     return productsState.data;
   }, [productsState]);
 
-  // const createRequest = (model: ProductFormModel) => {
-  //   postProduct(
-  //     model,
-  //     extraData.suppliers,
-  //     extraData.templates
-  //   )(productsDispatch);
-  //   getProducts(extraData.suppliers, extraData.templates)(productsDispatch);
-  // };
-
   async function createFromTemplateRequest(template_id: number, count: number) {
     postFromTemplateProduct(
       template_id,
@@ -103,13 +94,6 @@ function ProductsScreen(): React.ReactElement {
       </Grid>
 
       <Grid item>
-        {/* <Button
-          variant="contained"
-          onClick={() => setOpen(true)}
-          style={{ marginRight: 10 }}
-        >
-          Add single product
-        </Button> */}
         <Button
           variant="contained"
           onClick={() => setOpenFromTemplate(true)}
@@ -117,19 +101,7 @@ function ProductsScreen(): React.ReactElement {
         >
           Add products
         </Button>
-        {/* <Button
-          variant="contained"
-          color="secondary"
-          to="/dashboard"
-          component={Link}
-        >
-          Dashboard
-        </Button> */}
-        {/* <ProductForm
-          open={open}
-          handleClose={() => setOpen(false)}
-          createRequest={createRequest}
-        /> */}
+
         <Modal
           open={openFromTemplate}
           onClose={() => setOpenFromTemplate(false)}

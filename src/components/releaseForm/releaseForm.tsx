@@ -2,7 +2,7 @@ import * as React from "react";
 import { Box, Button, Grid, IconButton, TextField } from "@mui/material";
 import { Field, Form, Formik, ErrorMessage, FieldArray } from "formik";
 import * as Yup from "yup";
-import style from "./moveProductForm.module.css";
+import styles from "./moveProductForm.module.css";
 import { StoreContext } from "../../redux/store/StoreProvider";
 import { Autocomplete } from "formik-material-ui";
 import { LogisticUnitModel } from "../../api/apiModel";
@@ -15,7 +15,7 @@ import { getStorages } from "../../redux/storage/action";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { ProductFormModel } from "../productTable/types";
-import { useHistory } from "react-router-dom";
+import { ClientFormModel } from "../clientTable/types";
 
 type Props = {
   createRequest: (logistic_unit: number) => void;
@@ -23,7 +23,10 @@ type Props = {
   setNewIds: (newValue: ProductFormModel[]) => void;
 };
 
-type LogisticUnitModels = { units: LogisticUnitModel[] };
+type LogisticUnitModels = {
+  units: LogisticUnitModel[];
+  customer: ClientFormModel;
+};
 
 export function ReleaseForm({
   createRequest,
@@ -32,16 +35,13 @@ export function ReleaseForm({
   const {
     logisticUnitsState,
     logisticUnitsDispatch,
-    suppliersState,
-    productTemplatesState,
     storageDispatch,
     customersState,
-    customersDispatch,
   } = React.useContext(StoreContext);
 
-  // useEffect(() => {
-  //   getLogisticUnits()(logisticUnitsDispatch);
-  // }, [logisticUnitsState.data]);
+  const customersOptions: ClientFormModel[] = useMemo(() => {
+    return customersState.data;
+  }, [customersState]);
 
   const unitsOptions: LogisticUnitModel[] = useMemo(() => {
     return logisticUnitsState.data.filter(
@@ -50,17 +50,13 @@ export function ReleaseForm({
   }, [logisticUnitsState]);
   const [isDownloadButton, setIsDownloadButton] = useState(false);
 
-  // const validationSchema = Yup.object({
-  //   name: Yup.string()
-  //     .max(30, "Must be 30 characters or less")
-  //     .required("Required"),
-  // });
-  const history = useHistory();
-
   return (
     <Box>
       <Formik<LogisticUnitModels>
-        initialValues={{ units: [unitsOptions[0]] }}
+        initialValues={{
+          units: [unitsOptions[0]],
+          customer: customersOptions[0],
+        }}
         enableReinitialize={true}
         validateOnChange={true}
         validateOnBlur={true}
@@ -84,10 +80,34 @@ export function ReleaseForm({
                   direction="row"
                   sx={{ maxWidth: "500px" }}
                 >
+                  <Grid item className={styles.field}>
+                    <Field
+                      label="Customert"
+                      name={`customer`}
+                      type="select"
+                      component={Autocomplete}
+                      options={customersOptions}
+                      getOptionLabel={(option: ClientFormModel) =>
+                        `${option.name}`
+                      }
+                      renderInput={(params: any) => (
+                        <TextField
+                          {...params}
+                          label="Customer"
+                          variant="outlined"
+                        />
+                      )}
+                    />
+                    <ErrorMessage name={`customer`}>
+                      {(msg) => (
+                        <div className={styles.errorMessage}>{msg}</div>
+                      )}
+                    </ErrorMessage>
+                  </Grid>
                   {values.units && values.units.length > 0 ? (
                     values.units.map((unit, index) => (
                       <>
-                        <Grid item className={style.field}>
+                        <Grid item className={styles.field}>
                           <Field
                             label="Logistic unit"
                             name={`units[${index}]`}
@@ -95,7 +115,12 @@ export function ReleaseForm({
                             component={Autocomplete}
                             // multiple
                             // error={errors.unit && touched.logistic_unit}
-                            options={unitsOptions}
+                            options={unitsOptions.filter(
+                              (unit) =>
+                                unit.products[0] &&
+                                values.customer &&
+                                unit.products[0].customer === values.customer.id
+                            )}
                             getOptionLabel={(option: LogisticUnitModel) =>
                               `ID${option.id} : ${option.products[0]?.name} (${option.products.length})`
                             }
@@ -109,7 +134,7 @@ export function ReleaseForm({
                           />
                           <ErrorMessage name={`units[${index}]`}>
                             {(msg) => (
-                              <div className={style.errorMessage}>{msg}</div>
+                              <div className={styles.errorMessage}>{msg}</div>
                             )}
                           </ErrorMessage>
                         </Grid>
@@ -133,7 +158,7 @@ export function ReleaseForm({
                       </>
                     ))
                   ) : (
-                    <Grid item className={style.field}>
+                    <Grid item className={styles.field}>
                       <Button
                         variant="outlined"
                         onClick={() => arrayHelpers.push(unitsOptions[0])}
@@ -142,13 +167,13 @@ export function ReleaseForm({
                       </Button>
                     </Grid>
                   )}
-                  <Grid container item className={style.fieldsRow}>
-                    <Grid item className={style.submitButton}>
+                  <Grid container item spacing={1} className={styles.fieldsRow}>
+                    <Grid item className={styles.submitButton}>
                       <Button type="submit" variant="contained">
                         Release
                       </Button>
                     </Grid>
-                    <Grid item className={style.submitButton}>
+                    <Grid item className={styles.submitButton}>
                       {isDownloadButton && props.setNewIds.length > 0 && (
                         <Button
                           onClick={() => {
@@ -160,7 +185,7 @@ export function ReleaseForm({
                                   )
                                 )
                               ),
-                              4,
+                              customersState.data[0].id,
                               "release"
                             )(logisticUnitsDispatch).then((resp) => {
                               getLogisticUnits()(logisticUnitsDispatch).then(
@@ -186,15 +211,6 @@ export function ReleaseForm({
                         </Button>
                       )}
                     </Grid>
-                    {/* <Button
-                      variant="contained"
-                      color="secondary"
-                      onClick={() => history.go(0)}
-                      // component={Link}
-                      // to="/dashboard"
-                    >
-                      New order
-                    </Button> */}
                   </Grid>
                 </Grid>
               )}

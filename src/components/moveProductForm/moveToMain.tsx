@@ -1,15 +1,8 @@
 import * as React from "react";
-import {
-  Box,
-  Button,
-  Grid,
-  TextField,
-  ToggleButton,
-  ToggleButtonGroup,
-} from "@mui/material";
+import { Button, Grid, TextField } from "@mui/material";
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import style from "./moveProductForm.module.css";
+import styles from "./moveProductForm.module.css";
 import { StoreContext } from "../../redux/store/StoreProvider";
 import { Autocomplete } from "formik-material-ui";
 import { LogisticUnitModel } from "../../api/apiModel";
@@ -17,9 +10,7 @@ import {
   getLogisticUnits,
   postLogisticUnitMovement,
 } from "../../redux/logisticUnit/action";
-import { useMemo } from "react";
 import { getStorages } from "../../redux/storage/action";
-import { ClientFormModel } from "../clientTable/types";
 
 type Props = {
   options: LogisticUnitModel[];
@@ -93,8 +84,8 @@ export function MoveToMain({ options }: Props): React.ReactElement {
     >
       {({ errors, touched, values }) => (
         <Form>
-          <Grid container spacing={2} columns={1} sx={{ maxWidth: "480px" }}>
-            <Grid item className={style.field}>
+          <Grid container spacing={2} columns={1} sx={{ width: "400px" }}>
+            <Grid item className={styles.field}>
               <Field
                 label="Logistic unit"
                 name="logistic_unit"
@@ -114,10 +105,10 @@ export function MoveToMain({ options }: Props): React.ReactElement {
                 )}
               />
               <ErrorMessage name="logistic_unit">
-                {(msg) => <div className={style.errorMessage}>{msg}</div>}
+                {(msg) => <div className={styles.errorMessage}>{msg}</div>}
               </ErrorMessage>
             </Grid>
-            <Grid item className={style.submitButton}>
+            <Grid item className={styles.submitButton}>
               <Button type="submit" variant="contained">
                 Move
               </Button>

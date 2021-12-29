@@ -27,7 +27,6 @@ const ClientTable = ({
   const [openGeneralDelete, setOpenGeneralDelete] = useState(false);
   const [idx, setIdx] = useState<number>(0);
   const [updatedCustomer, setUpdatedCustomer] = useState<ClientFormModel>();
-  const disabled = !!(localStorage["admin"] === "false");
 
   const openDeleteModal = (idx: number) => {
     setOpenDelete(true);
@@ -180,73 +179,7 @@ const ClientTable = ({
         clientType={clientType}
       />
     </div>
-    // <TableContainer component={Paper}>
-    //   <Table size="medium" aria-label="Client table">
-    //     <TableHead>
-    //       <TableRow>
-    //         {columnNames.map(({ field, headerName }) => (
-    //           <TableCell key={field}>{headerName}</TableCell>
-    //         ))}
-    //       </TableRow>
-    //     </TableHead>
-    //     <TableBody>
-    //       {data.map((customer: ClientFormModel, id: number) => (
-    //         <TableRow
-    //           key={id}
-    //           sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-    //         >
-    //           <TableCell component="th" scope="row">
-    //             {customer.name}
-    //           </TableCell>
-    //           <TableCell>{customer.phone ?? "-"}</TableCell>
-    //           <TableCell>{customer.email ?? "-"}</TableCell>
-    //           <TableCell>{customer.city}</TableCell>
-    //           <TableCell>{customer.zipCode}</TableCell>
-    //           <TableCell>{customer.streetName}</TableCell>
-    //           <TableCell>{customer.streetNumber}</TableCell>
-    //           <TableCell>
-    //             <Button
-    //               onClick={() => openUpdateModal(customer)}
-    //               disabled={disabled}
-    //             >
-    //               <EditIcon />
-    //             </Button>
-    //             <Button
-    //               onClick={() => openDeleteModal(customer.id)}
-    //               disabled={disabled}
-    //             >
-    //               <DeleteIcon />
-    //             </Button>
-
-    // <DeletionModal
-    //   open={openDelete}
-    //   handleClose={() => setOpenDelete(false)}
-    //   createRequest={deleteRequest}
-    //   idxs={[idx]}
-    // />
-    // <ClientForm
-    //   open={openUpdate}
-    //   handleClose={() => setOpenUpdate(false)}
-    //   createRequest={updateRequest}
-    //   initialValues={updatedCustomer}
-    // />
-    //           </TableCell>
-    //         </TableRow>
-    //       ))}
-    //     </TableBody>
-    //   </Table>
-    // </TableContainer>
   );
 };
-
-// const columnNames = [
-//   { field: "name", headerName: "Name", width: 120 },
-//   { field: "phone", headerName: "Phone", width: 120 },
-//   { field: "email", headerName: "E-mail", width: 150 },
-//   { field: "city", headerName: "City", width: 100 },
-//   { field: "zipCode", headerName: "Zip code", width: 100 },
-//   { field: "streetName", headerName: "Street Name", width: 120 },
-//   { field: "streetNumber", headerName: "Street Number", width: 80 },
-// ];
 
 export default ClientTable;

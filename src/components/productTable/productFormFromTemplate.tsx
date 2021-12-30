@@ -135,10 +135,7 @@ export function ProductFormFromTemplate({
           units.forEach(({ template, count }) =>
             createRequest(template.id, count)
           );
-          // await createSubmitRequest(units);
           setIsDownloadButton(true);
-          // createRequest(template.id, count);
-          // if (props.initialValues) handleClose(true);
           resetForm({});
           getLogisticUnits()(logisticUnitsDispatch);
           getStorages("admission")(storageDispatch);

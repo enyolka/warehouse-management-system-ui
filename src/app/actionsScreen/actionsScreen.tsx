@@ -53,11 +53,11 @@ function ActionsScreen({
       productTemplatesState.data
     )(productsDispatch).then((resp) => {
       setNewIds((prev) => (resp ? [...prev, ...resp] : prev));
+      getProducts(
+        suppliersState.data,
+        productTemplatesState.data
+      )(productsDispatch);
     });
-    getProducts(
-      suppliersState.data,
-      productTemplatesState.data
-    )(productsDispatch);
   };
 
   const releaseRequest = (logistic_unit: number) => {

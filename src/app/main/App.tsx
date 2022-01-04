@@ -16,7 +16,7 @@ function App() {
         <Router>
           <Box className={styles.root}>
             <Header value={value} setValue={setValue} />
-            <Content value={value} setValue={setValue} />
+            <Content />
           </Box>
         </Router>
       </ThemeProvider>

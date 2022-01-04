@@ -1,19 +1,9 @@
-import {
-  Autocomplete,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  TextField,
-} from "@mui/material";
+import { FormControlLabel, Radio, RadioGroup, TextField } from "@mui/material";
 import { FieldInputProps, FieldMetaProps, FormikProps } from "formik";
 import { fieldToTextField } from "formik-material-ui";
 import { useState } from "react";
 import { ClientFormModel } from "../clientTable/types";
-import {
-  ProductFormModel,
-  ProductTemplateFormModel,
-  StatusModel,
-} from "../productTable/types";
+import { ProductTemplateFormModel, StatusModel } from "../productTable/types";
 
 export interface FieldProps<V = any> {
   field: FieldInputProps<V>;
@@ -34,33 +24,6 @@ const MyInput = ({ field, form, ...props }: FieldProps) => {
       {...field}
       {...props}
     />
-  );
-};
-
-const MyAutoComplete = ({
-  options = [],
-  isError = false,
-  ...props
-}: FieldProps) => {
-  const {
-    form: { setTouched, setFieldValue },
-  } = props;
-  const { ...field } = fieldToTextField(props);
-  const { name } = field;
-
-  return (
-    <p>oj</p>
-    // <Autocomplete
-    //   {...props}
-    //   // options={options}
-    //   // getOptionLabel={props.getOptionLabel}
-    //   onChange={(_, newValue: ClientFormModel | ProductFormModel | any) => {
-    //     setFieldValue(name!, newValue);
-    //   }}
-    //   renderInput={(params) => (
-    //     <TextField {...params} {...field} label={field.label} />
-    //   )}
-    // />
   );
 };
 
@@ -94,4 +57,4 @@ const MyRadioGroup = ({
   );
 };
 
-export { MyAutoComplete, MyInput, MyRadioGroup };
+export { MyInput, MyRadioGroup };

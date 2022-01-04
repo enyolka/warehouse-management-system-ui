@@ -4,7 +4,6 @@ import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { MyInput } from "../input/inputComponents";
 import { Field, Form, Formik, ErrorMessage, FieldArray } from "formik";
-import * as Yup from "yup";
 import styles from "./moveProductForm.module.css";
 import { StoreContext } from "../../redux/store/StoreProvider";
 import { Autocomplete } from "formik-material-ui";
@@ -56,7 +55,6 @@ export function MoveToRelease({
     customersState,
   } = React.useContext(StoreContext);
   const [unitsOptionsState, setUnitsOptionsState] = useState<any>([]);
-  const [modalOpen, setModalOpen] = useState(false);
 
   const extraData: {
     suppliers: ClientFormModel[];
@@ -120,7 +118,6 @@ export function MoveToRelease({
       suppliersState.data,
       customersState.data
     )(productsDispatch).then((resp) => {
-      setModalOpen(true);
       setRoutes(resp?.routes.flat() ?? []);
       setRoutesString(resp?.routesString ?? "");
     });
@@ -149,7 +146,7 @@ export function MoveToRelease({
         getStorages("release")(storageDispatch);
       }}
     >
-      {({ errors, touched, values }) => (
+      {({ values }) => (
         <Form>
           <FieldArray
             name="units"
@@ -187,7 +184,6 @@ export function MoveToRelease({
                           name={`units[${index}].template`}
                           type="select"
                           component={Autocomplete}
-                          // error={errors.units[index].template && touched[index].template}
                           options={templatesOptions}
                           getOptionLabel={(option: ProductTemplateFormModel) =>
                             `${option.name} (${option.supplier.name})`
@@ -221,7 +217,6 @@ export function MoveToRelease({
                               },
                             }}
                             component={MyInput}
-                            // error={errors.count && touched.count}
                           />
                           <ErrorMessage name={`units[${index}].count`}>
                             {(msg) => (
@@ -235,7 +230,6 @@ export function MoveToRelease({
                           sx={{ width: "3em" }}
                         >
                           <IconButton
-                            // variant
                             onClick={() => {
                               setUnitsOptionsState((prevState: any) => {
                                 return {
@@ -246,7 +240,6 @@ export function MoveToRelease({
                               });
                               return arrayHelpers.remove(index);
                             }}
-                            // setUnitsOptionsState(prev => prev.find(unit => unit) )}} // remove a friend from the list
                           >
                             <RemoveCircleOutlineIcon />
                           </IconButton>
@@ -269,7 +262,7 @@ export function MoveToRelease({
                                 index,
                                 initialTemplateModel
                               );
-                            }} // insert an empty string at a position
+                            }}
                           >
                             <AddCircleOutlineIcon />
                           </IconButton>

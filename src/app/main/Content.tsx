@@ -10,12 +10,7 @@ import StartScreen from "../startScreen/startScreen";
 import SuppliersScreen from "../suppliersScreen/suppliersScreen";
 import styles from "./App.module.css";
 
-type Props = {
-  value: number;
-  setValue: (newValue: number) => void;
-};
-
-const Content = ({ value, setValue }: Props) => {
+const Content = () => {
   const { loginState } = useContext(StoreContext);
   const isUserLogged = useMemo(() => Boolean(localStorage.token), [loginState]);
 
@@ -26,11 +21,7 @@ const Content = ({ value, setValue }: Props) => {
           {isUserLogged ? <Redirect to="/dashboard" /> : <StartScreen />}
         </Route>
         {isUserLogged && (
-          <Route
-            exact
-            path="/dashboard"
-            render={() => <Dashboard value={value} setValue={setValue} />}
-          />
+          <Route exact path="/dashboard" render={() => <Dashboard />} />
         )}
 
         {isUserLogged && localStorage["admin"] === "true" && (

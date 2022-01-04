@@ -25,6 +25,7 @@ import {
   getProducts,
   postFromTemplateProduct,
 } from "../../redux/products/action";
+import { ClientFormModel } from "../clientTable/types";
 
 type Props = {
   open?: boolean;
@@ -42,6 +43,7 @@ type ProductFromTemplateModel = {
 
 type ProductFromTemplateModels = {
   units: ProductFromTemplateModel[];
+  supplier: ClientFormModel;
 };
 
 export const statuses: Array<StatusModel> = [
@@ -77,23 +79,16 @@ export function ProductFormFromTemplate({
     productTemplatesState,
     storageDispatch,
     logisticUnitsDispatch,
-    productsState,
     productsDispatch,
     suppliersState,
   } = React.useContext(StoreContext);
   const [isDownloadButton, setIsDownloadButton] = useState(false);
-  // const [newIds, setNewIds] = React.useState<ProductFormModel[]>([]);
+  const [supplierId, setSupplierId] = useState(0);
 
   const initialTemplateModel: ProductFromTemplateModel = {
     template: productTemplatesState.data[0],
     count: 0,
   };
-
-  const validationSchema = Yup.object({
-    name: Yup.string()
-      .max(30, "Must be 30 characters or less")
-      .required("Required"),
-  });
 
   async function createFromTemplateRequest(template_id: number, count: number) {
     postFromTemplateProduct(
@@ -102,9 +97,6 @@ export function ProductFormFromTemplate({
       suppliersState.data,
       productTemplatesState.data
     )(productsDispatch);
-    // .then((resp) => {
-    //   setNewIds((prev: any) => (resp ? [...prev, ...resp] : prev));
-    // });
   }
 
   async function createSubmitRequest(units: ProductFromTemplateModel[]) {
@@ -127,7 +119,10 @@ export function ProductFormFromTemplate({
       )}
     >
       <Formik<ProductFromTemplateModels>
-        initialValues={{ units: [initialTemplateModel] }}
+        initialValues={{
+          units: [initialTemplateModel],
+          supplier: suppliersState.data[0],
+        }}
         enableReinitialize={true}
         validateOnChange={true}
         validateOnBlur={true}
@@ -135,14 +130,14 @@ export function ProductFormFromTemplate({
           units.forEach(({ template, count }) =>
             createRequest(template.id, count)
           );
+          setSupplierId(units[0].template.supplier.id);
           setIsDownloadButton(true);
           resetForm({});
           getLogisticUnits()(logisticUnitsDispatch);
           getStorages("admission")(storageDispatch);
         }}
-        //validationSchema={validationSchema}
       >
-        {({ errors, touched, values }) => (
+        {({ values }) => (
           <Form>
             <FieldArray
               name="units"
@@ -153,6 +148,30 @@ export function ProductFormFromTemplate({
                   columns={1}
                   sx={{ maxWidth: "500px" }}
                 >
+                  <Grid item className={styles.field}>
+                    <Field
+                      label="Supplier"
+                      name={`supplier`}
+                      type="select"
+                      component={Autocomplete}
+                      options={suppliersState.data}
+                      getOptionLabel={(option: ClientFormModel) =>
+                        `${option.name}`
+                      }
+                      renderInput={(params: any) => (
+                        <TextField
+                          {...params}
+                          label="Supplier"
+                          variant="outlined"
+                        />
+                      )}
+                    />
+                    <ErrorMessage name={`supplier`}>
+                      {(msg) => (
+                        <div className={styles.errorMessage}>{msg}</div>
+                      )}
+                    </ErrorMessage>
+                  </Grid>
                   {values.units && values.units.length > 0 ? (
                     values.units.map((unit, index) => (
                       <>
@@ -162,8 +181,10 @@ export function ProductFormFromTemplate({
                             name={`units[${index}].template`}
                             type="select"
                             component={Autocomplete}
-                            // error={errors.units[index].template && touched[index].template}
-                            options={productTemplatesState.data}
+                            options={productTemplatesState.data.filter(
+                              (unit: ProductTemplateFormModel) =>
+                                unit.supplier.id === values.supplier.id
+                            )}
                             getOptionLabel={(
                               option: ProductTemplateFormModel
                             ) => `${option.name} (${option.supplier.name})`}
@@ -189,7 +210,6 @@ export function ProductFormFromTemplate({
                               type="number"
                               InputProps={{ inputProps: { min: 0 } }}
                               component={MyInput}
-                              // error={errors.count && touched.count}
                             />
                             <ErrorMessage name={`units[${index}].count`}>
                               {(msg) => (
@@ -203,8 +223,7 @@ export function ProductFormFromTemplate({
                             sx={{ width: "3em" }}
                           >
                             <IconButton
-                              // variant
-                              onClick={() => arrayHelpers.remove(index)} // remove a friend from the list
+                              onClick={() => arrayHelpers.remove(index)}
                             >
                               <RemoveCircleOutlineIcon />
                             </IconButton>
@@ -217,7 +236,7 @@ export function ProductFormFromTemplate({
                             <IconButton
                               onClick={() =>
                                 arrayHelpers.insert(index, initialTemplateModel)
-                              } // insert an empty string at a position
+                              }
                             >
                               <AddCircleOutlineIcon />
                             </IconButton>
@@ -256,7 +275,7 @@ export function ProductFormFromTemplate({
                                   )
                                 )
                               ),
-                              suppliersState.data[0].id,
+                              supplierId,
                               "admission"
                             )(logisticUnitsDispatch).then((resp) => {
                               getLogisticUnits()(logisticUnitsDispatch).then(

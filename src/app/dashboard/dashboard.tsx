@@ -12,11 +12,6 @@ import { ClientFormModel } from "../../components/clientTable/types";
 import { ProductFormModel } from "../../components/productTable/types";
 import { getProducts } from "../../redux/products/action";
 
-type Props = {
-  value: number;
-  setValue: (newValue: number) => void;
-};
-
 function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
@@ -24,11 +19,10 @@ function a11yProps(index: number) {
   };
 }
 
-function Dashboard({ value, setValue }: Props): React.ReactElement {
+function Dashboard(): React.ReactElement {
   const {
     storageState,
     storageDispatch,
-    productsState,
     productsDispatch,
     suppliersState,
     productTemplatesState,

@@ -36,6 +36,7 @@ export function ProductForm({
     width: 0,
     height: 0,
     weight: 0,
+    unit: productTemplatesState.data[0].unit,
     status: statuses[0].value,
     acceptance_at: new Date().toJSON(),
     logistic_unit: 0,

@@ -32,6 +32,7 @@ type Props = {
   createRequest: (model: ClientFormModel) => void;
   initialValues?: ClientFormModel;
   clientType: "supplier" | "customer";
+  isEdited?: boolean;
 };
 
 export function ClientForm({
@@ -39,6 +40,7 @@ export function ClientForm({
   handleClose,
   createRequest,
   clientType,
+  isEdited = false,
   ...props
 }: Props): React.ReactElement {
   const { suppliersState, customersState } = useContext(StoreContext);
@@ -78,7 +80,7 @@ export function ClientForm({
       .max(10, "Must be 10 characters")
       .min(10, "Must be 10 characters")
       // .matches(nipRegExp, "NIP is not valid")
-      .test("Unique", "Nip needs te be unique", (value: any) => {
+      .test("Unique", "NIP needs te be unique", (value: any) => {
         return value ? duplicateNameCheck(value) : false;
       })
       .required("Required"),
@@ -90,9 +92,7 @@ export function ClientForm({
     streetNumber: Yup.string()
       .matches(streetRegExp, "Street number is not valid")
       .required("Required"),
-    // zipCode: Yup.string()
-    //   .matches(zipCodeRegExp, "Zip code is not valid. Must be 5 numbers")
-    //   .required("Required"),
+    zipCode: Yup.string().required("Required"),
     city: Yup.string()
       .max(20, "Must be 20 characters or less")
       .required("Required"),
@@ -145,6 +145,7 @@ export function ClientForm({
                     }}
                     component={MyInput}
                     error={errors.nip && touched.nip}
+                    disabled={isEdited}
                   />
                   <ErrorMessage name="nip">
                     {(msg) => <div className={styles.errorMessage}>{msg}</div>}

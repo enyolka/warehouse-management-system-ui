@@ -4,7 +4,7 @@ import { Field, Form, Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import styles from "../clientTable/clientTable.module.css";
 import classNames from "classnames";
-import { ProductTemplateFormModel } from "./types";
+import { ProductTemplateFormModel, UnitsModel } from "./types";
 import { StoreContext } from "../../redux/store/StoreProvider";
 import { ClientFormModel } from "../clientTable/types";
 import { Autocomplete } from "formik-material-ui";
@@ -34,6 +34,7 @@ export function ProductTemplateForm({
     height: 0,
     weight: 0,
     price: 0,
+    unit: "pc",
   };
 
   const validationSchema = Yup.object({
@@ -82,7 +83,11 @@ export function ProductTemplateForm({
                 </Grid>
 
                 <Grid item className={styles.fieldsRow}>
-                  <Grid item className={styles.field}>
+                  <Grid
+                    item
+                    className={styles.field}
+                    style={{ marginRight: "0.5em" }}
+                  >
                     <Field
                       label="Supplier"
                       name="supplier"
@@ -105,7 +110,7 @@ export function ProductTemplateForm({
                       )}
                     </ErrorMessage>
                   </Grid>
-                  <Grid item className={styles.field}>
+                  <Grid item className={styles.field} style={{ width: "60%" }}>
                     <Field
                       label="Price"
                       name="price"
@@ -119,9 +124,45 @@ export function ProductTemplateForm({
                       )}
                     </ErrorMessage>
                   </Grid>
+                  <Grid item className={styles.field} style={{ width: "40%" }}>
+                    <Field
+                      label="Unit"
+                      name="unit"
+                      type="select"
+                      component={Autocomplete}
+                      error={errors.unit && touched.unit}
+                      options={["pc", "kg", "pk"]}
+                      renderInput={(params: any) => (
+                        <TextField
+                          {...params}
+                          label="Unit"
+                          variant="outlined"
+                        />
+                      )}
+                    />
+                    <ErrorMessage name="supplier">
+                      {(msg) => (
+                        <div className={styles.errorMessage}>{msg}</div>
+                      )}
+                    </ErrorMessage>
+                  </Grid>
                 </Grid>
 
                 <Grid item className={styles.fieldsRow}>
+                  <Grid item className={styles.field}>
+                    <Field
+                      label="Weight"
+                      name="weight"
+                      type="number"
+                      component={MyInput}
+                      error={errors.weight && touched.weight}
+                    />
+                    <ErrorMessage name="weight">
+                      {(msg) => (
+                        <div className={styles.errorMessage}>{msg}</div>
+                      )}
+                    </ErrorMessage>
+                  </Grid>
                   <Grid item className={styles.field}>
                     <Field
                       label="Length"
@@ -159,20 +200,6 @@ export function ProductTemplateForm({
                       error={errors.height && touched.height}
                     />
                     <ErrorMessage name="height">
-                      {(msg) => (
-                        <div className={styles.errorMessage}>{msg}</div>
-                      )}
-                    </ErrorMessage>
-                  </Grid>
-                  <Grid item className={styles.field}>
-                    <Field
-                      label="Weight"
-                      name="weight"
-                      type="number"
-                      component={MyInput}
-                      error={errors.weight && touched.weight}
-                    />
-                    <ErrorMessage name="weight">
                       {(msg) => (
                         <div className={styles.errorMessage}>{msg}</div>
                       )}

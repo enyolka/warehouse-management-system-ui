@@ -1,4 +1,5 @@
 export type Status = "ACCEPTED" | "IN_STOCK" | "PACKED" | "SHIPPED";
+export type Unit = "kg" | "pc" | "pk"
 
 export type UserModel = {
   id: number;
@@ -28,6 +29,7 @@ export type ProductTemplateModel= {
   height?: number;
   weight: number;
   price?: number;
+  unit: Unit;
 };
 
 export type ProductModel = {
@@ -42,6 +44,7 @@ export type ProductModel = {
   height?: number;
   weight: number;
   price?: number;
+  unit: Unit;
   status?: Status;
   logistic_unit?: number;
   acceptance_at: string;

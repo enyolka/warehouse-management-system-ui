@@ -177,6 +177,7 @@ const ClientTable = ({
         createRequest={updateRequest}
         initialValues={updatedCustomer}
         clientType={clientType}
+        isEdited={true}
       />
     </div>
   );

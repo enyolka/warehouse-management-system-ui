@@ -39,7 +39,10 @@ const ProductTemplateTable = ({
   };
 
   const rows: GridRowsProp = data.map(
-    ({ id, name, supplier, length, width, height, weight, price }, row_id) => ({
+    (
+      { id, name, supplier, length, width, height, weight, price, unit },
+      row_id
+    ) => ({
       row_id: row_id,
       id: id,
       name: name,
@@ -49,6 +52,7 @@ const ProductTemplateTable = ({
       height: height,
       weight: weight,
       price: price,
+      unit: unit,
     })
   );
 
@@ -98,6 +102,13 @@ const ProductTemplateTable = ({
     {
       field: "price",
       headerName: "Price",
+      width: 100,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "unit",
+      headerName: "Unit",
       width: 100,
       headerAlign: "center",
       align: "center",

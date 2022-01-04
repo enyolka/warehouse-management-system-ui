@@ -22,6 +22,7 @@
   margin-left: auto !important;
   margin-top: 1em !important;
   font-weight: 700;
+  width: 10em;
 }
 
 .btn__logout:hover {

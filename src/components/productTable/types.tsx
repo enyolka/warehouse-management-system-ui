@@ -1,4 +1,4 @@
-import { Status } from "../../api/apiModel";
+import { Status, Unit } from "../../api/apiModel";
 import { ClientFormModel } from "../clientTable/types";
 import { UserFormModel } from "../staffTable/types";
 
@@ -11,6 +11,11 @@ type Color =
   | "success"
   | "warning"
   | undefined;
+
+export type UnitsModel = {
+  label: string;
+  value: Unit;
+};
 
 export type StatusModel = {
   label: string;
@@ -27,6 +32,7 @@ export type ProductTemplateFormModel = {
   height?: number;
   weight: number;
   price?: number;
+  unit: Unit;
 };
 
 export type ProductFormModel = {
@@ -42,6 +48,7 @@ export type ProductFormModel = {
   weight: number;
   price?: number;
   status?: Status;
+  unit: Unit;
   logistic_unit?: number;
   acceptance_at: string;
   admission_file_url?: string;

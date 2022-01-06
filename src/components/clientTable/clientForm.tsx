@@ -65,10 +65,12 @@ export function ClientForm({
   const duplicateNameCheck = (value: string | undefined) => {
     const list =
       clientType === "customer" ? customersState.data : suppliersState.data;
-    for (var i = 0; i < list.length; i++)
-      if (value === list[i].nip) {
-        return false;
-      }
+    if (!isEdited) {
+      for (var i = 0; i < list.length; i++)
+        if (value === list[i].nip) {
+          return false;
+        }
+    }
     return true;
   };
 

@@ -128,21 +128,21 @@ const ProductTemplateTable = ({
       headerAlign: "center",
       align: "center",
     },
-    {
-      field: "delete",
-      headerName: "",
-      width: 90,
-      renderCell: (params: any) => (
-        <Button
-          onClick={() => openDeleteModal(params.row.row_id)}
-          disabled={disabled}
-        >
-          <DeleteIcon />
-        </Button>
-      ),
-      headerAlign: "center",
-      align: "center",
-    },
+    // {
+    //   field: "delete",
+    //   headerName: "",
+    //   width: 90,
+    //   renderCell: (params: any) => (
+    //     <Button
+    //       onClick={() => openDeleteModal(params.row.row_id)}
+    //       disabled={disabled}
+    //     >
+    //       <DeleteIcon />
+    //     </Button>
+    //   ),
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
   ];
 
   return (

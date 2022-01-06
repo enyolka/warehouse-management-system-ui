@@ -30,6 +30,8 @@ type LogisticUnitModels = {
 
 export function ReleaseForm({
   createRequest,
+  newIds,
+  setNewIds,
   ...props
 }: Props): React.ReactElement {
   const {
@@ -174,13 +176,15 @@ export function ReleaseForm({
                       </Button>
                     </Grid>
                     <Grid item className={styles.submitButton}>
-                      {isDownloadButton && props.setNewIds.length > 0 && (
+                      {isDownloadButton && newIds.length > 0 && (
                         <Button
+                          variant="contained"
+                          color="secondary"
                           onClick={() => {
                             postDocuments(
                               Array.from(
                                 new Set(
-                                  props.newIds.map(
+                                  newIds.map(
                                     ({ logistic_unit }) => logistic_unit!
                                   )
                                 )
@@ -195,19 +199,31 @@ export function ReleaseForm({
                                       (resp
                                         ? resp.find(
                                             ({ id }: LogisticUnitModel) =>
-                                              id ===
-                                              props.newIds[0].logistic_unit
+                                              id === newIds[0].logistic_unit
                                           )?.products[0].release_file_url!
                                         : "")
                                   );
                                   if (newWindow) newWindow.opener = null;
-                                  props.setNewIds([]);
                                 }
                               );
                             });
                           }}
                         >
                           Goods Issued Note (WZ)
+                        </Button>
+                      )}
+                    </Grid>
+                    <Grid item className={styles.submitButton}>
+                      {isDownloadButton && newIds.length > 0 && (
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          onClick={() => {
+                            setNewIds([]);
+                            setIsDownloadButton(false);
+                          }}
+                        >
+                          Reset
                         </Button>
                       )}
                     </Grid>

@@ -10,9 +10,11 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import GroupsIcon from "@mui/icons-material/Groups";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { useState } from "react";
 import DeletionModal from "../deletionModal/deletionModal";
-import ClientForm from "./staffForm";
+import ClientForm, { StaffForm } from "./staffForm";
 import { UserModel } from "../../api/apiModel";
 import { UserCreateModel } from "./types";
 
@@ -22,21 +24,21 @@ type Props = {
   updateRequest: (model: UserCreateModel) => void;
 };
 
-const UserTable = ({ data, deleteRequest, updateRequest }: Props) => {
+const StaffTable = ({ data, deleteRequest, updateRequest }: Props) => {
   const [openDelete, setOpenDelete] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
   const [idx, setIdx] = useState<number>(0);
   const [updatedUser, setUpdatedUser] = useState<UserCreateModel>();
 
-  const openDeleteModal = (idx: number) => {
-    setOpenDelete(true);
-    setIdx(idx);
-  };
+  // const openDeleteModal = (idx: number) => {
+  //   setOpenDelete(true);
+  //   setIdx(idx);
+  // };
 
-  const openUpdateModal = (model: UserCreateModel) => {
-    setOpenUpdate(true);
-    setUpdatedUser(model);
-  };
+  // const openUpdateModal = (model: UserCreateModel) => {
+  //   setOpenUpdate(true);
+  //   setUpdatedUser(model);
+  // };
 
   return (
     <TableContainer component={Paper}>
@@ -59,27 +61,26 @@ const UserTable = ({ data, deleteRequest, updateRequest }: Props) => {
               </TableCell>
               <TableCell>{user.email ?? "-"}</TableCell>
               <TableCell>
-                <Button
-                // onClick={() => openUpdateModal(user)}
-                >
+                {user.is_staff ? <AdminPanelSettingsIcon /> : <GroupsIcon />}
+                {/* <Button onClick={() => openUpdateModal(user)}>
                   <EditIcon />
                 </Button>
                 <Button onClick={() => openDeleteModal(user.id)}>
                   <DeleteIcon />
-                </Button>
-
+                </Button> */}
+                {/* 
                 <DeletionModal
                   open={openDelete}
                   handleClose={() => setOpenDelete(false)}
                   createRequest={deleteRequest}
                   idxs={[idx]}
                 />
-                <ClientForm
+                <StaffForm
                   open={openUpdate}
                   handleClose={() => setOpenUpdate(false)}
                   createRequest={updateRequest}
                   initialValues={updatedUser}
-                />
+                /> */}
               </TableCell>
             </TableRow>
           ))}
@@ -95,4 +96,4 @@ const columnNames = [
   { field: "is_staff", headerName: "Staff", width: 80 },
 ];
 
-export default UserTable;
+export default StaffTable;

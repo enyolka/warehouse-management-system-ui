@@ -123,6 +123,7 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
       field: "created_by",
       headerName: "Last modification",
       width: 150,
+      align: "center",
     },
     {
       field: "status",
@@ -137,38 +138,26 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
       headerAlign: "center",
       align: "center",
     },
-    {
-      field: "delete",
-      headerName: "",
-      width: 60,
-      renderCell: (params: any) => (
-        <Button onClick={() => openDeleteModal(params.id)}>
-          <DeleteIcon />
-        </Button>
-      ),
-      headerAlign: "center",
-      align: "center",
-    },
   ];
 
   return (
-    <div style={{ height: 600, maxWidth: 700, minWidth: "70vw" }}>
+    <div style={{ height: 600, maxWidth: 700, minWidth: "65vw" }}>
       <DataGrid
         rows={rows}
         columns={columnNames}
-        components={{
-          Pagination: CustomPagination,
-        }}
-        componentsProps={{
-          pagination: { setOpenGeneralDelete, checked },
-        }}
-        checkboxSelection
-        onSelectionModelChange={(ids) => {
-          const selectedIDs = new Set(ids);
-          setChecked(
-            rows.filter((row) => selectedIDs.has(row.id)).map((x) => x.id)
-          );
-        }}
+        // components={{
+        //   Pagination: CustomPagination,
+        // }}
+        // componentsProps={{
+        //   pagination: { setOpenGeneralDelete, checked },
+        // }}
+        // checkboxSelection
+        // onSelectionModelChange={(ids) => {
+        //   const selectedIDs = new Set(ids);
+        //   setChecked(
+        //     rows.filter((row) => selectedIDs.has(row.id)).map((x) => x.id)
+        //   );
+        // }}
         // getRowId={(row) => row.row_id}
       />
       <DeletionModal

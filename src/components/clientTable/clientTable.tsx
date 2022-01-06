@@ -126,22 +126,22 @@ const ClientTable = ({
       headerAlign: "center",
       align: "center",
     },
-    {
-      field: "delete",
-      headerName: "",
-      width: 60,
-      renderCell: (params: any) => (
-        <Button onClick={() => openDeleteModal(params.id)}>
-          <DeleteIcon />
-        </Button>
-      ),
-      headerAlign: "center",
-      align: "center",
-    },
+    // {
+    //   field: "delete",
+    //   headerName: "",
+    //   width: 60,
+    //   renderCell: (params: any) => (
+    //     <Button onClick={() => openDeleteModal(params.id)}>
+    //       <DeleteIcon />
+    //     </Button>
+    //   ),
+    //   headerAlign: "center",
+    //   align: "center",
+    // },
   ];
 
   return (
-    <div style={{ height: 600, maxWidth: 500, minWidth: "60vw" }}>
+    <div style={{ height: 600, maxWidth: 540, minWidth: "62vw" }}>
       <DataGrid
         rows={rows}
         columns={columnNames}

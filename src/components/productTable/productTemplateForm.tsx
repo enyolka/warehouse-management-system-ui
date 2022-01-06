@@ -112,7 +112,7 @@ export function ProductTemplateForm({
                   </Grid>
                   <Grid item className={styles.field} style={{ width: "60%" }}>
                     <Field
-                      label="Price"
+                      label="Price ($)"
                       name="price"
                       type="number"
                       component={MyInput}
@@ -151,7 +151,7 @@ export function ProductTemplateForm({
                 <Grid item className={styles.fieldsRow}>
                   <Grid item className={styles.field}>
                     <Field
-                      label="Weight"
+                      label="Weight (kg)"
                       name="weight"
                       type="number"
                       component={MyInput}

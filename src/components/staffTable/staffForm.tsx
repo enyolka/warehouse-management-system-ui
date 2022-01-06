@@ -34,7 +34,7 @@ type Props = {
   initialValues?: UserCreateModel;
 };
 
-export function UserForm({
+export function StaffForm({
   open,
   handleClose,
   createRequest,
@@ -89,6 +89,18 @@ export function UserForm({
                     {(msg) => <div className={styles.errorMessage}>{msg}</div>}
                   </ErrorMessage>
                 </Grid>
+                <Grid item className={styles.field}>
+                  <Field
+                    label="Email"
+                    name="email"
+                    type="text"
+                    component={MyInput}
+                    error={errors.email && touched.email}
+                  />
+                  <ErrorMessage name="email">
+                    {(msg) => <div className={styles.errorMessage}>{msg}</div>}
+                  </ErrorMessage>
+                </Grid>
 
                 <Grid item className={styles.field}>
                   <Field
@@ -117,4 +129,4 @@ export function UserForm({
   );
 }
 
-export default UserForm;
+export default StaffForm;

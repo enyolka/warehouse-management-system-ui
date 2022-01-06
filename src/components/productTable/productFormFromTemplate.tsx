@@ -260,9 +260,8 @@ export function ProductFormFromTemplate({
                         Submit
                       </Button>
                     </Grid>
-
                     <Grid item className={styles.submitButton}>
-                      {isDownloadButton && setNewIds.length >= 0 && (
+                      {isDownloadButton && newIds.length > 0 && (
                         <Button
                           variant="contained"
                           color="secondary"
@@ -290,13 +289,26 @@ export function ProductFormFromTemplate({
                                         : "")
                                   );
                                   if (newWindow) newWindow.opener = null;
-                                  setNewIds([]);
                                 }
                               );
                             });
                           }}
                         >
                           GRN Document (PZ)
+                        </Button>
+                      )}
+                    </Grid>
+                    <Grid item className={styles.submitButton}>
+                      {isDownloadButton && newIds.length > 0 && (
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          onClick={() => {
+                            setNewIds([]);
+                            setIsDownloadButton(false);
+                          }}
+                        >
+                          Reset
                         </Button>
                       )}
                     </Grid>

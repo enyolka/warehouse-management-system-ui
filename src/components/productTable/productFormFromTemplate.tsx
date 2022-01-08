@@ -14,7 +14,7 @@ import {
 import { StoreContext } from "../../redux/store/StoreProvider";
 import { Autocomplete } from "formik-material-ui";
 import { MyInput } from "../input/inputComponents";
-import { LogisticUnitModel } from "../../api/apiModel";
+import { LogisticUnitModel, StorageModel } from "../../api/apiModel";
 import { getStorages } from "../../redux/storage/action";
 import {
   getLogisticUnits,
@@ -77,6 +77,7 @@ export function ProductFormFromTemplate({
 }: Props): React.ReactElement {
   const {
     productTemplatesState,
+    storageState,
     storageDispatch,
     logisticUnitsDispatch,
     productsDispatch,
@@ -254,65 +255,74 @@ export function ProductFormFromTemplate({
                       </Button>
                     </Grid>
                   )}
-                  <Grid container item spacing={1} className={styles.fieldsRow}>
-                    <Grid item className={styles.submitButton}>
-                      <Button type="submit" variant="contained">
-                        Submit
-                      </Button>
-                    </Grid>
-                    <Grid item className={styles.submitButton}>
-                      {isDownloadButton && newIds.length > 0 && (
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          onClick={() => {
-                            postDocuments(
-                              Array.from(
-                                new Set(
-                                  newIds.map(
-                                    ({ logistic_unit }) => logistic_unit!
-                                  )
-                                )
-                              ),
-                              supplierId,
-                              "admission"
-                            )(logisticUnitsDispatch).then((resp) => {
-                              getLogisticUnits()(logisticUnitsDispatch).then(
-                                (resp) => {
-                                  const newWindow = window.open(
-                                    "http://localhost:8000" +
-                                      (resp
-                                        ? resp.find(
-                                            ({ id }: LogisticUnitModel) =>
-                                              id === newIds[0].logistic_unit
-                                          )?.products[0].admission_file_url!
-                                        : "")
-                                  );
-                                  if (newWindow) newWindow.opener = null;
-                                }
-                              );
-                            });
-                          }}
-                        >
-                          GRN Document (PZ)
-                        </Button>
-                      )}
-                    </Grid>
-                    <Grid item className={styles.submitButton}>
-                      {isDownloadButton && newIds.length > 0 && (
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          onClick={() => {
-                            setNewIds([]);
-                            setIsDownloadButton(false);
-                          }}
-                        >
-                          Reset
-                        </Button>
-                      )}
-                    </Grid>
-                  </Grid>
+                  {storageState.data.find(({ id }: StorageModel) => id === 2) &&
+                    storageState.data.find(({ id }: StorageModel) => id === 2)
+                      .empty_places !== 0 && (
+                      <Grid
+                        container
+                        item
+                        spacing={1}
+                        className={styles.fieldsRow}
+                      >
+                        <Grid item className={styles.submitButton}>
+                          <Button type="submit" variant="contained">
+                            Submit
+                          </Button>
+                        </Grid>
+                        <Grid item className={styles.submitButton}>
+                          {isDownloadButton && newIds.length > 0 && (
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              onClick={() => {
+                                postDocuments(
+                                  Array.from(
+                                    new Set(
+                                      newIds.map(
+                                        ({ logistic_unit }) => logistic_unit!
+                                      )
+                                    )
+                                  ),
+                                  supplierId,
+                                  "admission"
+                                )(logisticUnitsDispatch).then((resp) => {
+                                  getLogisticUnits()(
+                                    logisticUnitsDispatch
+                                  ).then((resp) => {
+                                    const newWindow = window.open(
+                                      "http://localhost:8000" +
+                                        (resp
+                                          ? resp.find(
+                                              ({ id }: LogisticUnitModel) =>
+                                                id === newIds[0].logistic_unit
+                                            )?.products[0].admission_file_url!
+                                          : "")
+                                    );
+                                    if (newWindow) newWindow.opener = null;
+                                  });
+                                });
+                              }}
+                            >
+                              GRN Document (PZ)
+                            </Button>
+                          )}
+                        </Grid>
+                        <Grid item className={styles.submitButton}>
+                          {isDownloadButton && newIds.length > 0 && (
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              onClick={() => {
+                                setNewIds([]);
+                                setIsDownloadButton(false);
+                              }}
+                            >
+                              Reset
+                            </Button>
+                          )}
+                        </Grid>
+                      </Grid>
+                    )}
                 </Grid>
               )}
             />

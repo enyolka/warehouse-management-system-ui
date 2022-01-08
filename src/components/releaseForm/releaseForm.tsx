@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import styles from "./moveProductForm.module.css";
 import { StoreContext } from "../../redux/store/StoreProvider";
 import { Autocomplete } from "formik-material-ui";
-import { LogisticUnitModel } from "../../api/apiModel";
+import { LogisticUnitModel, StorageModel } from "../../api/apiModel";
 import {
   getLogisticUnits,
   postDocuments,
@@ -37,6 +37,7 @@ export function ReleaseForm({
   const {
     logisticUnitsState,
     logisticUnitsDispatch,
+    storageState,
     storageDispatch,
     customersState,
   } = React.useContext(StoreContext);
@@ -169,65 +170,74 @@ export function ReleaseForm({
                       </Button>
                     </Grid>
                   )}
-                  <Grid container item spacing={1} className={styles.fieldsRow}>
-                    <Grid item className={styles.submitButton}>
-                      <Button type="submit" variant="contained">
-                        Release
-                      </Button>
-                    </Grid>
-                    <Grid item className={styles.submitButton}>
-                      {isDownloadButton && newIds.length > 0 && (
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          onClick={() => {
-                            postDocuments(
-                              Array.from(
-                                new Set(
-                                  newIds.map(
-                                    ({ logistic_unit }) => logistic_unit!
-                                  )
-                                )
-                              ),
-                              customersState.data[0].id,
-                              "release"
-                            )(logisticUnitsDispatch).then((resp) => {
-                              getLogisticUnits()(logisticUnitsDispatch).then(
-                                (resp) => {
-                                  const newWindow = window.open(
-                                    "http://localhost:8000" +
-                                      (resp
-                                        ? resp.find(
-                                            ({ id }: LogisticUnitModel) =>
-                                              id === newIds[0].logistic_unit
-                                          )?.products[0].release_file_url!
-                                        : "")
-                                  );
-                                  if (newWindow) newWindow.opener = null;
-                                }
-                              );
-                            });
-                          }}
-                        >
-                          Goods Issued Note (WZ)
-                        </Button>
-                      )}
-                    </Grid>
-                    <Grid item className={styles.submitButton}>
-                      {isDownloadButton && newIds.length > 0 && (
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          onClick={() => {
-                            setNewIds([]);
-                            setIsDownloadButton(false);
-                          }}
-                        >
-                          Reset
-                        </Button>
-                      )}
-                    </Grid>
-                  </Grid>
+                  {storageState.data.find(({ id }: StorageModel) => id === 3) &&
+                    storageState.data.find(({ id }: StorageModel) => id === 3)
+                      .empty_places !== 0 && (
+                      <Grid
+                        container
+                        item
+                        spacing={1}
+                        className={styles.fieldsRow}
+                      >
+                        <Grid item className={styles.submitButton}>
+                          <Button type="submit" variant="contained">
+                            Release
+                          </Button>
+                        </Grid>
+                        <Grid item className={styles.submitButton}>
+                          {isDownloadButton && newIds.length > 0 && (
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              onClick={() => {
+                                postDocuments(
+                                  Array.from(
+                                    new Set(
+                                      newIds.map(
+                                        ({ logistic_unit }) => logistic_unit!
+                                      )
+                                    )
+                                  ),
+                                  customersState.data[0].id,
+                                  "release"
+                                )(logisticUnitsDispatch).then((resp) => {
+                                  getLogisticUnits()(
+                                    logisticUnitsDispatch
+                                  ).then((resp) => {
+                                    const newWindow = window.open(
+                                      "http://localhost:8000" +
+                                        (resp
+                                          ? resp.find(
+                                              ({ id }: LogisticUnitModel) =>
+                                                id === newIds[0].logistic_unit
+                                            )?.products[0].release_file_url!
+                                          : "")
+                                    );
+                                    if (newWindow) newWindow.opener = null;
+                                  });
+                                });
+                              }}
+                            >
+                              Goods Issued Note (WZ)
+                            </Button>
+                          )}
+                        </Grid>
+                        <Grid item className={styles.submitButton}>
+                          {isDownloadButton && newIds.length > 0 && (
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              onClick={() => {
+                                setNewIds([]);
+                                setIsDownloadButton(false);
+                              }}
+                            >
+                              Reset
+                            </Button>
+                          )}
+                        </Grid>
+                      </Grid>
+                    )}
                 </Grid>
               )}
             />

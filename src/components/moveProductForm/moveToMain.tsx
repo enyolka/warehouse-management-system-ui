@@ -4,7 +4,7 @@ import { Field, Form, Formik, ErrorMessage } from "formik";
 import styles from "./moveProductForm.module.css";
 import { StoreContext } from "../../redux/store/StoreProvider";
 import { Autocomplete } from "formik-material-ui";
-import { LogisticUnitModel } from "../../api/apiModel";
+import { LogisticUnitModel, StorageModel } from "../../api/apiModel";
 import {
   getLogisticUnits,
   postLogisticUnitMovement,
@@ -13,6 +13,7 @@ import { getStorages } from "../../redux/storage/action";
 
 type Props = {
   options: LogisticUnitModel[];
+  setRoutes: (arr: number[]) => void;
 };
 
 type MovementModel = {
@@ -20,11 +21,12 @@ type MovementModel = {
   storage_type: number;
 };
 
-export function MoveToMain({ options }: Props): React.ReactElement {
+export function MoveToMain({ options, setRoutes }: Props): React.ReactElement {
   const {
     logisticUnitsDispatch,
     suppliersState,
     productTemplatesState,
+    storageState,
     storageDispatch,
     customersState,
   } = React.useContext(StoreContext);
@@ -46,7 +48,9 @@ export function MoveToMain({ options }: Props): React.ReactElement {
       productTemplatesState.data,
       customer,
       customersState.data
-    )(logisticUnitsDispatch);
+    )(logisticUnitsDispatch).then((resp) =>
+      setRoutes([resp?.storage_place.x ?? 0])
+    );
   };
 
   return (
@@ -86,11 +90,15 @@ export function MoveToMain({ options }: Props): React.ReactElement {
                 {(msg) => <div className={styles.errorMessage}>{msg}</div>}
               </ErrorMessage>
             </Grid>
-            <Grid item className={styles.submitButton}>
-              <Button type="submit" variant="contained">
-                Move
-              </Button>
-            </Grid>
+            {storageState.data.find(({ id }: StorageModel) => id === 1) &&
+              storageState.data.find(({ id }: StorageModel) => id === 1)
+                .empty_places !== 0 && (
+                <Grid item className={styles.submitButton}>
+                  <Button type="submit" variant="contained">
+                    Move
+                  </Button>
+                </Grid>
+              )}
           </Grid>
         </Form>
       )}

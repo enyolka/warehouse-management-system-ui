@@ -1,4 +1,4 @@
-import { LogisticUnitModel } from "../../api/apiModel";
+import { LogisticUnitModel, StoragePlaceModel } from "../../api/apiModel";
 import { ClientFormModel } from "../../components/clientTable/types";
 import { ProductTemplateFormModel } from "../../components/productTable/types";
 import request from "../../helpers/request";
@@ -32,8 +32,11 @@ export const getLogisticUnits = () => (dispatch: any) => {
 export const postLogisticUnitMovement = (logistic_unit: number, storage_type: number, suppliers: ClientFormModel[], templates: ProductTemplateFormModel[], customer?: number, customers?: ClientFormModel[]) => (dispatch: any) => {
   return request().post(
     `/storages/v1/logistic_units/${logistic_unit}/move/`,
-    {storage_type: storage_type,
-    customer: customer},
+    {
+      storage_type: storage_type,
+      customer: customer,
+      storage_place: null,
+    },
      { headers: { Authorization: `Token ${localStorage.token}`}}
   ).then(
     resp => { 
@@ -42,7 +45,10 @@ export const postLogisticUnitMovement = (logistic_unit: number, storage_type: nu
         payload: translateToPostFormModel(resp.data, suppliers, templates, customers), 
       });
     dispatch({type: "PRODUCT_SUCCESS"})
-    return translateToPostFormModel(resp.data, suppliers, templates, customers);
+    return ({ 
+      list: translateToPostFormModel(resp.data, suppliers, templates, customers),
+      storage_place: resp.data.storage_place as unknown as StoragePlaceModel 
+    });
     })
   .catch((err) => {Promise.reject(err);       
     dispatch({

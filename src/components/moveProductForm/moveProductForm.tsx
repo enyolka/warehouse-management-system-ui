@@ -51,7 +51,7 @@ export function MoveProductForm({
         <ToggleButton value="IN_STOCK">To Shipment</ToggleButton>
       </ToggleButtonGroup>
       {currentType === "ACCEPTED" ? (
-        <MoveToMain options={unitsOptions} />
+        <MoveToMain options={unitsOptions} setRoutes={setRoutes} />
       ) : (
         <MoveToRelease
           options={unitsOptions}

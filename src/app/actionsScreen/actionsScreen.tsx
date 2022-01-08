@@ -67,7 +67,7 @@ function ActionsScreen({
       suppliersState.data,
       productTemplatesState.data
     )(logisticUnitsDispatch).then((resp) => {
-      setNewIds((prev) => (resp ? [...prev, ...resp] : prev));
+      setNewIds((prev) => (resp ? [...prev, ...resp.list] : prev));
     });
     getProducts(
       suppliersState.data,

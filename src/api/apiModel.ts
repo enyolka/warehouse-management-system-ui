@@ -71,4 +71,6 @@ export type StorageModel = {
   title: string;
   storage_type: 1 | 2 | 3;
   storageplace_set: StoragePlaceModel[];
+  row_length: number;
+  empty_places: number;
 }

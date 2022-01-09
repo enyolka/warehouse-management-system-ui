@@ -60,7 +60,7 @@ const ClientTable = ({
     {
       field: "name",
       headerName: "Name",
-      width: 120,
+      width: 200,
       headerAlign: "center",
       align: "center",
     },
@@ -81,14 +81,14 @@ const ClientTable = ({
     {
       field: "email",
       headerName: "E-mail",
-      width: 180,
+      width: 200,
       headerAlign: "center",
       align: "center",
     },
     {
       field: "city",
       headerName: "City",
-      width: 100,
+      width: 140,
       headerAlign: "center",
       align: "center",
     },
@@ -102,7 +102,7 @@ const ClientTable = ({
     {
       field: "streetName",
       headerName: "Street Name",
-      width: 120,
+      width: 160,
       headerAlign: "center",
       align: "center",
     },
@@ -141,7 +141,7 @@ const ClientTable = ({
   ];
 
   return (
-    <div style={{ height: 600, maxWidth: 540, minWidth: "62vw" }}>
+    <div style={{ height: 600, maxWidth: 540, minWidth: "65vw" }}>
       <DataGrid
         rows={rows}
         columns={columnNames}

@@ -29,7 +29,7 @@ function WarehouseMapDiv({ data, type, routes, setRoutes }: Props) {
         rowSpacing={4}
         columnSpacing={0.5}
         sx={{
-          width: "480px",
+          width: "640px",
           height: "fit-content",
           margin: "1em",
           padding: "2em",
@@ -39,6 +39,7 @@ function WarehouseMapDiv({ data, type, routes, setRoutes }: Props) {
           if (item.x === rackNum && item.y === 0 && item.z === 0) {
             isEmpty = 0;
             tooltip = [];
+            tooltip.push(<p> Rack: {item.x} </p>);
           }
           isEmpty =
             item.logisticunit?.products && item.logisticunit.products.length > 0
@@ -75,8 +76,11 @@ function WarehouseMapDiv({ data, type, routes, setRoutes }: Props) {
                             : "primary"
                           : "secondary"
                       }
+                      sx={{
+                        width: "90px",
+                      }}
                     >
-                      {isEmpty} / 9
+                      {item.x} ({isEmpty}/9)
                     </Button>
                   </Tooltip>
                 </Grid>

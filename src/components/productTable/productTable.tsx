@@ -24,19 +24,9 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
   const [updatedProduct, setUpdatedProduct] = useState<ProductFormModel>();
   const [checked, setChecked] = useState<number[]>([]);
 
-  const openDeleteModal = (idx: number) => {
-    setOpenDelete(true);
-    setIdx(idx);
-  };
-
   const findStatus = (value: Status) => {
     return statuses.find((status) => value === status.value) ?? statuses[0];
   };
-
-  // const openUpdateModal = (model: ProductFormModel) => {
-  //   setOpenUpdate(true);
-  //   setUpdatedProduct(model);
-  // };
 
   const rows: GridRowsProp = data.map(
     (
@@ -73,14 +63,14 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
     {
       field: "name",
       headerName: "Name",
-      width: 180,
+      width: 200,
       headerAlign: "center",
       align: "center",
     },
     {
       field: "supplier",
       headerName: "Supplier",
-      width: 160,
+      width: 180,
       headerAlign: "center",
       align: "center",
     },
@@ -107,22 +97,22 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
     },
     {
       field: "weight",
-      headerName: "Weight",
-      width: 90,
+      headerName: "Weight (kg)",
+      width: 110,
       headerAlign: "center",
       align: "center",
     },
     {
       field: "price",
-      headerName: "Price",
-      width: 90,
+      headerName: "Price ($)",
+      width: 110,
       headerAlign: "center",
       align: "center",
     },
     {
       field: "created_by",
       headerName: "Last modification",
-      width: 150,
+      width: 160,
       align: "center",
     },
     {
@@ -141,25 +131,8 @@ const ProductTable = ({ data, deleteRequest, updateRequest }: Props) => {
   ];
 
   return (
-    <div style={{ height: 600, maxWidth: 700, minWidth: "65vw" }}>
-      <DataGrid
-        rows={rows}
-        columns={columnNames}
-        // components={{
-        //   Pagination: CustomPagination,
-        // }}
-        // componentsProps={{
-        //   pagination: { setOpenGeneralDelete, checked },
-        // }}
-        // checkboxSelection
-        // onSelectionModelChange={(ids) => {
-        //   const selectedIDs = new Set(ids);
-        //   setChecked(
-        //     rows.filter((row) => selectedIDs.has(row.id)).map((x) => x.id)
-        //   );
-        // }}
-        // getRowId={(row) => row.row_id}
-      />
+    <div style={{ height: 600, maxWidth: 700, minWidth: "60vw" }}>
+      <DataGrid rows={rows} columns={columnNames} />
       <DeletionModal
         open={openGeneralDelete}
         handleClose={() => setOpenGeneralDelete(false)}
